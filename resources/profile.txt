@@ -1,0 +1,5 @@
+mode:s
+boardsize:4
+player1:vahe
+player2:
+playable:true
