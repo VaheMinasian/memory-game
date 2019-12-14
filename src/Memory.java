@@ -13,7 +13,7 @@ public class Memory {
 		// MemoryGame game = new MemoryGame();
 		MemoryGame mGame = MemoryGame.getInstance();
 		GameView gView = new GameView();
-		MenuController controller = MenuController.getInstance(menu, view, mGame, gView);
+		MenuController controller = MenuController. getInstance(menu, view, mGame, gView);
 		
 	}
 }
