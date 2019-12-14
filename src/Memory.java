@@ -14,6 +14,6 @@ public class Memory {
 		MemoryGame mGame = MemoryGame.getInstance();
 		GameView gView = new GameView();
 		MenuController controller = MenuController. getInstance(menu, view, mGame, gView);
-		
+		 
 	}
 }
