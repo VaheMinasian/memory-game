@@ -12,7 +12,7 @@ import view.GameView;
 
 public class MemoryGame implements Game {
 
-	private static MemoryGame Single_Instance = null;
+//	private static MemoryGame Single_Instance = null;
 
 	private static Card[][] cards;
 	private Card selectedCard;
@@ -31,19 +31,15 @@ public class MemoryGame implements Game {
 	private int counter = 0;
 	private int wincheck = 0;
 
-	private MemoryGame() {
+	public MemoryGame() {
 
 	}
 
-	public static MemoryGame getInstance() {
-		// TODO Auto-generated method stub
-		if (Single_Instance == null) {
-			synchronized (MemoryGame.class) {
-				Single_Instance = new MemoryGame();
-			}
-		}
-		return Single_Instance;
-	}
+	/*
+	 * public static MemoryGame getInstance() { // TODO Auto-generated method stub
+	 * if (Single_Instance == null) { synchronized (MemoryGame.class) {
+	 * Single_Instance = new MemoryGame(); } } return Single_Instance; }
+	 */
 
 	public void initializeParameters(ArrayList<String> profile) {
 		// TODO Auto-generated method stub

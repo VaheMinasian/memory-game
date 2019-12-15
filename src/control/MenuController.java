@@ -23,7 +23,7 @@ import view.OptionsView;
 //Controller class for Main menu and options menu using singleton controller object
 public class MenuController {
 
-	private static MenuController singletonMenuControlObject = null;
+//	private static MenuController singletonMenuControlObject = null;
 
 	private static MainMenuView mainMenuView;
 	private static OptionsView optionsView;
@@ -35,24 +35,27 @@ public class MenuController {
 	private static int humanCounter = 0;
 	private static int toMain;
 
-	public MenuController() {
+	public MenuController(MainMenuView mView, OptionsView oView, MemoryGame mGame, GameView gView) {
+		mainMenuView = mView;
+		optionsView = oView;
+		gameModel = mGame; 
+		gameView = gView;
+		mainMenuView.addMainMenuViewListener(new MainMenuListener());
+		isPlayable();
 	}
 
 	// creates singleton for controller
-	public static MenuController getInstance(MainMenuView mView, OptionsView oView, MemoryGame mGame, GameView gView) {
-
-		if (singletonMenuControlObject == null) {
-			singletonMenuControlObject = new MenuController();
-			mainMenuView = mView;
-			optionsView = oView;
-			gameModel = mGame;
-			gameView = gView;
-
-			mainMenuView.addMainMenuViewListener(new MainMenuListener());
-			isPlayable();
-		}
-		return singletonMenuControlObject;
-	}
+	/*
+	 * public static MenuController getInstance(MainMenuView mView, OptionsView
+	 * oView, MemoryGame mGame, GameView gView) {
+	 * 
+	 * if (singletonMenuControlObject == null) { singletonMenuControlObject = new
+	 * MenuController(); mainMenuView = mView; optionsView = oView; gameModel =
+	 * mGame; gameView = gView;
+	 * 
+	 * mainMenuView.addMainMenuViewListener(new MainMenuListener()); isPlayable(); }
+	 * return singletonMenuControlObject; }
+	 */
 
 	// Check if profile file is empty to enable play button (for first run)
 	private static void isPlayable() {
@@ -493,7 +496,7 @@ public class MenuController {
 		switch (toMain){
 		case 0:
 			gameModel = null;
-			gameModel = MemoryGame.getInstance();
+			gameModel = new MemoryGame();
 			gameModel.getPlayer1().setScore(0);
 			gameModel.getPlayer1().setTries(0);
 			if(!profile.get(0).equals("s")) {
@@ -510,7 +513,7 @@ public class MenuController {
 			break;
 		case 1:
 			gameModel = null;
-			gameModel = MemoryGame.getInstance();
+			gameModel = new MemoryGame();
 			gameModel.getPlayer1().setScore(0);
 			gameModel.getPlayer1().setTries(0);
 			if(!profile.get(0).equals("s")) {

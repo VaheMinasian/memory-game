@@ -5,15 +5,15 @@ import view.MainMenuView;
 import view.OptionsView;
 
 public class Memory {
-	boolean willPlay=false;
+//	boolean willPlay=false; *
 	public static void main(String[] args){
 
-		MainMenuView menu = new MainMenuView();
-		OptionsView view = OptionsView.getInstance();
+		MainMenuView mMenu = new MainMenuView();
+		OptionsView oView = new OptionsView();
 		// MemoryGame game = new MemoryGame();
-		MemoryGame mGame = MemoryGame.getInstance();
+		MemoryGame mGame = new MemoryGame();
 		GameView gView = new GameView();
-		MenuController controller = MenuController. getInstance(menu, view, mGame, gView);
-		 
+		MenuController controller = new MenuController(mMenu, oView, mGame, gView);
+		
 	}
 }

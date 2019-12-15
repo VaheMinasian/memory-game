@@ -42,17 +42,18 @@ public class OptionsView extends JFrame implements ActionListener, ListSelection
 	private JTextField playerName;
 	private static JList<String> list;
 	private static DefaultListModel<String> listModel;
-	private static OptionsView view = null;
+//	private static OptionsView view = null;  *
+	
 	private ArrayList<JButton> selectedButtons;
 
-	private OptionsView() {
+	public OptionsView() {
+	
 	}
 
-	public static OptionsView getInstance() {
-		if (view == null)
-			view = new OptionsView();
-		return view;
-	}
+	/*              *
+	 * public static OptionsView getInstance() { if (view == null) view = new
+	 * OptionsView(); return view; }
+	 */
 
 	/*
 	 * this method creates the options view dialog for the class SetupView.
