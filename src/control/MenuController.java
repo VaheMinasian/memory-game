@@ -29,7 +29,7 @@ public class MenuController {
 	private static OptionsView optionsView;
 	private static MemoryGame gameModel;
 	private static GameView gameView;
-	static boolean loaded = false;
+	private boolean firstTimeProfileSave = false;
 	static BufferedReader reader;
 	static ArrayList<String> profile = new ArrayList<>();
 	private static int humanCounter = 0;
@@ -197,7 +197,7 @@ public class MenuController {
 			if (e.getSource() == mainMenuView.getOptionsButton()) {
 				// setup and display options menu
 				optionsView.setOptionsMenu();
-				if ((profile.size() != 0) || (loaded == true)) {
+				if ((profile.size() != 0) || (firstTimeProfileSave == true) ) {
 					loadProfile();
 					loadOptionsProfile(optionsView);
 				}
@@ -206,7 +206,7 @@ public class MenuController {
 
 				// hide main menu when switching to options menu.
 				mainMenuView.frame.setVisible(false);
-				loaded = true;
+				firstTimeProfileSave = true;
 
 				// override system.exit(0) on options menu to return to main menu
 				optionsView.frame.addWindowListener(new WindowAdapter() {

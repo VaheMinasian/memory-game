@@ -1,5 +1,5 @@
-mode:c
+mode:s
 boardsize:4
-player1:vahe
-player2:Computer
+player1:v
+player2:
 playable:true
