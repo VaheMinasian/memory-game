@@ -40,11 +40,11 @@ public class OptionsView extends JFrame implements ActionListener, ListSelection
 	private JToggleButton soloButton, humanButton, computerButton, sqrFour, sqrSix, sqrEight, sqrTen;
 	private JButton addButton, removeButton, saveButton;
 	private JTextField playerName;
-	private static JList<String> list;
-	private static DefaultListModel<String> listModel;
+	private JList<String> list;
+	private DefaultListModel<String> listModel;
 //	private static OptionsView view = null;  *
 	
-	private ArrayList<JButton> selectedButtons;
+//	private ArrayList<JButton> selectedButtons; *CHECKED
 
 	public OptionsView() {
 	
@@ -55,9 +55,8 @@ public class OptionsView extends JFrame implements ActionListener, ListSelection
 	 * OptionsView(); return view; }
 	 */
 
-	/*
-	 * this method creates the options view dialog for the class SetupView.
-	 */
+	
+//	  this method creates the options view dialog for the class SetupView. 
 	public void setOptionsMenu() {
 		frame = new JFrame("Memory");
 		ImageIcon frameIcon = new ImageIcon(OptionsView.class.getResource("/46.png"));
@@ -417,29 +416,27 @@ public class OptionsView extends JFrame implements ActionListener, ListSelection
 		return computerButton;
 	}
 
-	public static DefaultListModel<String> getListModel() {
-		return listModel;
+	public DefaultListModel<String> getListModel() {
+		return this.listModel;
 	}
 
-	public static JList<String> getList() {
-		return list;
+	public JList<String> getList() {
+		return this.list;
 	}
 
 	public JButton getSaveButton() {
 		return saveButton;
 	}
 
-	public ArrayList<JButton> getSelectedButtons() {
-		return selectedButtons;
-	}
-
-	public void setSelectedButtons(ArrayList<JButton> selectedButtons) {
-		this.selectedButtons = selectedButtons;
-	}
-
-	public void setSelectedButton(JButton selectedButton) {
-		selectedButtons.add(selectedButton);
-	}
+	/* CHECKED
+	 * public ArrayList<JButton> getSelectedButtons() { return selectedButtons; }
+	 * 
+	 * public void setSelectedButtons(ArrayList<JButton> selectedButtons) {
+	 * this.selectedButtons = selectedButtons; }
+	 * 
+	 * public void setSelectedButton(JButton selectedButton) {
+	 * selectedButtons.add(selectedButton); }
+	 */
 
 	public JTextField getPlayerName() {
 		return playerName;

@@ -13,7 +13,7 @@ public class Memory {
 		// MemoryGame game = new MemoryGame();
 		MemoryGame mGame = new MemoryGame();
 		GameView gView = new GameView();
-		MenuController controller = new MenuController(mMenu, oView, mGame, gView);
+		new MenuController(mMenu, oView, mGame, gView);
 		
 	}
 }

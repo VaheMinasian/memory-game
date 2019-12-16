@@ -57,6 +57,7 @@ public class MenuController {
 	 * return singletonMenuControlObject; }
 	 */
 
+	
 	// Check if profile file is empty to enable play button (for first run)
 	private static void isPlayable() {
 
@@ -146,23 +147,24 @@ public class MenuController {
 		}
 		// checking player name(s) in profile and loading to UI
 		if (!profile.get(2).equals("")) {
-			OptionsView.getListModel().insertElementAt(profile.get(2), 0);
-			OptionsView.getList().setSelectedIndex(0);
-			OptionsView.getList().ensureIndexIsVisible(0);
+			optionsView.getListModel().insertElementAt(profile.get(2), 0);
+			optionsView.getList().setSelectedIndex(0);
+			optionsView.getList().ensureIndexIsVisible(0);
 
 		}
 		if (!profile.get(3).equals("") && !profile.get(3).equals("Computer")) {
-			OptionsView.getListModel().insertElementAt(profile.get(3), 1);
-			OptionsView.getList().setSelectedIndex(1);
-			OptionsView.getList().ensureIndexIsVisible(1);
+			optionsView.getListModel().insertElementAt(profile.get(3), 1);
+			optionsView.getList().setSelectedIndex(1);
+			optionsView.getList().ensureIndexIsVisible(1);
 
 		} // End of Reading profile data from file
 	}
 
-	static class MainMenuListener implements ActionListener {
+	class MainMenuListener implements ActionListener {
 
 		public void actionPerformed(ActionEvent e) {
 
+			// Initialize game when 'PLAY' button is clicked in main menu
 			if (e.getSource() == mainMenuView.getPlayButton()) {
 				loadProfile();
 				gameModel.initializeParameters(profile);
@@ -186,12 +188,12 @@ public class MenuController {
 				}
 			}
 
-			// exit application if 'Quit' button is clicked in main menu
+			// exit application if 'QUIT' button is clicked in main menu
 			if (e.getSource() == mainMenuView.getExitButton()) {
 				System.exit(0);
 			}
 
-			// actions performed if Options button is clicked in main menu
+			// actions performed if 'OPTIONS' button is clicked in main menu
 			if (e.getSource() == mainMenuView.getOptionsButton()) {
 				// setup and display options menu
 				optionsView.setOptionsMenu();
@@ -218,7 +220,7 @@ public class MenuController {
 		}// End of Action performed
 	} // End of MainMenuListener
 
-	static class OptionsViewListener implements ActionListener {
+	class OptionsViewListener implements ActionListener {
 
 		String player1 = "", player2 = "", player3 = "";
 		String selectedGameMode;
@@ -238,39 +240,39 @@ public class MenuController {
 								|| (optionsView.getSqrEight().isSelected())
 								|| (optionsView.getSqrTen().isSelected()))) {
 					if (optionsView.getSoloButton().isSelected()) {
-						if (OptionsView.getListModel().getSize() != 1) {
+						if (optionsView.getListModel().getSize() != 1) {
 							Toolkit.getDefaultToolkit().beep();
 							JOptionPane.showMessageDialog(null, "You should have only one name!", "Memory",
 									JOptionPane.INFORMATION_MESSAGE);
 							return;
 						}
-						player1 = OptionsView.getListModel().getElementAt(0);
+						player1 = optionsView.getListModel().getElementAt(0);
 					}
 					// V A L I D A T I O N
 					// Play against computer
 					else if (optionsView.getComputerButton().isSelected()) {
-						if (OptionsView.getListModel().getSize() != 1) {
+						if (optionsView.getListModel().getSize() != 1) {
 							Toolkit.getDefaultToolkit().beep();
 							JOptionPane.showMessageDialog(null, "You should have only one name!", "Memory",
 									JOptionPane.INFORMATION_MESSAGE);
 							return;
 						}
 
-						player1 = OptionsView.getListModel().getElementAt(0);
+						player1 = optionsView.getListModel().getElementAt(0);
 						player2 = "Computer";
 
 					}
 					// V A L I D A T I O N
 					// Play between 2 human
 					else if (optionsView.getHumanButton().isSelected()) {
-						if (OptionsView.getListModel().getSize() != 2) {
+						if (optionsView.getListModel().getSize() != 2) {
 							Toolkit.getDefaultToolkit().beep();
 							JOptionPane.showMessageDialog(null, "Please register 2 player names.", "Memory",
 									JOptionPane.INFORMATION_MESSAGE);
 							return;
 						}
-						player1 = OptionsView.getListModel().getElementAt(0);
-						player2 = OptionsView.getListModel().getElementAt(1);
+						player1 = optionsView.getListModel().getElementAt(0);
+						player2 = optionsView.getListModel().getElementAt(1);
 
 					} // END OF OPTIONS MENU VALIDATIONS
 
@@ -329,7 +331,7 @@ public class MenuController {
 	}
 
 	//
-	static class GameListener implements ActionListener {
+	class GameListener implements ActionListener {
 
 		public void actionPerformed(ActionEvent e) {
 			// Double loop to find the clicked button
@@ -507,7 +509,7 @@ public class MenuController {
 			gameView = new GameView();
 			gameView.initialize(profile);
 			gameView.revalidate();
-			gameView.addGameViewListener(new GameListener());
+//			gameView.addGameViewListener(new GameListener());
 			gameView.setScore1Label(0, 0);
 			gameView.setScore2Label(0, 0);
 			break;
