@@ -29,11 +29,16 @@ public class MenuController {
 	private static OptionsView optionsView;
 	private static MemoryGame gameModel;
 	private static GameView gameView;
+	
+	
+//	*
+	private static BufferedReader reader;
+	private static FileReader file;
+	private static ArrayList<String> profile = new ArrayList<>();
+	
+	private int validClicksOnCards = 0;
+//	private int toMain;
 	private boolean firstTimeProfileSave = false;
-	static BufferedReader reader;
-	static ArrayList<String> profile = new ArrayList<>();
-	private static int humanCounter = 0;
-	private static int toMain;
 
 	public MenuController(MainMenuView mView, OptionsView oView, MemoryGame mGame, GameView gView) {
 		mainMenuView = mView;
@@ -61,7 +66,7 @@ public class MenuController {
 	// Check if profile file is empty to enable play button (for first run)
 	private static void isPlayable() {
 
-		FileReader file;
+//		FileReader file;
 		String line = "";
 		try {
 			file = new FileReader("resources/profile.txt");
@@ -86,7 +91,7 @@ public class MenuController {
 
 	// Reading profile data from file
 	private static void loadProfile() {
-		FileReader file;
+//		FileReader file;
 		profile.clear();
 
 		try {
@@ -340,10 +345,10 @@ public class MenuController {
 				for (int i = 0; i < gameView.getEmojiButtons().length; i++) {
 					for (int j = 0; j < gameView.getEmojiButtons()[i].length; j++) {
 						// selecting the card/button clicked
-						if ((e.getSource() == gameView.getEmojiButtons()[i][j]) && (humanCounter < 2)
+						if ((e.getSource() == gameView.getEmojiButtons()[i][j]) && (validClicksOnCards < 2)
 								&& (!gameModel.getActivePlayer().getName().equals("Computer"))) {
 
-							humanCounter++;
+							validClicksOnCards++;
 							gameModel.setSelectedCard(MemoryGame.getCards()[i][j]);
 //							System.out.println("i=" + i + ", j=" + j);
 //							System.out.println(gameModel.getSelectedCard().getClass());
@@ -351,7 +356,7 @@ public class MenuController {
 								gameModel.buttonIsOpen();
 							} catch (ButtonNotAvailableException e1) {
 								System.err.println("IndexOutOfBoundsException: " + e1.getMessage());
-								humanCounter--;
+								validClicksOnCards--;
 							}
 							// controls if card will be opened, and if yes opens it and does necesary
 							// asignments
@@ -376,7 +381,7 @@ public class MenuController {
 											gameModel.resetCounter();
 											gameModel.revoke();
 											updateScoreBoard();
-											humanCounter = 0;
+											validClicksOnCards = 0;
 											if (profile.get(0).equals("s")) {
 											} else {
 												gameModel.switchActivePlayer();
@@ -394,7 +399,7 @@ public class MenuController {
 											gameModel.resetCounter();
 											gameModel.update();
 											updateScoreBoard();
-											humanCounter = 0;
+											validClicksOnCards = 0;
 											if (gameModel.gameOver()) {
 												resetGame();
 											}
@@ -494,8 +499,7 @@ public class MenuController {
 	}
 
 	static void resetGame() {
-		toMain = gameModel.getMessage(profile.get(0));
-		switch (toMain){
+		switch (gameModel.getMessage(profile.get(0))){
 		case 0:
 			gameModel = null;
 			gameModel = new MemoryGame();
