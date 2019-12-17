@@ -36,10 +36,10 @@ public class GameView extends JFrame implements ActionListener {
 	private ImageIcon titleIcon, backgroundIcon;
 	private JButton[][] emojiButtons;
 
-	private final ImageIcon patternIcon = new ImageIcon(OptionsView.class.getResource("/pattern.png"));
-	private ArrayList<Integer> iconsNames;
-	private static ArrayList<Integer> currentIconsNames;
+	private ArrayList<Integer> iconIndexes;
+	private static ArrayList<Integer> currentIconIndexes;
 	private int randomNumber;
+	private final ImageIcon patternIcon = new ImageIcon(GameView.class.getResource("/pattern.png"));
 	private Icon image;
 
 	public GameView() {
@@ -96,21 +96,21 @@ public class GameView extends JFrame implements ActionListener {
 		getBoardPanel().setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(),
 				" M E M O R Y      G A M E ", TitledBorder.CENTER, TitledBorder.TOP));
 
-		currentIconsNames = new ArrayList<>(cellDimension * cellDimension);
+		currentIconIndexes = new ArrayList<>(cellDimension * cellDimension);
 
-		iconsNames = new ArrayList<>();
+		iconIndexes = new ArrayList<>();
 		for (int i = 1; i < 73; i++) {
-			iconsNames.add(i);
+			iconIndexes.add(i);
 		}
-		Collections.shuffle(iconsNames);
+		Collections.shuffle(iconIndexes);
 
-		iconsNames = new ArrayList<Integer>(iconsNames.subList(0, 72 - (72 - (cellDimension * cellDimension / 2))));
+		iconIndexes = new ArrayList<Integer>(iconIndexes.subList(0, 72 - (72 - (cellDimension * cellDimension / 2))));
 
-		for (int n = 0; n < iconsNames.size(); n++) {
-			currentIconsNames.add(iconsNames.get(n));
-			currentIconsNames.add(iconsNames.get(n));
+		for (int n = 0; n < iconIndexes.size(); n++) {
+			currentIconIndexes.add(iconIndexes.get(n));
+			currentIconIndexes.add(iconIndexes.get(n));
 		}
-		Collections.shuffle(currentIconsNames);
+		Collections.shuffle(currentIconIndexes);
 
 		emojiButtons = new JButton[cellDimension][cellDimension];
 		for (int i = 0; i < cellDimension; i++) {
@@ -206,7 +206,7 @@ public class GameView extends JFrame implements ActionListener {
 	}
 
 	public static ArrayList<Integer> getCurrentIconsNames() {
-		return currentIconsNames;
+		return currentIconIndexes;
 	}
 
 	public JButton[][] getEmojiButtons() {

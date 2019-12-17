@@ -28,7 +28,7 @@ public class MenuController {
 	private static MainMenuView mainMenuView;
 	private static OptionsView optionsView;
 	private static MemoryGame gameModel;
-	private static GameView gameView;
+	private GameView gameView;
 	
 	
 //	*
@@ -38,6 +38,7 @@ public class MenuController {
 	
 	private int validClicksOnCards = 0;
 //	private int toMain;
+	int firstNumber, secondNumber;
 	private boolean firstTimeProfileSave = false;
 
 	public MenuController(MainMenuView mView, OptionsView oView, MemoryGame mGame, GameView gView) {
@@ -337,7 +338,7 @@ public class MenuController {
 
 	//
 	class GameListener implements ActionListener {
-
+		
 		public void actionPerformed(ActionEvent e) {
 			// Double loop to find the clicked button
 			if (gameModel.getActivePlayer().getClass() != null) {
@@ -364,13 +365,19 @@ public class MenuController {
 							System.out.println("Player1 name is: " + gameModel.getPlayer1().getName());
 //								System.out.println("Player2 name is: " + gameModel.getPlayer2().getName());
 
-							if (((gameModel.getSecondNumber()) == 0) && (gameModel.move(i, j))) {
+							if ((secondNumber == 0) && (gameModel.move(i, j))) {
+								if(validClicksOnCards==1) { 
+									firstNumber=GameView.getCurrentIconsNames().get(i * GameView.getCellDimension() + j);
+									}
+								else if (validClicksOnCards==2){ 
+									secondNumber=GameView.getCurrentIconsNames().get(i * GameView.getCellDimension() + j);
+									}
 								// if(singletonModel.move(i, j));
 								gameView.updateCardBoard(i, j);
 							}
-							if (gameModel.getSecondNumber() != 0) {
+							if (secondNumber != 0) {
 
-								if (!gameModel.getStatus()) {
+								if (!gameModel.getStatus(firstNumber, secondNumber)) {
 									new java.util.Timer().schedule(new java.util.TimerTask() {
 										@Override
 										public void run() {
@@ -379,6 +386,8 @@ public class MenuController {
 											gameView.closeButton(gameModel.getSecondCard());
 											gameModel.nullifyButtonsIndex();
 											gameModel.resetCounter();
+											firstNumber=0;
+											secondNumber=0;
 											gameModel.revoke();
 											updateScoreBoard();
 											validClicksOnCards = 0;
@@ -390,13 +399,15 @@ public class MenuController {
 										}
 									}, 1000);
 
-								} else if (gameModel.getStatus()) {
+								} else if (gameModel.getStatus(firstNumber, secondNumber)) {
 									new java.util.Timer().schedule(new java.util.TimerTask() {
 										@Override
 										public void run() {
 											gameView.removeButtons(gameModel.getFirstCard(), gameModel.getSecondCard());
 											gameModel.nullifyButtonsIndex();
 											gameModel.resetCounter();
+											firstNumber=0;
+											secondNumber=0;
 											gameModel.update();
 											updateScoreBoard();
 											validClicksOnCards = 0;
@@ -415,7 +426,7 @@ public class MenuController {
 		}
 	}
 
-	public static void playTheComputer() {
+	public void playTheComputer() {
 		int xIndexComp;
 		int yIndexComp;
 
@@ -440,13 +451,13 @@ public class MenuController {
 
 					gameModel.setSelectedCard(MemoryGame.getCards()[xIndexComp][yIndexComp]);
 					// Check condition to execute first card open
-					if (((gameModel.getSecondNumber()) == 0) && (gameModel.move(xIndexComp, yIndexComp))) {
+					if ((secondNumber == 0) && (gameModel.move(xIndexComp, yIndexComp))) {
 						gameView.updateCardBoard(xIndexComp, yIndexComp);
 					}
 
-					if (gameModel.getSecondNumber() != 0) {
+					if (secondNumber != 0) {
 						System.out.println("inside second number !=0");
-						if (!gameModel.getStatus()) {
+						if (!gameModel.getStatus(firstNumber, secondNumber)) {
 							System.out.println("inside !gameModel.getStatus()");
 
 							try {
@@ -459,11 +470,13 @@ public class MenuController {
 							gameView.closeButton(gameModel.getSecondCard());
 							gameModel.nullifyButtonsIndex();
 							gameModel.resetCounter();
+							firstNumber=0;
+							secondNumber=0;
 							gameModel.revoke();
 							updateScoreBoard();
 							gameModel.switchActivePlayer();
 
-						} else if (gameModel.getStatus()) {
+						} else if (gameModel.getStatus(firstNumber, secondNumber)) {
 							System.out.println("inside gameModel.getStatus()");
 							try {
 								Thread.sleep(1000);
@@ -474,6 +487,8 @@ public class MenuController {
 							gameView.removeButtons(gameModel.getFirstCard(), gameModel.getSecondCard());
 							gameModel.nullifyButtonsIndex();
 							gameModel.resetCounter();
+							firstNumber=0;
+							secondNumber=0;
 							gameModel.update();
 							updateScoreBoard();
 							if (gameModel.gameOver()) {
@@ -487,7 +502,7 @@ public class MenuController {
 		} while (gameModel.getActivePlayer().getName().equals("Computer"));
 	}
 
-	static void updateScoreBoard() {
+	void updateScoreBoard() {
 		if (gameModel.getActivePlayer().equals(gameModel.getPlayer1())) {
 			System.out.println("player1 update inside updateScoreBoard");
 			gameView.setScore1Label(gameModel.getActivePlayer().getScore(), gameModel.getActivePlayer().getTries());
@@ -498,7 +513,7 @@ public class MenuController {
 		}
 	}
 
-	static void resetGame() {
+	void resetGame() {
 		switch (gameModel.getMessage(profile.get(0))){
 		case 0:
 			gameModel = null;

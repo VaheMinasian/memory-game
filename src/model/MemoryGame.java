@@ -26,7 +26,7 @@ public class MemoryGame implements Game {
 	private static Timer timer;
 
 	private Card firstCard = null, secondCard = null;
-	private int firstNumber, secondNumber; // Icon file names
+//	private int firstNumber, secondNumber; // Icon file names
 	private static int[] buttonsIndex = new int[4];
 	private int counter = 0;
 	private int wincheck = 0;
@@ -78,13 +78,13 @@ public class MemoryGame implements Game {
 			// if ((firstCard.getState() == CardState.CLOSED) && (secondCard.getState() ==
 			// CardState.CLOSED)){
 			firstCard = cards[i][j];
-			firstNumber = GameView.getCurrentIconsNames().get(i * GameView.getCellDimension() + j);
+//			firstNumber = GameView.getCurrentIconsNames().get(i * GameView.getCellDimension() + j);
 			firstCard.updateCard(CardState.OPEN);
 			buttonsIndex[0] = i;
 			buttonsIndex[1] = j;
 
 			System.out.println("Buton 1 index is  [" + i + "][" + j + "]");
-			System.out.println("first emoji no. " + firstNumber + " - second emoji no. " + secondNumber);
+//			System.out.println("first emoji no. " + firstNumber + " - second emoji no. " + secondNumber);
 //			  System.out.println("first card is: " + firstCard.getState() + " - second card is: " + secondCard.getState());
 
 			counter++;
@@ -98,13 +98,13 @@ public class MemoryGame implements Game {
 		else if ((counter == 1) && (!firstCard.equals(selectedCard))) {
 //			System.out.println("Entering move'2', counter= " + counter + "\n");
 			secondCard = cards[i][j];
-			secondNumber = GameView.getCurrentIconsNames().get(i * GameView.getCellDimension() + j);
+//			secondNumber = GameView.getCurrentIconsNames().get(i * GameView.getCellDimension() + j);
 			secondCard.updateCard(CardState.OPEN);
 			buttonsIndex[2] = i;
 			buttonsIndex[3] = j;
 
 			System.out.println("Buton 2 index is [" + i + "][" + j + "]");
-			System.out.println("first emoji no. " + firstNumber + " - second emoji no. " + secondNumber);
+//			System.out.println("first emoji no. " + firstNumber + " - second emoji no. " + secondNumber);
 			System.out.println("first card is \"" + firstCard.getState() + "\" - second card is \""
 					+ secondCard.getState() + "\"");
 
@@ -116,9 +116,9 @@ public class MemoryGame implements Game {
 	}
 
 	@Override
-	public Boolean getStatus() {
+	public Boolean getStatus(int x, int y) {
 
-		if (firstNumber == secondNumber) {
+		if (x == y) {
 			return true;
 		} else {
 			return false;
@@ -249,8 +249,8 @@ public class MemoryGame implements Game {
 	}
 
 	public void revoke() {
-		firstNumber = 0;
-		secondNumber = 0;
+//		firstNumber = 0;
+//		secondNumber = 0;
 		getActivePlayer().incrementTries();
 		setSelectedCard(null);
 
@@ -261,8 +261,8 @@ public class MemoryGame implements Game {
 	}
 
 	public void update() {
-		firstNumber = 0;
-		secondNumber = 0;
+//		firstNumber = 0;
+//		secondNumber = 0;
 		setSelectedCard(null);
 		getActivePlayer().incrementTries();
 		getActivePlayer().incrementScore();
@@ -332,14 +332,11 @@ public class MemoryGame implements Game {
 		return secondCard;
 	}
 
-	public int getFirstNumber() {
-		return firstNumber;
-	}
-
-	public int getSecondNumber() {
-		return secondNumber;
-	}
-
+	/*
+	 * public int getFirstNumber() { return firstNumber; }
+	 * 
+	 * public int getSecondNumber() { return secondNumber; }
+	 */
 	public static Card[][] getCards() {
 		return cards;
 	}
