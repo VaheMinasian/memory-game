@@ -450,8 +450,19 @@ public class MenuController {
 					}
 
 					gameModel.setSelectedCard(MemoryGame.getCards()[xIndexComp][yIndexComp]);
+					validClicksOnCards++;
 					// Check condition to execute first card open
 					if ((secondNumber == 0) && (gameModel.move(xIndexComp, yIndexComp))) {
+						if(validClicksOnCards==1) { 
+							firstNumber=GameView.getCurrentIconsNames().get(xIndexComp * GameView.getCellDimension() + yIndexComp);
+							System.out.println("valid clicks =1");
+							System.out.println("FirstNumber is: " + firstNumber);
+						}
+						else if (validClicksOnCards==2){ 
+							secondNumber=GameView.getCurrentIconsNames().get(xIndexComp * GameView.getCellDimension() + yIndexComp);
+							System.out.println("valid clicks =2");
+							System.out.println("SecondNumber is: " + secondNumber);
+						}
 						gameView.updateCardBoard(xIndexComp, yIndexComp);
 					}
 
@@ -470,6 +481,7 @@ public class MenuController {
 							gameView.closeButton(gameModel.getSecondCard());
 							gameModel.nullifyButtonsIndex();
 							gameModel.resetCounter();
+							validClicksOnCards = 0;
 							firstNumber=0;
 							secondNumber=0;
 							gameModel.revoke();
@@ -487,6 +499,7 @@ public class MenuController {
 							gameView.removeButtons(gameModel.getFirstCard(), gameModel.getSecondCard());
 							gameModel.nullifyButtonsIndex();
 							gameModel.resetCounter();
+							validClicksOnCards = 0;
 							firstNumber=0;
 							secondNumber=0;
 							gameModel.update();
@@ -499,7 +512,7 @@ public class MenuController {
 				}
 			}
 
-		} while (gameModel.getActivePlayer().getName().equals("Computer"));
+		} while ((!gameModel.gameOver()) && (gameModel.getActivePlayer().getName().equals("Computer")));
 	}
 
 	void updateScoreBoard() {

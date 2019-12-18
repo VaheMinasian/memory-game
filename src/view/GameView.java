@@ -155,6 +155,7 @@ public class GameView extends JFrame implements ActionListener {
 		return temp;
 	}
 
+	
 	private ImageIcon getRandomBackGIcon() {
 		int big = 75, small = 73, random;
 		Random rand = new Random();
@@ -166,6 +167,7 @@ public class GameView extends JFrame implements ActionListener {
 		return icon;
 	}
 
+	
 	public static ImageIcon resizeImage(ImageIcon defaultImage, int width, int height) {
 
 		Image img = defaultImage.getImage();
@@ -175,6 +177,7 @@ public class GameView extends JFrame implements ActionListener {
 		return defaultImage;
 	}
 
+	
 	public void addGameViewListener(ActionListener BottonListener) {
 		for (int i = 0; i < cellDimension; i++) {
 			for (int j = 0; j < cellDimension; j++) {
@@ -183,6 +186,7 @@ public class GameView extends JFrame implements ActionListener {
 		}
 	}
 
+	
 	public void updateCardBoard(int i, int j) {
 		Icon image;
 		int iconName;
@@ -197,6 +201,7 @@ public class GameView extends JFrame implements ActionListener {
 	 * System.out.println("set visible false"); boardPanel.revalidate(); }
 	 */
 
+	
 	public JButton getEmojiButton(int i, int j) {
 		return emojiButtons[i][j];
 	}
@@ -231,9 +236,16 @@ public class GameView extends JFrame implements ActionListener {
 	}
 
 	public void closeButton(Card card) {
+		int counterTest = 0;
 		image = new ImageIcon(GameView.class.getResource("/pattern.png"));
 		emojiButtons[card.getCardIndex()[0]][card.getCardIndex()[1]].setIcon(image);
-		// emojiButtons[x][y].setSelected(false);
+		counterTest++;
+		if(counterTest==1) {
+			System.out.println("first card closes " + "[" + card.getCardIndex()[0] + "]" + "[" + card.getCardIndex()[1] + "]");			
+		} else if (counterTest ==2) {
+			System.out.println("second card closes " + "[" + card.getCardIndex()[2] + "]" + "[" + card.getCardIndex()[3] + "]");
+			counterTest=0;
+		}
 	}
 
 	public void removeButtons(Card card1, Card card2) {

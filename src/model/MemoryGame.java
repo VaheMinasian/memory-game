@@ -154,19 +154,6 @@ public class MemoryGame implements Game {
 				break;
 			}
 
-			/*
-			 * int res = JOptionPane.showOptionDialog(null, "Congratulations " +
-			 * player1.getName() + ", you have won! \nYour socre is " + player1.getScore() +
-			 * " out of " + player1.getTries() + " moves.", "Memory",
-			 * JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, null,
-			 * null);
-			 */
-
-			/*
-			 * JOptionPane.showMessageDialog (null, "Congratulations " + player1.getName() +
-			 * ", you have won! \nYour socre is " + player1.getScore() + " out of " +
-			 * player1.getTries() + " moves." , "Memory", JOptionPane.INFORMATION_MESSAGE);
-			 */
 		} else if (wincheck == 2) {
 			System.out.println("inside wincheck==2");
 

@@ -21,11 +21,9 @@ public class ComputerPlayer extends Player {
 	@Override
 	public boolean setRandomIndex(int i) {
 		randomNo = new Random();
-		System.out.println("\nprofile.get(1)= " + i);;
 		do {
 			cardIndexX = randomNo.nextInt(i);
 			cardIndexY = randomNo.nextInt(i);
-			System.out.println("cardIndexX= " + cardIndexX + ", cardIndexY= " + cardIndexY);
 		} while (MemoryGame.getCards()[cardIndexX][cardIndexY].getState() != CardState.CLOSED);
 		System.out.println("returning true from gameModel.setRandomIndex cardIndexX & cardIndexY = ("+cardIndexX +","+cardIndexY +")");
 		return true;
