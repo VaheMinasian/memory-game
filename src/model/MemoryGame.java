@@ -4,11 +4,8 @@ import java.util.ArrayList;
 import java.util.Random;
 
 import javax.swing.JOptionPane;
-import javax.swing.Timer;
-
 import control.ButtonNotAvailableException;
 import model.Card.CardState;
-import view.GameView;
 
 public class MemoryGame implements Game {
 
@@ -23,7 +20,6 @@ public class MemoryGame implements Game {
 	private boolean hasWinner = false;
 	private Player activePlayer;
 	private int numberOfCells;
-	private static Timer timer;
 
 	private Card firstCard = null, secondCard = null;
 //	private int firstNumber, secondNumber; // Icon file names

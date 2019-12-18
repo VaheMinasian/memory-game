@@ -26,6 +26,7 @@ import javax.swing.border.TitledBorder;
 
 import model.Card;
 
+@SuppressWarnings("serial")
 public class GameView extends JFrame implements ActionListener {
 
 	private JPanel mainPanel, namesPanel;
@@ -37,8 +38,7 @@ public class GameView extends JFrame implements ActionListener {
 	private JButton[][] emojiButtons;
 
 	private ArrayList<Integer> iconIndexes;
-	private static ArrayList<Integer> currentIconIndexes;
-	private int randomNumber;
+	private ArrayList<Integer> currentIconIndexes;
 	private final ImageIcon patternIcon = new ImageIcon(GameView.class.getResource("/pattern.png"));
 	private Icon image;
 
@@ -210,7 +210,7 @@ public class GameView extends JFrame implements ActionListener {
 		return cellDimension;
 	}
 
-	public static ArrayList<Integer> getCurrentIconsNames() {
+	public ArrayList<Integer> getCurrentIconsNames() {
 		return currentIconIndexes;
 	}
 

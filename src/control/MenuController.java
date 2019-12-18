@@ -367,10 +367,10 @@ public class MenuController {
 
 							if ((secondNumber == 0) && (gameModel.move(i, j))) {
 								if(validClicksOnCards==1) { 
-									firstNumber=GameView.getCurrentIconsNames().get(i * GameView.getCellDimension() + j);
+									firstNumber=gameView.getCurrentIconsNames().get(i * GameView.getCellDimension() + j);
 									}
 								else if (validClicksOnCards==2){ 
-									secondNumber=GameView.getCurrentIconsNames().get(i * GameView.getCellDimension() + j);
+									secondNumber=gameView.getCurrentIconsNames().get(i * GameView.getCellDimension() + j);
 									}
 								// if(singletonModel.move(i, j));
 								gameView.updateCardBoard(i, j);
@@ -454,12 +454,12 @@ public class MenuController {
 					// Check condition to execute first card open
 					if ((secondNumber == 0) && (gameModel.move(xIndexComp, yIndexComp))) {
 						if(validClicksOnCards==1) { 
-							firstNumber=GameView.getCurrentIconsNames().get(xIndexComp * GameView.getCellDimension() + yIndexComp);
+							firstNumber=gameView.getCurrentIconsNames().get(xIndexComp * GameView.getCellDimension() + yIndexComp);
 							System.out.println("valid clicks =1");
 							System.out.println("FirstNumber is: " + firstNumber);
 						}
 						else if (validClicksOnCards==2){ 
-							secondNumber=GameView.getCurrentIconsNames().get(xIndexComp * GameView.getCellDimension() + yIndexComp);
+							secondNumber=gameView.getCurrentIconsNames().get(xIndexComp * GameView.getCellDimension() + yIndexComp);
 							System.out.println("valid clicks =2");
 							System.out.println("SecondNumber is: " + secondNumber);
 						}
