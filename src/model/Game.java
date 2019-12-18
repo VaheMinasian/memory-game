@@ -7,6 +7,4 @@ public interface Game {
 	public Boolean getStatus(int x, int y);
 
 	public int getMessage(String s);
-	
-	
 }

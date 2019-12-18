@@ -37,7 +37,6 @@ public class MenuController {
 	private static ArrayList<String> profile = new ArrayList<>();
 	
 	private int validClicksOnCards = 0;
-//	private int toMain;
 	int firstNumber, secondNumber;
 	private boolean firstTimeProfileSave = false;
 
@@ -50,24 +49,10 @@ public class MenuController {
 		isPlayable();
 	}
 
-	// creates singleton for controller
-	/*
-	 * public static MenuController getInstance(MainMenuView mView, OptionsView
-	 * oView, MemoryGame mGame, GameView gView) {
-	 * 
-	 * if (singletonMenuControlObject == null) { singletonMenuControlObject = new
-	 * MenuController(); mainMenuView = mView; optionsView = oView; gameModel =
-	 * mGame; gameView = gView;
-	 * 
-	 * mainMenuView.addMainMenuViewListener(new MainMenuListener()); isPlayable(); }
-	 * return singletonMenuControlObject; }
-	 */
-
-	
+		
 	// Check if profile file is empty to enable play button (for first run)
 	private static void isPlayable() {
 
-//		FileReader file;
 		String line = "";
 		try {
 			file = new FileReader("resources/profile.txt");
@@ -92,7 +77,6 @@ public class MenuController {
 
 	// Reading profile data from file
 	private static void loadProfile() {
-//		FileReader file;
 		profile.clear();
 
 		try {

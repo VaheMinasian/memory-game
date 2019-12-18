@@ -42,20 +42,11 @@ public class OptionsView extends JFrame implements ActionListener, ListSelection
 	private JTextField playerName;
 	private JList<String> list;
 	private DefaultListModel<String> listModel;
-//	private static OptionsView view = null;  *
-	
-//	private ArrayList<JButton> selectedButtons; *CHECKED
 
 	public OptionsView() {
 	
 	}
 
-	/*              *
-	 * public static OptionsView getInstance() { if (view == null) view = new
-	 * OptionsView(); return view; }
-	 */
-
-	
 //	  this method creates the options view dialog for the class SetupView. 
 	public void setOptionsMenu() {
 		frame = new JFrame("Memory");
@@ -427,16 +418,6 @@ public class OptionsView extends JFrame implements ActionListener, ListSelection
 	public JButton getSaveButton() {
 		return saveButton;
 	}
-
-	/* CHECKED
-	 * public ArrayList<JButton> getSelectedButtons() { return selectedButtons; }
-	 * 
-	 * public void setSelectedButtons(ArrayList<JButton> selectedButtons) {
-	 * this.selectedButtons = selectedButtons; }
-	 * 
-	 * public void setSelectedButton(JButton selectedButton) {
-	 * selectedButtons.add(selectedButton); }
-	 */
 
 	public JTextField getPlayerName() {
 		return playerName;

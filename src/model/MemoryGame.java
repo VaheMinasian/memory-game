@@ -64,43 +64,24 @@ public class MemoryGame implements Game {
 
 	@Override
 	public boolean move(int i, int j) {
-		/*
-		 * System.out.println("Entering move'1', counter= " + counter + "\n");
-		 * System.out.println("firstCard.equals(selectedCard) is: " +
-		 * (!firstCard.equals(selectedCard)));
-		 */
-		if (counter == 0) {// &&(firstCard.getState() == CardState.CLOSED) && (secondCard.getState() ==
-							// CardState.CLOSED)){
-			// if ((firstCard.getState() == CardState.CLOSED) && (secondCard.getState() ==
-			// CardState.CLOSED)){
+	
+		if (counter == 0) {
 			firstCard = cards[i][j];
-//			firstNumber = GameView.getCurrentIconsNames().get(i * GameView.getCellDimension() + j);
 			firstCard.updateCard(CardState.OPEN);
 			buttonsIndex[0] = i;
 			buttonsIndex[1] = j;
-
 			System.out.println("Buton 1 index is  [" + i + "][" + j + "]");
-//			System.out.println("first emoji no. " + firstNumber + " - second emoji no. " + secondNumber);
-//			  System.out.println("first card is: " + firstCard.getState() + " - second card is: " + secondCard.getState());
-
 			counter++;
-
 			System.out.println("Leaving move1 counter= " + counter);
 			return true;
 		}
 
-		// if ((firstCard.getState() == CardState.OPEN) && (firstCard != selectedCard)
-		// && (secondCard.getState() == CardState.CLOSED)){
 		else if ((counter == 1) && (!firstCard.equals(selectedCard))) {
-//			System.out.println("Entering move'2', counter= " + counter + "\n");
 			secondCard = cards[i][j];
-//			secondNumber = GameView.getCurrentIconsNames().get(i * GameView.getCellDimension() + j);
 			secondCard.updateCard(CardState.OPEN);
 			buttonsIndex[2] = i;
 			buttonsIndex[3] = j;
-
 			System.out.println("Buton 2 index is [" + i + "][" + j + "]");
-//			System.out.println("first emoji no. " + firstNumber + " - second emoji no. " + secondNumber);
 			System.out.println("first card is \"" + firstCard.getState() + "\" - second card is \""
 					+ secondCard.getState() + "\"");
 

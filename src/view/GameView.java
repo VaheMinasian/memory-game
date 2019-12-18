@@ -196,11 +196,6 @@ public class GameView extends JFrame implements ActionListener {
 		System.out.println("CardBoard updated got emojiButton:("+i+","+j+")");
 	}
 
-	/*
-	 * public void removeButton(int x, int y){ emojiButtons[x][y].setVisible(false);
-	 * System.out.println("set visible false"); boardPanel.revalidate(); }
-	 */
-
 	
 	public JButton getEmojiButton(int i, int j) {
 		return emojiButtons[i][j];

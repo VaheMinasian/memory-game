@@ -43,5 +43,4 @@ public class ComputerPlayer extends Player {
 	public void setCardIndexY(int cardIndexY) {
 		this.cardIndexY = cardIndexY;
 	}
-
 }
