@@ -27,7 +27,7 @@ public class MenuController {
 
 	private static MainMenuView mainMenuView;
 	private static OptionsView optionsView;
-	private static MemoryGame gameModel;
+	private MemoryGame gameModel;
 	private GameView gameView;
 	
 	
@@ -350,7 +350,7 @@ public class MenuController {
 								&& (!gameModel.getActivePlayer().getName().equals("Computer"))) {
 
 							validClicksOnCards++;
-							gameModel.setSelectedCard(MemoryGame.getCards()[i][j]);
+							gameModel.setSelectedCard(gameModel.getCards()[i][j]);
 //							System.out.println("i=" + i + ", j=" + j);
 //							System.out.println(gameModel.getSelectedCard().getClass());
 							try {
@@ -437,7 +437,7 @@ public class MenuController {
 		do {
 			for (int c = 0; c < 2; c++) {
 				if ((!gameModel.gameOver())
-						&& (gameModel.getActivePlayer().setRandomIndex(Integer.parseInt(profile.get(1))))) {
+						&& (gameModel.getActivePlayer().setRandomIndex(gameModel, Integer.parseInt(profile.get(1))))) {
 					xIndexComp = gameModel.getActivePlayer().getCardIndexX();
 					yIndexComp = gameModel.getActivePlayer().getCardIndexY();
 					System.out.println("after assigning x and y are: " + xIndexComp + ", " + yIndexComp);
@@ -449,7 +449,7 @@ public class MenuController {
 						interrupt.printStackTrace();
 					}
 
-					gameModel.setSelectedCard(MemoryGame.getCards()[xIndexComp][yIndexComp]);
+					gameModel.setSelectedCard(gameModel.getCards()[xIndexComp][yIndexComp]);
 					validClicksOnCards++;
 					// Check condition to execute first card open
 					if ((secondNumber == 0) && (gameModel.move(xIndexComp, yIndexComp))) {

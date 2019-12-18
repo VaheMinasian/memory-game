@@ -9,7 +9,7 @@ public class HumanPlayer extends Player {
 	
 	
 	@Override
-	public boolean setRandomIndex(int i) {
+	public boolean setRandomIndex(MemoryGame model, int i) {
 		// TODO Auto-generated method stub
 		return false;
 	}

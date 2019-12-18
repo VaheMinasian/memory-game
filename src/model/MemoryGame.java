@@ -14,7 +14,7 @@ public class MemoryGame implements Game {
 
 //	private static MemoryGame Single_Instance = null;
 
-	private static Card[][] cards;
+	private Card[][] cards;
 	private Card selectedCard;
 	private static Board boardDimension;
 	private static Player player1;
@@ -324,8 +324,8 @@ public class MemoryGame implements Game {
 	 * 
 	 * public int getSecondNumber() { return secondNumber; }
 	 */
-	public static Card[][] getCards() {
-		return cards;
+	public Card[][] getCards() {
+		return this.cards;
 	}
 
 	public void setSelectedCard(Card selectedCard) {

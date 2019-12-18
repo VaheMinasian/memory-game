@@ -10,7 +10,6 @@ public class Memory {
 
 		MainMenuView mMenu = new MainMenuView();
 		OptionsView oView = new OptionsView();
-		// MemoryGame game = new MemoryGame();
 		MemoryGame mGame = new MemoryGame();
 		GameView gView = new GameView();
 		new MenuController(mMenu, oView, mGame, gView);

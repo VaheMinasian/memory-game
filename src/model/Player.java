@@ -7,7 +7,7 @@ public abstract class Player {
 	private int tries=0;
 	private boolean active = false;
 		
-	public abstract boolean setRandomIndex(int i);
+	public abstract boolean setRandomIndex(MemoryGame model, int i);
 
 	public Player() {}
 	
