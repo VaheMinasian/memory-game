@@ -1,5 +1,5 @@
-mode:s
+mode:h
 boardsize:4
 player1:v
-player2:
+player2:k
 playable:true

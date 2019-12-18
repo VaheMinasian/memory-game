@@ -106,7 +106,7 @@ public class MemoryGame implements Game {
 	public int getMessage(String s) {
 		int i;
 		String[] options = { "play", "Main Menu", "Quit" };
-		int returnValue=-10;
+		int dialogBoxReturnValue=-10;
 		wincheck = (s.equals("s")) ? 1 : 2;
 		if (wincheck == 1) {
 			System.out.println("inside wincheck==1");
@@ -118,19 +118,20 @@ public class MemoryGame implements Game {
 
 			switch (i) {
 			case 0:
-				returnValue= 0;
+				dialogBoxReturnValue= 0;
 				break;
 			case 1:
-				returnValue= 1;
+				dialogBoxReturnValue= 1;
 				break;
 			case 2:
-				returnValue= 2;
+				dialogBoxReturnValue= 2;
 				break;
 			default:
-				returnValue= 2;
+				dialogBoxReturnValue= 2;
 				break;
 			}
-
+			return dialogBoxReturnValue;
+			
 		} else if (wincheck == 2) {
 			System.out.println("inside wincheck==2");
 
@@ -141,16 +142,16 @@ public class MemoryGame implements Game {
 						JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);
 				switch (i) {
 				case 0:
-					returnValue= 0;
+					dialogBoxReturnValue= 0;
 					break;
 				case 1:
-					returnValue= 1;
+					dialogBoxReturnValue= 1;
 					break;
 				case 2:
-					returnValue= 2;
+					dialogBoxReturnValue= 2;
 					break;
 				default:
-					returnValue= 2;
+					dialogBoxReturnValue= 2;
 					break;
 				}
 				break;
@@ -167,21 +168,22 @@ public class MemoryGame implements Game {
 			}
 			switch (i) {
 			case 0:
-				returnValue= 0;
+				dialogBoxReturnValue= 0;
 				break;
 			case 1:
-				returnValue= 1;
+				dialogBoxReturnValue= 1;
 				break;
 			case 2:
-				returnValue= 2;
+				dialogBoxReturnValue= 2;
 				break;
 			default:
-				returnValue= 2;
+				dialogBoxReturnValue= 2;
 				break;
 			}
-			
+			return dialogBoxReturnValue;
+
 		}
-		return returnValue;
+		return dialogBoxReturnValue;
 	}
 
 	// randomly selects the player who will begin the game

@@ -513,24 +513,26 @@ public class MenuController {
 	void resetGame() {
 		switch (gameModel.getMessage(profile.get(0))){
 		case 0:
-			gameModel = null;
+			System.out.println("inside case 0");
+//			gameModel = null;
 			gameModel = new MemoryGame();
-			gameModel.getPlayer1().setScore(0);
-			gameModel.getPlayer1().setTries(0);
-			if(!profile.get(0).equals("s")) {
-				gameModel.getPlayer2().setScore(0);
-				gameModel.getPlayer2().setTries(0);														
-			}
+			/*
+			 * gameModel.getPlayer1().setScore(0); gameModel.getPlayer1().setTries(0);
+			 * if(!profile.get(0).equals("s")) { gameModel.getPlayer2().setScore(0);
+			 * gameModel.getPlayer2().setTries(0); }
+			 */
 			gameView.dispose();
 			gameView = new GameView();
-			gameView.initialize(profile);
-			gameView.revalidate();
+//			gameView.initialize(profile);
 //			gameView.addGameViewListener(new GameListener());
+			mainMenuView.getPlayButton().doClick();
+			gameView.revalidate();
 			gameView.setScore1Label(0, 0);
 			gameView.setScore2Label(0, 0);
 			break;
 		case 1:
-			gameModel = null;
+			System.out.println("inside case 1");
+//			gameModel = null;
 			gameModel = new MemoryGame();
 			gameModel.getPlayer1().setScore(0);
 			gameModel.getPlayer1().setTries(0);
@@ -545,7 +547,9 @@ public class MenuController {
 			gameView.revalidate();
 			break;
 		case 2:
+			System.out.println("inside case 2");
 			System.exit(0);	
+			break;
 		default:
 			System.exit(0);	
 		}
