@@ -54,13 +54,13 @@ public class OptionsView extends JFrame implements ActionListener, ListSelection
 
 		mainPanel = new JPanel(new GridBagLayout());
 		frame.getContentPane().add(mainPanel);
-		mainPanel.setPreferredSize(new Dimension(350, 350));
+		mainPanel.setPreferredSize(new Dimension(360, 380));
 		mainPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(),
 				" G A M E    S E T U P ", TitledBorder.CENTER, TitledBorder.TOP));
 		mainPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
 
 		emptyPanel = new JPanel();
-		emptyPanel.setPreferredSize(new Dimension(300, 20));
+		emptyPanel.setPreferredSize(new Dimension(310, 20));
 
 		soloButton = new JToggleButton();
 		soloButton.setPreferredSize(new Dimension(70, 50));
@@ -136,7 +136,7 @@ public class OptionsView extends JFrame implements ActionListener, ListSelection
 		dimensions.add(sqrTen);
 
 		boardSizePanel = new JPanel();
-		boardSizePanel.setPreferredSize(new Dimension(200, 70));
+		boardSizePanel.setPreferredSize(new Dimension(210, 70));
 		boardSizePanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(),
 				" c h o o s e   b o a r d   s i z e ", TitledBorder.CENTER, TitledBorder.TOP));
 		boardSizePanel.add(sqrFour);
@@ -283,13 +283,15 @@ public class OptionsView extends JFrame implements ActionListener, ListSelection
 
 		});
 
-		playerName = new JTextField(17);
+		playerName = new JTextField(14);
 		playerName.setPreferredSize(new Dimension(200, 30));
 		playerName.setFont((new Font("dialog", Font.PLAIN, 14)));
 
 		playerName.addActionListener(addListener);
 		playerName.getDocument().addDocumentListener(addListener);
 		tableButtonsPanel = new JPanel();
+		tableButtonsPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(),
+				" a d d  p l a y e r s ", TitledBorder.CENTER, TitledBorder.TOP));
 		tableButtonsPanel.add(addButton);
 		tableButtonsPanel.add(playerName);
 		tableButtonsPanel.add(removeButton);
