@@ -25,6 +25,7 @@ import javax.swing.UIManager;
 import javax.swing.border.TitledBorder;
 
 import model.Card;
+import model.Player;
 
 @SuppressWarnings("serial")
 public class GameView extends JFrame implements ActionListener {
@@ -36,7 +37,8 @@ public class GameView extends JFrame implements ActionListener {
 	private int boardDimension, fontSize;
 	private ImageIcon titleIcon, backgroundIcon;
 	private JButton[][] emojiButtons;
-
+	Font boldFont = new Font("Courier", Font.BOLD,18);
+	Font  planeFont = new Font("Courier", Font.PLAIN,17);
 	private ArrayList<Integer> iconIndexes;
 	private ArrayList<Integer> currentIconIndexes;
 	private final ImageIcon patternIcon = new ImageIcon(GameView.class.getResource("/pattern.png"));
@@ -68,23 +70,33 @@ public class GameView extends JFrame implements ActionListener {
 		player1Label.setText(profile.get(2));
 		player1Label.setVerticalAlignment(SwingConstants.BOTTOM);
 		score1Label = makeLabel("S");
+		player1Label.setFont(planeFont);
+		score1Label.setFont(planeFont);
 		setScore1Label(0, 0);
 		score1Label.setVerticalAlignment(SwingConstants.NORTH);
 		namesPanel.add(player1Label);
 
-		player2Label = makeLabel("N");
-		player2Label.setVerticalAlignment(SwingConstants.BOTTOM);
-		score2Label = makeLabel("S");
-		score2Label.setVerticalAlignment(SwingConstants.NORTH);
-		namesPanel.add(player2Label);
-		namesPanel.add(score1Label);
-		namesPanel.add(score2Label);
+	
+			player2Label = makeLabel("N");
+			player2Label.setFont(planeFont);
+			player2Label.setVerticalAlignment(SwingConstants.BOTTOM);
+			score2Label = makeLabel("S");
+			score2Label.setFont(planeFont);
+			score2Label.setVerticalAlignment(SwingConstants.NORTH);
+			if (!profile.get(0).equals("s")){
+				namesPanel.add(player2Label);				
+			} 
+			namesPanel.add(score1Label);
+			if (!profile.get(0).equals("s")){
+			namesPanel.add(score2Label);
+			}
+			if (!profile.get(0).equals("s")){
+				
+		} 
 
-		if (profile.get(0).equals("c")) {
+		if (profile.get(0).equals("c") || profile.get(0).equals("h")) {
 			player2Label.setText(profile.get(3));
-		} else if (profile.get(0).equals("h")) {
-			player2Label.setText(profile.get(3));
-		}
+		} 
 		setScore2Label(0, 0);
 
 		backgroundIcon = getRandomBackGIcon();
@@ -145,7 +157,7 @@ public class GameView extends JFrame implements ActionListener {
 		temp.setHorizontalAlignment(JLabel.CENTER);
 		temp.setOpaque(true);
 		temp.setBackground(Color.black);
-		temp.setFont((new Font("dialog", Font.BOLD, fontSize)));
+//		temp.setFont((new Font("dialog", Font.BOLD, fontSize)));
 		if (sort == "S")
 			temp.setForeground(Color.ORANGE);
 		else if (sort == "N")
@@ -216,6 +228,22 @@ public class GameView extends JFrame implements ActionListener {
 	public int getBoardDimension() {
 		return boardDimension;
 	}
+	
+	public void setActivePlayerFont(String string) {
+		if (string == "player1") {
+			player1Label.setFont(boldFont);
+			score1Label.setFont(boldFont);
+			player2Label.setFont(planeFont);
+			score2Label.setFont(planeFont);
+		} else if (string=="player2") {
+			player2Label.setFont(boldFont);
+			score2Label.setFont(boldFont);
+			player1Label.setFont(planeFont);
+			score1Label.setFont(planeFont);
+		}	
+	}
+	
+	
 
 	@Override
 	public void actionPerformed(ActionEvent arg0) {

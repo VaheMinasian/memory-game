@@ -64,7 +64,7 @@ public class MemoryGame implements Game {
 
 	@Override
 	public boolean move(int i, int j) {
-	
+
 		if (counter == 0) {
 			firstCard = cards[i][j];
 			firstCard.updateCard(CardState.OPEN);
@@ -106,7 +106,7 @@ public class MemoryGame implements Game {
 	public int getMessage(String s) {
 		int i;
 		String[] options = { "play", "Main Menu", "Quit" };
-		int dialogBoxReturnValue=-10;
+		int dialogBoxReturnValue = -10;
 		wincheck = (s.equals("s")) ? 1 : 2;
 		if (wincheck == 1) {
 			System.out.println("inside wincheck==1");
@@ -118,20 +118,20 @@ public class MemoryGame implements Game {
 
 			switch (i) {
 			case 0:
-				dialogBoxReturnValue= 0;
+				dialogBoxReturnValue = 0;
 				break;
 			case 1:
-				dialogBoxReturnValue= 1;
+				dialogBoxReturnValue = 1;
 				break;
 			case 2:
-				dialogBoxReturnValue= 2;
+				dialogBoxReturnValue = 2;
 				break;
 			default:
-				dialogBoxReturnValue= 2;
+				dialogBoxReturnValue = 2;
 				break;
 			}
 			return dialogBoxReturnValue;
-			
+
 		} else if (wincheck == 2) {
 			System.out.println("inside wincheck==2");
 
@@ -142,16 +142,16 @@ public class MemoryGame implements Game {
 						JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);
 				switch (i) {
 				case 0:
-					dialogBoxReturnValue= 0;
+					dialogBoxReturnValue = 0;
 					break;
 				case 1:
-					dialogBoxReturnValue= 1;
+					dialogBoxReturnValue = 1;
 					break;
 				case 2:
-					dialogBoxReturnValue= 2;
+					dialogBoxReturnValue = 2;
 					break;
 				default:
-					dialogBoxReturnValue= 2;
+					dialogBoxReturnValue = 2;
 					break;
 				}
 				break;
@@ -168,16 +168,16 @@ public class MemoryGame implements Game {
 			}
 			switch (i) {
 			case 0:
-				dialogBoxReturnValue= 0;
+				dialogBoxReturnValue = 0;
 				break;
 			case 1:
-				dialogBoxReturnValue= 1;
+				dialogBoxReturnValue = 1;
 				break;
 			case 2:
-				dialogBoxReturnValue= 2;
+				dialogBoxReturnValue = 2;
 				break;
 			default:
-				dialogBoxReturnValue= 2;
+				dialogBoxReturnValue = 2;
 				break;
 			}
 			return dialogBoxReturnValue;
@@ -199,19 +199,21 @@ public class MemoryGame implements Game {
 	}
 
 	// switches the current player
-	public void switchActivePlayer() {
-		if (activePlayer.equals(player1)) {
-			player1.setActive(false);
-			player2.setActive(true);
-			setActivePlayer(player2);
-			System.out.println("active player is: " + getActivePlayer().getName());
-
-		} else if (activePlayer.equals(player2)) {
+	public String switchActivePlayer() {
+		if (activePlayer.equals(player2)) {
 			player2.setActive(false);
 			player1.setActive(true);
 			setActivePlayer(player1);
 			System.out.println("active player is: " + getActivePlayer().getName());
+			return "player1";
+		} else if (activePlayer.equals(player1)) {
+			player1.setActive(false);
+			player2.setActive(true);
+			setActivePlayer(player2);
+			System.out.println("active player is: " + getActivePlayer().getName());
+			return "player2";
 		}
+		return "player2";
 	}
 
 	public void revoke() {

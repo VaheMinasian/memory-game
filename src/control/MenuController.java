@@ -35,6 +35,7 @@ public class MenuController {
 	private static BufferedReader reader;
 	private static FileReader file;
 	private static ArrayList<String> profile = new ArrayList<>();
+	String activePlayerLabel=null;
 	
 	private int validClicksOnCards = 0;
 	int firstNumber, secondNumber;
@@ -170,7 +171,6 @@ public class MenuController {
 				if (!profile.get(0).equals("s")) {
 					gameModel.randomFirstPlayer();
 				}
-				System.out.println("Active player is: " + gameModel.getActivePlayer().getName());
 
 				if (gameModel.getActivePlayer().getName().equals("Computer")) {
 					new java.util.Timer().schedule(new java.util.TimerTask() {
@@ -180,6 +180,9 @@ public class MenuController {
 						}
 					}, 1000);
 				}
+				String p1Label = gameModel.getActivePlayer()==gameModel.getPlayer1() ? "player1" : "player2";
+				gameView.setActivePlayerFont(p1Label);
+//				System.out.println("The active player is: " +gameModel.getActivePlayer().getName());
 			}
 
 			// exit application if 'QUIT' button is clicked in main menu
@@ -381,7 +384,8 @@ public class MenuController {
 											validClicksOnCards = 0;
 											if (profile.get(0).equals("s")) {
 											} else {
-												gameModel.switchActivePlayer();
+												activePlayerLabel = gameModel.switchActivePlayer();
+												gameView.setActivePlayerFont(activePlayerLabel);
 												playTheComputer();
 											}
 										}
@@ -485,7 +489,9 @@ public class MenuController {
 							secondNumber=0;
 							gameModel.revoke();
 							updateScoreBoard();
-							gameModel.switchActivePlayer();
+							activePlayerLabel = gameModel.switchActivePlayer();
+							gameView.setActivePlayerFont(activePlayerLabel);
+							
 
 						} else if (gameModel.getStatus(firstNumber, secondNumber)) {
 							System.out.println("inside gameModel.getStatus()");

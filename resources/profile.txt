@@ -1,5 +1,5 @@
-mode:c
-boardsize:4
+mode:h
+boardsize:10
 player1:kevork
-player2:Computer
+player2:aa
 playable:true
