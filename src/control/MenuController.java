@@ -436,7 +436,6 @@ public class MenuController {
 					System.out.println("after assigning x and y are: " + xIndexComp + ", " + yIndexComp);
 					System.out.println(Thread.currentThread().getId() + "2");
 
-
 					try {
 						Thread.sleep(300);
 					} catch (InterruptedException interrupt) {

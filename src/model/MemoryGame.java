@@ -17,7 +17,6 @@ public class MemoryGame implements Game {
 	private static Player player1;
 	private static Player player2;
 	private static String gameMode;
-	private boolean hasWinner = false;
 	private Player activePlayer;
 	private int numberOfCells;
 
@@ -276,14 +275,6 @@ public class MemoryGame implements Game {
 		return player2;
 	}
 
-	public boolean isHasWinner() {
-		return hasWinner;
-	}
-
-	public void setHasWinner(boolean hasWinner) {
-		this.hasWinner = hasWinner;
-	}
-
 	public void setFirstCard(Card firstCard) {
 		this.firstCard = firstCard;
 	}
@@ -300,11 +291,6 @@ public class MemoryGame implements Game {
 		return secondCard;
 	}
 
-	/*
-	 * public int getFirstNumber() { return firstNumber; }
-	 * 
-	 * public int getSecondNumber() { return secondNumber; }
-	 */
 	public Card[][] getCards() {
 		return this.cards;
 	}

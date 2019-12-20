@@ -25,7 +25,6 @@ import javax.swing.UIManager;
 import javax.swing.border.TitledBorder;
 
 import model.Card;
-import model.Player;
 
 @SuppressWarnings("serial")
 public class GameView extends JFrame implements ActionListener {
@@ -34,7 +33,7 @@ public class GameView extends JFrame implements ActionListener {
 	private MyPanel boardPanel;
 	private JLabel player1Label, player2Label, score1Label, score2Label;
 	private static int cellDimension;
-	private int boardDimension, fontSize;
+	private int boardDimension;
 	private ImageIcon titleIcon, backgroundIcon;
 	private JButton[][] emojiButtons;
 	Font boldFont = new Font("Courier", Font.BOLD,18);
@@ -53,7 +52,6 @@ public class GameView extends JFrame implements ActionListener {
 
 		cellDimension = Integer.parseInt(profile.get(1));
 		boardDimension = cellDimension * 75;
-		fontSize = cellDimension * 4;
 
 		mainPanel = new JPanel();
 		boardPanel = new MyPanel();
