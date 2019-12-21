@@ -43,7 +43,7 @@ public class OptionsView extends JFrame implements ActionListener, ListSelection
 	private DefaultListModel<String> listModel;
 
 	public OptionsView() {
-	
+
 	}
 
 //	  this method creates the options view dialog for the class SetupView. 
@@ -150,33 +150,53 @@ public class OptionsView extends JFrame implements ActionListener, ListSelection
 		list.addListSelectionListener(this);
 		JScrollPane tablePane = new JScrollPane(list);
 
+		addButton = new JButton("add");
+		addButton.setFont((new Font("dialog", Font.BOLD, 12)));
+		addButton.setPreferredSize(new Dimension(55, 28));
+		addButton.setActionCommand("addPlayer");
+		addButton.setEnabled(false);
+
+		removeButton = new JButton("remove");
+		removeButton.setFont((new Font("dialog", Font.BOLD, 12)));
+		removeButton.setPreferredSize(new Dimension(77, 28));
+		removeButton.setActionCommand("removePlayer");
+
 		tablePane.setPreferredSize(new Dimension(100, 50));
 
-		class AddListener implements ActionListener, DocumentListener {
+		class PlayerListListener implements ActionListener, DocumentListener {
 			private boolean alreadyEnabled = false;
-			private JButton button;
+			private JButton addButton;
 
-			public AddListener(JButton button) {
-				this.button = button;
+			public PlayerListListener(JButton button) {
+				this.addButton = button;
 			}
 
 			public void actionPerformed(ActionEvent e) {
 
-				if (((soloButton.isSelected()) || (computerButton.isSelected())) && (listModel.getSize() + 1 > 1)) {
+				if (listModel.getSize() + 1 > 2) {
+					if ((humanButton.isSelected()) && (listModel.getSize() + 1 > 2)) {
+						Toolkit.getDefaultToolkit().beep();
+						JOptionPane.showMessageDialog(null, "You can have only 2 players in \"human\" mode!", "Memory",
+								JOptionPane.INFORMATION_MESSAGE);
+						playerNameTextField.setText("");
+						return;
+					} else if (((soloButton.isSelected()) || (computerButton.isSelected()))
+							&& (listModel.getSize() + 1 > 1)) {
+						Toolkit.getDefaultToolkit().beep();
+						JOptionPane.showMessageDialog(null,
+								"You can have only 1 player in \"solo\" or  \"computer\" mode!", "Memory",
+								JOptionPane.INFORMATION_MESSAGE);
+						playerNameTextField.setText("");
+						playerNameTextField.requestFocusInWindow();
+						return;
+					}
 					Toolkit.getDefaultToolkit().beep();
-					JOptionPane.showMessageDialog(null,
-							"You can have only 1 player in \"solo\" or  \"computer\" game mode!", "Memory",
+					JOptionPane.showMessageDialog(null, "You can't register more than 2 players!", "Memory",
 							JOptionPane.INFORMATION_MESSAGE);
 					playerNameTextField.setText("");
+					playerNameTextField.requestFocusInWindow();
 					return;
-				}
 
-				else if ((humanButton.isSelected()) && (listModel.getSize() + 1 > 2)) {
-					Toolkit.getDefaultToolkit().beep();
-					JOptionPane.showMessageDialog(null, "You can have only 2 players in \"pair\" game mode!", "Memory",
-							JOptionPane.INFORMATION_MESSAGE);
-					playerNameTextField.setText("");
-					return;
 				}
 
 				String name = playerNameTextField.getText();
@@ -209,7 +229,6 @@ public class OptionsView extends JFrame implements ActionListener, ListSelection
 				list.ensureIndexIsVisible(index);
 			}
 
-
 			// Required by DocumentListener.
 			public void insertUpdate(DocumentEvent e) {
 				enableButton();
@@ -229,13 +248,13 @@ public class OptionsView extends JFrame implements ActionListener, ListSelection
 
 			private void enableButton() {
 				if (!alreadyEnabled) {
-					button.setEnabled(true);
+					addButton.setEnabled(true);
 				}
 			}
 
 			private boolean handleEmptyTextField(DocumentEvent e) {
 				if (e.getDocument().getLength() <= 0) {
-					button.setEnabled(false);
+					addButton.setEnabled(false);
 					alreadyEnabled = false;
 					return true;
 				}
@@ -243,18 +262,8 @@ public class OptionsView extends JFrame implements ActionListener, ListSelection
 			}
 		}
 
-		addButton = new JButton("add");
-		AddListener addListener = new AddListener(addButton);
-		addButton.setFont((new Font("dialog", Font.BOLD, 12)));
-		addButton.setPreferredSize(new Dimension(55, 28));
-		addButton.setActionCommand("addPlayer");
+		PlayerListListener addListener = new PlayerListListener(addButton);
 		addButton.addActionListener(addListener);
-		addButton.setEnabled(false);
-
-		removeButton = new JButton("remove");
-		removeButton.setFont((new Font("dialog", Font.BOLD, 12)));
-		removeButton.setPreferredSize(new Dimension(77, 28));
-		removeButton.setActionCommand("removePlayer");
 
 		removeButton.addActionListener(new ActionListener() {
 
@@ -267,16 +276,12 @@ public class OptionsView extends JFrame implements ActionListener, ListSelection
 						defaultLM.removeElementAt(selectedIndices[i]);
 					}
 				}
-
-				int size = listModel.getSize();
-
-				if (size == 0) {
+				int listSize = listModel.getSize();
+				if (listSize == 0) {
 					removeButton.setEnabled(false);
 				}
-
 				list.ensureIndexIsVisible(list.getSelectedIndex());
 			}
-
 		});
 
 		playerNameTextField = new JTextField(14);
@@ -346,20 +351,19 @@ public class OptionsView extends JFrame implements ActionListener, ListSelection
 
 	// set action listener on all setup view buttons
 	public void addOptionsViewListener(ActionListener selected) {
-		sqrFour.addActionListener(selected);
-		sqrSix.addActionListener(selected);
-		sqrEight.addActionListener(selected);
-		sqrTen.addActionListener(selected);
-		soloButton.addActionListener(selected);
-		humanButton.addActionListener(selected);
-		computerButton.addActionListener(selected);
+//		sqrFour.addActionListener(selected);
+//		sqrSix.addActionListener(selected);
+//		sqrEight.addActionListener(selected);
+//		sqrTen.addActionListener(selected);
+//		soloButton.addActionListener(selected);
+//		humanButton.addActionListener(selected);
+//		computerButton.addActionListener(selected);
 		saveButton.addActionListener(selected);
 	}
 
 	@Override
 	public void valueChanged(ListSelectionEvent arg0) {
 		if (arg0.getValueIsAdjusting() == false) {
-
 			if (list.getSelectedIndex() == -1) {
 				// No selection, disable remove button.
 				removeButton.setEnabled(false);
@@ -367,7 +371,6 @@ public class OptionsView extends JFrame implements ActionListener, ListSelection
 			} else {
 				// Selection, enable the remove button.
 				removeButton.setEnabled(true);
-
 			}
 		}
 	}

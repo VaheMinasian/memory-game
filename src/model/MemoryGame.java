@@ -13,7 +13,7 @@ public class MemoryGame implements Game {
 
 	private Card[][] cards;
 	private Card selectedCard;
-	private static Board boardDimension;
+	private Board boardDimension;
 	private static Player player1;
 	private static Player player2;
 	private static String gameMode;
@@ -46,7 +46,7 @@ public class MemoryGame implements Game {
 		}
 		setGameMode(profile.get(0));
 		setBoardDimension(new Board(profile.get(1)));
-
+		this.activePlayer=player1;
 		createCards(Integer.parseInt(profile.get(1)));
 	}
 
@@ -315,12 +315,12 @@ public class MemoryGame implements Game {
 		MemoryGame.gameMode = gameMode;
 	}
 
-	public static Board getBoardDimension() {
+	public Board getBoardDimension() {
 		return boardDimension;
 	}
 
-	public static void setBoardDimension(Board boardDimension) {
-		MemoryGame.boardDimension = boardDimension;
+	public void setBoardDimension(Board boardDimension) {
+		this.boardDimension = boardDimension;
 	}
 
 	public void buttonIsOpen() throws ButtonNotAvailableException {

@@ -20,6 +20,9 @@ import view.MainMenuView;
 import view.MyPanel;
 import view.OptionsView;
 
+
+
+
 //Controller class for Main menu and options menu using singleton controller object
 public class MenuController {
 
@@ -41,6 +44,7 @@ public class MenuController {
 	public MenuController() {
 		System.out.println("Main constructor invoked");
 	}
+	
 	
 	public MenuController(MainMenuView mView, OptionsView oView, MemoryGame mGame, GameView gView) {
 		mainMenuView = mView;
@@ -77,6 +81,7 @@ public class MenuController {
 		}
 	}
 
+	
 	// Reading profile data from file
 	private static void loadProfile() {
 		profile.clear();
@@ -103,18 +108,19 @@ public class MenuController {
 
 	}
 
+	
 	// Loading profile components to Options Menu UI
-	private static void loadOptionsProfile(OptionsView view) {
+	private static void loadProfileUI() {
 
 		switch (profile.get(0)) {
 		case "s":
-			view.getSoloButton().setSelected(true);
+			optionsView.getSoloButton().setSelected(true);
 			break;
 		case "h":
-			view.getHumanButton().setSelected(true);
+			optionsView.getHumanButton().setSelected(true);
 			break;
 		case "c":
-			view.getComputerButton().setSelected(true);
+			optionsView.getComputerButton().setSelected(true);
 			break;
 		default:
 			break;
@@ -123,16 +129,16 @@ public class MenuController {
 		// checking board size in profile and loading to UI
 		switch (profile.get(1)) {
 		case "4":
-			view.getSqrFour().setSelected(true);
+			optionsView.getSqrFour().setSelected(true);
 			break;
 		case "6":
-			view.getSqrSix().setSelected(true);
+			optionsView.getSqrSix().setSelected(true);
 			break;
 		case "8":
 			optionsView.getSqrEight().setSelected(true);
 			break;
 		case "10":
-			view.getSqrTen().setSelected(true);
+			optionsView.getSqrTen().setSelected(true);
 			break;
 		default:
 			break;
@@ -152,17 +158,54 @@ public class MenuController {
 		} // End of Reading profile data from file
 	}
 
+	
+	
+	
 	class MainMenuViewListener implements ActionListener {
 
 		public void actionPerformed(ActionEvent e) {
 
-			// Initialize game when 'PLAY' button is clicked in main menu
+			// exit application if     'Q U I T'     button is clicked in main menu
+			if (e.getSource() == mainMenuView.getExitButton()) {
+				System.exit(0);
+			}
+			
+			// actions performed if    'O P T I O N S'    button is clicked in main menu
+			if (e.getSource() == mainMenuView.getOptionsButton()) {
+
+				// hide main menu when switching to options menu.
+				mainMenuView.frame.setVisible(false);
+				
+				// setup and display options menu
+				optionsView.setOptionsMenu();
+				if ((profile.size() != 0) || (firstTimeProfileSave == true) ) {
+					loadProfile();
+					//used when options button is clicked more than once within the one game session
+					loadProfileUI();
+				}
+				// Add listeners to options menu
+				optionsView.addOptionsViewListener(new OptionsViewListener());
+				
+				//marker to ensure loading the "profile" file version of profile is loaded into options menu UI
+				firstTimeProfileSave = true;
+				
+				// override system.exit(0) on options menu to return to main menu
+				optionsView.frame.addWindowListener(new WindowAdapter() {
+					@Override
+					public void windowClosing(WindowEvent e) {
+						optionsView.frame.setVisible(false);
+						mainMenuView.frame.setVisible(true);
+					}
+				});
+			}
+			
+			// Initialize game when    'P L A Y'    button is clicked in main menu
 			if (e.getSource() == mainMenuView.getPlayButton()) {
 				loadProfile();
 				gameModel.initializeParameters(profile);
 				mainMenuView.frame.setVisible(false);
 				gameView.displayGameWindow(profile);
-				MyPanel.setBoardSize(gameView.getBoardDimension());
+//				gameView.getBoardPanel().setBoardSize(gameView.getBoardDimension());
 				gameView.addGameViewListener(new GameListener());
 				gameModel.setActivePlayer(gameModel.getPlayer1());
 				if (!profile.get(0).equals("s")) {
@@ -180,41 +223,15 @@ public class MenuController {
 				String p1Label = gameModel.getActivePlayer()==gameModel.getPlayer1() ? "player1" : "player2";
 				gameView.setActivePlayerFont(p1Label);
 			}
-
-			// exit application if 'QUIT' button is clicked in main menu
-			if (e.getSource() == mainMenuView.getExitButton()) {
-				System.exit(0);
-			}
-
-			// actions performed if 'OPTIONS' button is clicked in main menu
-			if (e.getSource() == mainMenuView.getOptionsButton()) {
-				// setup and display options menu
-				optionsView.setOptionsMenu();
-				if ((profile.size() != 0) || (firstTimeProfileSave == true) ) {
-					loadProfile();
-					loadOptionsProfile(optionsView);
-				}
-				// Add listeners to options menu
-				optionsView.addOptionsViewListener(new OptionsViewListener());
-
-				// hide main menu when switching to options menu.
-				mainMenuView.frame.setVisible(false);
-				firstTimeProfileSave = true;
-
-				// override system.exit(0) on options menu to return to main menu
-				optionsView.frame.addWindowListener(new WindowAdapter() {
-					@Override
-					public void windowClosing(WindowEvent e) {
-						optionsView.frame.setVisible(false);
-						mainMenuView.frame.setVisible(true);
-					}
-				});
-			}
 		}// End of Action performed
 	} // End of MainMenuViewListener
 
+	
+	
+	
+	
 	class OptionsViewListener implements ActionListener {
-
+		
 		String player1 = "", player2 = "", player3 = "";
 		String selectedGameMode;
 		String board;
@@ -235,7 +252,7 @@ public class MenuController {
 					if (optionsView.getSoloButton().isSelected()) {
 						if (optionsView.getListModel().getSize() != 1) {
 							Toolkit.getDefaultToolkit().beep();
-							JOptionPane.showMessageDialog(null, "You should have only one name!", "Memory",
+							JOptionPane.showMessageDialog(null, "Please register a player!", "Memory",
 									JOptionPane.INFORMATION_MESSAGE);
 							return;
 						}
@@ -246,7 +263,7 @@ public class MenuController {
 					else if (optionsView.getComputerButton().isSelected()) {
 						if (optionsView.getListModel().getSize() != 1) {
 							Toolkit.getDefaultToolkit().beep();
-							JOptionPane.showMessageDialog(null, "You should have only one name!", "Memory",
+							JOptionPane.showMessageDialog(null, "Please register a player!", "Memory",
 									JOptionPane.INFORMATION_MESSAGE);
 							return;
 						}
@@ -323,7 +340,9 @@ public class MenuController {
 		}
 	}
 
-	//
+	
+
+	
 	class GameListener implements ActionListener {
 		
 		public void actionPerformed(ActionEvent e) {
@@ -354,10 +373,10 @@ public class MenuController {
 
 							if ((secondNumber == 0) && (gameModel.move(i, j))) {
 								if(validClicksOnCards==1) { 
-									firstNumber=gameView.getCurrentIconsNames().get(i * GameView.getCellDimension() + j);
+									firstNumber=gameView.getCurrentIconsNames().get(i * gameView.getCellDimension() + j);
 									}
 								else if (validClicksOnCards==2){ 
-									secondNumber=gameView.getCurrentIconsNames().get(i * GameView.getCellDimension() + j);
+									secondNumber=gameView.getCurrentIconsNames().get(i * gameView.getCellDimension() + j);
 									}
 								// if(singletonModel.move(i, j));
 								gameView.updateCardBoard(i, j);
@@ -414,6 +433,7 @@ public class MenuController {
 		}
 	}
 
+	
 	public void playTheComputer() {
 		int xIndexComp;
 		int yIndexComp;
@@ -447,14 +467,14 @@ public class MenuController {
 						System.out.println(Thread.currentThread().getId() + "3");
 
 						if(validClicksOnCards==1) { 
-							firstNumber=gameView.getCurrentIconsNames().get(xIndexComp * GameView.getCellDimension() + yIndexComp);
+							firstNumber=gameView.getCurrentIconsNames().get(xIndexComp * gameView.getCellDimension() + yIndexComp);
 							System.out.println("valid clicks =1");
 							System.out.println("FirstNumber is: " + firstNumber);
 							System.out.println(Thread.currentThread().getId() + "4");
 
 						}
 						else if (validClicksOnCards==2){ 
-							secondNumber=gameView.getCurrentIconsNames().get(xIndexComp * GameView.getCellDimension() + yIndexComp);
+							secondNumber=gameView.getCurrentIconsNames().get(xIndexComp * gameView.getCellDimension() + yIndexComp);
 							System.out.println("valid clicks =2");
 							System.out.println("SecondNumber is: " + secondNumber);
 							System.out.println(Thread.currentThread().getId() + "5");

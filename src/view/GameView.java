@@ -32,8 +32,8 @@ public class GameView extends JFrame implements ActionListener {
 	private JPanel mainPanel, namesPanel;
 	private MyPanel boardPanel;
 	private JLabel player1Label, player2Label, score1Label, score2Label;
-	private static int cellDimension;
 	private int boardDimension;
+	private int boardSize;
 	private ImageIcon titleIcon, backgroundIcon;
 	private JButton[][] emojiButtons;
 	Font boldFont = new Font("Courier", Font.BOLD,18);
@@ -50,8 +50,8 @@ public class GameView extends JFrame implements ActionListener {
 
 //		public void setBoard(int noOfCells, String player1, String player2, String player3){
 
-		cellDimension = Integer.parseInt(profile.get(1));
-		boardDimension = cellDimension * 75;
+		boardDimension = Integer.parseInt(profile.get(1));
+		boardSize = boardDimension * 75;
 
 		mainPanel = new JPanel();
 		boardPanel = new MyPanel();
@@ -59,7 +59,7 @@ public class GameView extends JFrame implements ActionListener {
 
 		titleIcon = new ImageIcon(OptionsView.class.getResource("/46.png"));// smiling emoji
 		namesPanel.setAlignmentX(CENTER_ALIGNMENT);
-		namesPanel.setPreferredSize(new Dimension(boardDimension, boardDimension / 3));
+		namesPanel.setPreferredSize(new Dimension(boardSize, boardSize / 3));
 		namesPanel.setLayout(new GridLayout(2, 2));
 		namesPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(),
 				" P L A Y E R S     &     S C O R E S ", TitledBorder.CENTER, TitledBorder.TOP));
@@ -99,14 +99,14 @@ public class GameView extends JFrame implements ActionListener {
 
 		backgroundIcon = getRandomBackGIcon();
 		backgroundIcon = resizeImage(backgroundIcon, getBoardDimension(), getBoardDimension());
-		MyPanel.setImage(backgroundIcon);
-		getBoardPanel().setLayout(new GridLayout(cellDimension, cellDimension));
-		getBoardPanel().setVisible(true);
-		getBoardPanel().setPreferredSize(new Dimension(boardDimension, boardDimension));
-		getBoardPanel().setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(),
+		boardPanel.setImage(backgroundIcon);
+		boardPanel.setLayout(new GridLayout(boardDimension, boardDimension));
+		boardPanel.setVisible(true);
+		boardPanel.setPreferredSize(new Dimension(boardSize, boardSize));
+		boardPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(),
 				" M E M O R Y      G A M E ", TitledBorder.CENTER, TitledBorder.TOP));
-
-		currentIconIndexes = new ArrayList<>(cellDimension * cellDimension);
+		currentIconIndexes = new ArrayList<>(boardDimension * boardDimension);
+		boardPanel.setBoardSize(boardSize);
 
 		iconIndexes = new ArrayList<>();
 		for (int i = 1; i < 73; i++) {
@@ -114,7 +114,7 @@ public class GameView extends JFrame implements ActionListener {
 		}
 		Collections.shuffle(iconIndexes);
 
-		iconIndexes = new ArrayList<Integer>(iconIndexes.subList(0, 72 - (72 - (cellDimension * cellDimension / 2))));
+		iconIndexes = new ArrayList<Integer>(iconIndexes.subList(0, 72 - (72 - (boardDimension * boardDimension / 2))));
 
 		for (int n = 0; n < iconIndexes.size(); n++) {
 			currentIconIndexes.add(iconIndexes.get(n));
@@ -122,30 +122,29 @@ public class GameView extends JFrame implements ActionListener {
 		}
 		Collections.shuffle(currentIconIndexes);
 
-		emojiButtons = new JButton[cellDimension][cellDimension];
-		for (int i = 0; i < cellDimension; i++) {
-			for (int j = 0; j < cellDimension; j++) {
+		emojiButtons = new JButton[boardDimension][boardDimension];
+		for (int i = 0; i < boardDimension; i++) {
+			for (int j = 0; j < boardDimension; j++) {
 				emojiButtons[i][j] = new JButton(patternIcon);
-				getBoardPanel().add(emojiButtons[i][j]);
+				boardPanel.add(emojiButtons[i][j]);
 			}
 		}
 		// Collections.shuffle(Arrays.asList(emojiButtons));
 
 		UIManager.put("ToggleButton.select", Color.BLACK);
 		SwingUtilities.updateComponentTreeUI(this);
-
 		mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
-		mainPanel.add(getBoardPanel());
+		mainPanel.add(boardPanel);
 		mainPanel.add(namesPanel);
-
 		this.add(mainPanel);
 		this.pack();
-		this.setPreferredSize(new Dimension(boardDimension, boardDimension + 100));
+		this.setPreferredSize(new Dimension(boardSize, boardSize + 100));
 		this.setIconImage(titleIcon.getImage());
 		this.setLocationRelativeTo(null);
 		this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		this.setResizable(false);
 		this.setVisible(true);
+
 	}
 
 	private JLabel makeLabel(String sort) {
@@ -189,8 +188,8 @@ public class GameView extends JFrame implements ActionListener {
 
 	
 	public void addGameViewListener(ActionListener BottonListener) {
-		for (int i = 0; i < cellDimension; i++) {
-			for (int j = 0; j < cellDimension; j++) {
+		for (int i = 0; i < boardDimension; i++) {
+			for (int j = 0; j < boardDimension; j++) {
 				emojiButtons[i][j].addActionListener(BottonListener);
 			}
 		}
@@ -211,8 +210,8 @@ public class GameView extends JFrame implements ActionListener {
 		return emojiButtons[i][j];
 	}
 
-	public static int getCellDimension() {
-		return cellDimension;
+	public int getCellDimension() {
+		return boardDimension;
 	}
 
 	public ArrayList<Integer> getCurrentIconsNames() {
@@ -224,7 +223,7 @@ public class GameView extends JFrame implements ActionListener {
 	}
 
 	public int getBoardDimension() {
-		return boardDimension;
+		return boardSize;
 	}
 	
 	public void setActivePlayerFont(String string) {
@@ -273,10 +272,10 @@ public class GameView extends JFrame implements ActionListener {
 		emojiButtons[card1.getCardIndex()[0]][card1.getCardIndex()[1]].setVisible(false);
 		emojiButtons[card2.getCardIndex()[0]][card2.getCardIndex()[1]].setVisible(false);
 		System.out.println("set visible false");
-		getBoardPanel().revalidate();
+		boardPanel.revalidate();
 	}
 
-	public MyPanel getBoardPanel() {
-		return boardPanel;
-	}
+	
+	  public MyPanel getBoardPanel() { return boardPanel; }
+	 
 }
