@@ -10,7 +10,6 @@ import java.awt.Insets;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.ButtonGroup;
@@ -39,7 +38,7 @@ public class OptionsView extends JFrame implements ActionListener, ListSelection
 	private JPanel emptyPanel, mainPanel, gameModePanel, boardSizePanel, tableButtonsPanel, executionPanel;
 	private JToggleButton soloButton, humanButton, computerButton, sqrFour, sqrSix, sqrEight, sqrTen;
 	private JButton addButton, removeButton, saveButton;
-	private JTextField playerName;
+	private JTextField playerNameTextField;
 	private JList<String> list;
 	private DefaultListModel<String> listModel;
 
@@ -51,6 +50,7 @@ public class OptionsView extends JFrame implements ActionListener, ListSelection
 	public void setOptionsMenu() {
 		frame = new JFrame("Memory");
 		ImageIcon frameIcon = new ImageIcon(OptionsView.class.getResource("/46.png"));
+		frame.setIconImage(frameIcon.getImage());
 
 		mainPanel = new JPanel(new GridBagLayout());
 		frame.getContentPane().add(mainPanel);
@@ -160,7 +160,6 @@ public class OptionsView extends JFrame implements ActionListener, ListSelection
 				this.button = button;
 			}
 
-			// Required by ActionListener.
 			public void actionPerformed(ActionEvent e) {
 
 				if (((soloButton.isSelected()) || (computerButton.isSelected())) && (listModel.getSize() + 1 > 1)) {
@@ -168,7 +167,7 @@ public class OptionsView extends JFrame implements ActionListener, ListSelection
 					JOptionPane.showMessageDialog(null,
 							"You can have only 1 player in \"solo\" or  \"computer\" game mode!", "Memory",
 							JOptionPane.INFORMATION_MESSAGE);
-					playerName.setText("");
+					playerNameTextField.setText("");
 					return;
 				}
 
@@ -176,20 +175,20 @@ public class OptionsView extends JFrame implements ActionListener, ListSelection
 					Toolkit.getDefaultToolkit().beep();
 					JOptionPane.showMessageDialog(null, "You can have only 2 players in \"pair\" game mode!", "Memory",
 							JOptionPane.INFORMATION_MESSAGE);
-					playerName.setText("");
+					playerNameTextField.setText("");
 					return;
 				}
 
-				String name = playerName.getText();
+				String name = playerNameTextField.getText();
 
 				// User didn't type in a unique name...
-				if (name.equals("") || alreadyInList(name)) {
+				if (name.equals("") || listModel.contains(name)) {
 					Toolkit.getDefaultToolkit().beep();
 					JOptionPane.showMessageDialog(null, "The name already exists,  please choose another name",
 							"Memory", JOptionPane.INFORMATION_MESSAGE);
 
-					playerName.requestFocusInWindow();
-					playerName.selectAll();
+					playerNameTextField.requestFocusInWindow();
+					playerNameTextField.selectAll();
 					return;
 				}
 
@@ -200,19 +199,16 @@ public class OptionsView extends JFrame implements ActionListener, ListSelection
 					index++;
 				}
 
-				listModel.insertElementAt(playerName.getText(), index);
+				listModel.insertElementAt(playerNameTextField.getText(), index);
 				list.clearSelection();
 
-				playerName.requestFocusInWindow();
-				playerName.setText("");
+				playerNameTextField.requestFocusInWindow();
+				playerNameTextField.setText("");
 
 				list.setSelectedIndex(index);
 				list.ensureIndexIsVisible(index);
 			}
 
-			protected boolean alreadyInList(String name) {
-				return listModel.contains(name);
-			}
 
 			// Required by DocumentListener.
 			public void insertUpdate(DocumentEvent e) {
@@ -283,17 +279,17 @@ public class OptionsView extends JFrame implements ActionListener, ListSelection
 
 		});
 
-		playerName = new JTextField(14);
-		playerName.setPreferredSize(new Dimension(200, 30));
-		playerName.setFont((new Font("dialog", Font.PLAIN, 14)));
+		playerNameTextField = new JTextField(14);
+		playerNameTextField.setPreferredSize(new Dimension(200, 30));
+		playerNameTextField.setFont((new Font("dialog", Font.PLAIN, 14)));
 
-		playerName.addActionListener(addListener);
-		playerName.getDocument().addDocumentListener(addListener);
+		playerNameTextField.addActionListener(addListener);
+		playerNameTextField.getDocument().addDocumentListener(addListener);
 		tableButtonsPanel = new JPanel();
 		tableButtonsPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(),
 				" a d d  p l a y e r s ", TitledBorder.CENTER, TitledBorder.TOP));
 		tableButtonsPanel.add(addButton);
-		tableButtonsPanel.add(playerName);
+		tableButtonsPanel.add(playerNameTextField);
 		tableButtonsPanel.add(removeButton);
 
 		saveButton = new JButton("save");
@@ -341,7 +337,6 @@ public class OptionsView extends JFrame implements ActionListener, ListSelection
 		gbc.anchor = GridBagConstraints.SOUTH;
 		mainPanel.add(executionPanel, gbc);
 
-		frame.setIconImage(frameIcon.getImage());
 		frame.setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
 		frame.pack();
 		frame.setLocationRelativeTo(null);
@@ -422,10 +417,10 @@ public class OptionsView extends JFrame implements ActionListener, ListSelection
 	}
 
 	public JTextField getPlayerName() {
-		return playerName;
+		return playerNameTextField;
 	}
 
 	public void setPlayerName(JTextField playerName) {
-		this.playerName = playerName;
+		this.playerNameTextField = playerName;
 	}
 }

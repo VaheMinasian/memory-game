@@ -1,6 +1,6 @@
 package view;
 
-import java.awt.Dimension;
+import java.awt.Dimension; 
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -30,27 +30,28 @@ public class MainMenuView extends JFrame implements ActionListener {
 
 		frame = new JFrame("Memory");
 		ImageIcon frameIcon = new ImageIcon(OptionsView.class.getResource("/46.png"));
+		frame.setIconImage(frameIcon.getImage());
 		panel = new JPanel(new GridBagLayout());
-		frame.getContentPane().add(panel);
 		panel.setPreferredSize(new Dimension(220, 300));
 		panel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), " M A I N    M E N U ",
 				TitledBorder.CENTER, TitledBorder.TOP));
+		frame.getContentPane().add(panel);
 
 		playButton = new JButton("play!");
 		playButton.setFont((new Font("dialog", Font.BOLD, 13)));
 		playButton.setPreferredSize(new Dimension(140, 60));
-		playButton.setActionCommand("start");
+//		playButton.setActionCommand("start");
 		playButton.setEnabled(false);
 
 		optionsButton = new JButton("setup");
 		optionsButton.setFont((new Font("dialog", Font.BOLD, 13)));
 		optionsButton.setPreferredSize(new Dimension(140, 60));
-		optionsButton.setActionCommand("options");
+//		optionsButton.setActionCommand("options");
 
 		exitButton = new JButton("Quit");
 		exitButton.setFont((new Font("dialog", Font.BOLD, 13)));
 		exitButton.setPreferredSize(new Dimension(140, 60));
-		exitButton.setActionCommand("exit");
+//		exitButton.setActionCommand("exit");
 
 		GridBagConstraints c = new GridBagConstraints();
 
@@ -67,7 +68,6 @@ public class MainMenuView extends JFrame implements ActionListener {
 		c.gridy = 2;
 		panel.add(exitButton, c);
 
-		frame.setIconImage(frameIcon.getImage());
 		frame.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 		frame.pack();
 		frame.setLocationRelativeTo(null);

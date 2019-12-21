@@ -23,23 +23,20 @@ import view.OptionsView;
 //Controller class for Main menu and options menu using singleton controller object
 public class MenuController {
 
-//	private static MenuController singletonMenuControlObject = null;
-
 	private static MainMenuView mainMenuView;
 	private static OptionsView optionsView;
-	private MemoryGame gameModel;
-	private GameView gameView;
-	
-	
-//	*
 	private static BufferedReader reader;
 	private static FileReader file;
 	private static ArrayList<String> profile = new ArrayList<>();
-	String activePlayerLabel=null;
+
+	private MemoryGame gameModel;
+	private GameView gameView;
 	
 	private int validClicksOnCards = 0;
-	int firstNumber, secondNumber;
 	private boolean firstTimeProfileSave = false;
+
+	String activePlayerLabel = null;
+	int firstNumber, secondNumber;
 
 	public MenuController() {
 		System.out.println("Main constructor invoked");
@@ -50,8 +47,8 @@ public class MenuController {
 		optionsView = oView;
 		gameModel = mGame; 
 		gameView = gView;
-		mainMenuView.addMainMenuViewListener(new MainMenuListener());
 		isPlayable();
+		mainMenuView.addMainMenuViewListener(new MainMenuViewListener());
 	}
 
 		
@@ -155,7 +152,7 @@ public class MenuController {
 		} // End of Reading profile data from file
 	}
 
-	class MainMenuListener implements ActionListener {
+	class MainMenuViewListener implements ActionListener {
 
 		public void actionPerformed(ActionEvent e) {
 
@@ -164,7 +161,7 @@ public class MenuController {
 				loadProfile();
 				gameModel.initializeParameters(profile);
 				mainMenuView.frame.setVisible(false);
-				gameView.initialize(profile);
+				gameView.displayGameWindow(profile);
 				MyPanel.setBoardSize(gameView.getBoardDimension());
 				gameView.addGameViewListener(new GameListener());
 				gameModel.setActivePlayer(gameModel.getPlayer1());
@@ -182,7 +179,6 @@ public class MenuController {
 				}
 				String p1Label = gameModel.getActivePlayer()==gameModel.getPlayer1() ? "player1" : "player2";
 				gameView.setActivePlayerFont(p1Label);
-//				System.out.println("The active player is: " +gameModel.getActivePlayer().getName());
 			}
 
 			// exit application if 'QUIT' button is clicked in main menu
@@ -215,7 +211,7 @@ public class MenuController {
 				});
 			}
 		}// End of Action performed
-	} // End of MainMenuListener
+	} // End of MainMenuViewListener
 
 	class OptionsViewListener implements ActionListener {
 

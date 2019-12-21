@@ -1,5 +1,0 @@
-mode:c
-boardsize:6
-player1:a
-player2:Computer
-playable:true

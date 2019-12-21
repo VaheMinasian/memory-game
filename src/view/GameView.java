@@ -46,7 +46,7 @@ public class GameView extends JFrame implements ActionListener {
 	public GameView() {
 	}
 
-	public void initialize(ArrayList<String> profile) {
+	public void displayGameWindow(ArrayList<String> profile) {
 
 //		public void setBoard(int noOfCells, String player1, String player2, String player3){
 
