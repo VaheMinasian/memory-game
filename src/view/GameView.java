@@ -98,7 +98,7 @@ public class GameView extends JFrame implements ActionListener {
 		setScore2Label(0, 0);
 
 		backgroundIcon = getRandomBackGIcon();
-		backgroundIcon = resizeImage(backgroundIcon, getBoardDimension(), getBoardDimension());
+		backgroundIcon = resizeImage(backgroundIcon, getBoardSize(), getBoardSize());
 		boardPanel.setImage(backgroundIcon);
 		boardPanel.setLayout(new GridLayout(boardDimension, boardDimension));
 		boardPanel.setVisible(true);
@@ -222,7 +222,7 @@ public class GameView extends JFrame implements ActionListener {
 		return emojiButtons;
 	}
 
-	public int getBoardDimension() {
+	public int getBoardSize() {
 		return boardSize;
 	}
 	

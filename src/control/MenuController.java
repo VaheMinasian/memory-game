@@ -207,7 +207,7 @@ public class MenuController {
 				gameView.displayGameWindow(profile);
 //				gameView.getBoardPanel().setBoardSize(gameView.getBoardDimension());
 				gameView.addGameViewListener(new GameListener());
-				gameModel.setActivePlayer(gameModel.getPlayer1());
+//				gameModel.setActivePlayer(gameModel.getPlayer1());
 				if (!profile.get(0).equals("s")) {
 					gameModel.randomFirstPlayer();
 				}
