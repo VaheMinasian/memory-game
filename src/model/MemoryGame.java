@@ -13,28 +13,21 @@ public class MemoryGame implements Game {
 
 	private Card[][] cards;
 	private Card selectedCard;
-	private Board boardDimension;
+	private int boardDimension;
 	private static Player player1;
 	private static Player player2;
-	private static String gameMode;
 	private Player activePlayer;
-	private int numberOfCells;
 
 	private Card firstCard = null, secondCard = null;
-//	private int firstNumber, secondNumber; // Icon file names
-	private static int[] buttonsIndex = new int[4];
 	private int counter = 0;
 	private int wincheck = 0;
+
+//	private static String gameMode;
+//	private static int[] buttonsIndex = new int[4];
 
 	public MemoryGame() {
 
 	}
-
-	/*
-	 * public static MemoryGame getInstance() { // TODO Auto-generated method stub
-	 * if (Single_Instance == null) { synchronized (MemoryGame.class) {
-	 * Single_Instance = new MemoryGame(); } } return Single_Instance; }
-	 */
 
 	public void initializeParameters(ArrayList<String> profile) {
 		// TODO Auto-generated method stub
@@ -44,12 +37,25 @@ public class MemoryGame implements Game {
 		} else if (profile.get(0).equals("h")) {
 			player2 = new HumanPlayer(profile.get(3));
 		}
-		setGameMode(profile.get(0));
-		setBoardDimension(new Board(profile.get(1)));
+//		setGameMode(profile.get(0));
+		boardDimension = Integer.parseInt(profile.get(1));
 		this.activePlayer = player1;
-		createCards(Integer.parseInt(profile.get(1)));
+		createCards(boardDimension);
 	}
 
+	
+	// randomly selects the player who will begin the game
+		public void randomFirstPlayer() {
+			Random random = new Random();
+			// Create random integer 1 or 2 refering to eventual 2 players
+			int randomInteger = random.nextInt(2) + 1;
+
+			if (randomInteger == 1)
+				setActivePlayer(player1);
+			else if ((randomInteger == 2) && (!player2.getName().equals("")))
+				setActivePlayer(player2);
+		}
+	
 	private void createCards(int dimension) {
 		cards = new Card[dimension][dimension];
 		for (int i = 0; i < dimension; i++) {
@@ -58,34 +64,29 @@ public class MemoryGame implements Game {
 				cards[i][j] = new Card(i, j);
 			}
 		}
-		numberOfCells = dimension * dimension;
 	}
 
+	public void buttonIsOpen() throws ButtonNotAvailableException {
+		if (selectedCard.getState() == CardState.OPEN) {
+			System.out.println("Card Already open: \'selected card\'");
+			throw new ButtonNotAvailableException("You can't click on an open card!\n");
+		}
+	}
+
+	
 	@Override
 	public boolean move(int i, int j) {
-
 		if (counter == 0) {
 			firstCard = cards[i][j];
 			firstCard.updateCard(CardState.OPEN);
-			buttonsIndex[0] = i;
-			buttonsIndex[1] = j;
-			System.out.println("Buton 1 index is  [" + i + "][" + j + "]");
 			counter++;
-			System.out.println("Leaving move1 counter= " + counter);
 			return true;
 		}
 
 		else if ((counter == 1) && (!firstCard.equals(selectedCard))) {
 			secondCard = cards[i][j];
 			secondCard.updateCard(CardState.OPEN);
-			buttonsIndex[2] = i;
-			buttonsIndex[3] = j;
-			System.out.println("Buton 2 index is [" + i + "][" + j + "]");
-			System.out.println("first card is \"" + firstCard.getState() + "\" - second card is \""
-					+ secondCard.getState() + "\"");
-
-			counter++;
-			System.out.println("Leaving move'2', counter= " + counter + "\n");
+			counter--;
 			return true;
 		}
 		return false;
@@ -103,98 +104,38 @@ public class MemoryGame implements Game {
 
 	@Override
 	public int getMessage(String s) {
-		int i;
-		String[] options = { "play", "Main Menu", "Quit" };
-		int dialogBoxReturnValue = -10;
+		int dialogBoxReturnValue=-1;
+		
+		String[] options = { "play", "Main Menu", "Quit"};
 		wincheck = (s.equals("s")) ? 1 : 2;
 
 		if (wincheck == 1) {
-			System.out.println("inside wincheck==1");
-
-			i = JOptionPane.showOptionDialog(null,
+			dialogBoxReturnValue = JOptionPane.showOptionDialog(null,
 					"Congratulations " + player1.getName() + ", you have won! \nYour socre is " + player1.getScore()
 							+ " out of " + player1.getTries() + " moves.",
 					"Memory", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);
-			switch (i) {
-			case 0:
-				dialogBoxReturnValue = 0;
-				break;
-			case 1:
-				dialogBoxReturnValue = 1;
-				break;
-			case 2:
-				dialogBoxReturnValue = 2;
-				break;
-			default:
-				dialogBoxReturnValue = 2;
-				break;
-			}
-			return dialogBoxReturnValue;
-
+		
 		} else if (wincheck == 2) {
-			System.out.println("inside wincheck==2");
-
 			switch (player1.getScore() - player2.getScore()) {
-
 			case 0:
-				i = JOptionPane.showOptionDialog(null, "The game is drawn!", "Memory", JOptionPane.DEFAULT_OPTION,
+				dialogBoxReturnValue = JOptionPane.showOptionDialog(null, "The game is drawn!", "Memory", JOptionPane.DEFAULT_OPTION,
 						JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);
-				switch (i) {
-				case 0:
-					dialogBoxReturnValue = 0;
-					break;
-				case 1:
-					dialogBoxReturnValue = 1;
-					break;
-				case 2:
-					dialogBoxReturnValue = 2;
-					break;
-				default:
-					dialogBoxReturnValue = 2;
-					break;
-				}
 			break;
 			default:
-				int triesOfWinner = (player1.getScore() > numberOfCells / 4) ? player1.getTries() : player2.getTries();
+				int triesOfWinner = (player1.getScore() > boardDimension * boardDimension / 4) ? player1.getTries() : player2.getTries();
 				int winnerScore = Math.max(player1.getScore(), player2.getScore());
 
-				i = JOptionPane.showOptionDialog(null,
+				dialogBoxReturnValue = JOptionPane.showOptionDialog(null,
 						"Congratulations " + getWinnersName(winnerScore) + ", you have won! \nYour socre is "
 								+ winnerScore + " out of " + triesOfWinner + " moves.",
 						"Memory", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options,
 						options[0]);
-
-				switch (i) {
-				case 0:
-					dialogBoxReturnValue = 0;
-					break;
-				case 1:
-					dialogBoxReturnValue = 1;
-					break;
-				case 2:
-					dialogBoxReturnValue = 2;
-					break;
-				default:
-					dialogBoxReturnValue = 2;
-					break;
-				}
 			break;
 			}
 		}
-		return dialogBoxReturnValue;
+		return dialogBoxReturnValue;	
 	}
 
-	// randomly selects the player who will begin the game
-	public void randomFirstPlayer() {
-		Random random = new Random();
-		// Create random integer 1 or 2 refering to eventual 2 players
-		int randomInteger = random.nextInt(2) + 1;
-
-		if (randomInteger == 1)
-			setActivePlayer(player1);
-		else if ((randomInteger == 2) && (!player2.getName().equals("")))
-			setActivePlayer(player2);
-	}
 
 	// switches the current player
 	public String switchActivePlayer() {
@@ -251,6 +192,19 @@ public class MemoryGame implements Game {
 		return true;
 	}
 
+	/*
+	 * public void nullifyButtonsIndex() { for (int i = 0; i < buttonsIndex.length;
+	 * i++) buttonsIndex[i] = 0; }
+	 */
+	/*
+	 * public void resetCounter() { counter = 0; }
+	 */
+
+	public String getWinnersName(int i) {
+		String winner = player1.getScore() == i ? player1.getName() : player2.getName();
+		return winner;
+	}
+	
 	public void setActivePlayer(Player activePlayer) {
 		this.activePlayer = activePlayer;
 	}
@@ -303,44 +257,14 @@ public class MemoryGame implements Game {
 		return selectedCard;
 	}
 
-	public int getCounter() {
-		return counter;
-	}
+	/*
+	 * public int getCounter() { return counter; }
+	 */
 
-	public static String getGameMode() {
-		return gameMode;
-	}
-
-	public static void setGameMode(String gameMode) {
-		MemoryGame.gameMode = gameMode;
-	}
-
-	public Board getBoardDimension() {
-		return boardDimension;
-	}
-
-	public void setBoardDimension(Board boardDimension) {
-		this.boardDimension = boardDimension;
-	}
-
-	public void buttonIsOpen() throws ButtonNotAvailableException {
-		if (getSelectedCard().getState() == CardState.OPEN) {
-			System.out.println("Card Already open: \'selected card\'");
-			throw new ButtonNotAvailableException("You can't click on an open card!\n");
-		}
-	}
-
-	public void nullifyButtonsIndex() {
-		for (int i = 0; i < buttonsIndex.length; i++)
-			buttonsIndex[i] = 0;
-	}
-
-	public void resetCounter() {
-		counter = 0;
-	}
-
-	public String getWinnersName(int i) {
-		String winner = player1.getScore() == i ? player1.getName() : player2.getName();
-		return winner;
-	}
+	/*
+	 * public static String getGameMode() { return gameMode; }
+	 * 
+	 * public static void setGameMode(String gameMode) { MemoryGame.gameMode =
+	 * gameMode; }
+	 */
 }

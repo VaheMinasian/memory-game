@@ -39,7 +39,7 @@ public class GameView extends JFrame implements ActionListener {
 	Font boldFont = new Font("Courier", Font.BOLD,18);
 	Font  planeFont = new Font("Courier", Font.PLAIN,17);
 	private ArrayList<Integer> iconIndexes;
-	private ArrayList<Integer> currentIconIndexes;
+	private ArrayList<Integer> currentIcons;
 	private final ImageIcon patternIcon = new ImageIcon(GameView.class.getResource("/pattern.png"));
 	private Icon image;
 
@@ -105,7 +105,7 @@ public class GameView extends JFrame implements ActionListener {
 		boardPanel.setPreferredSize(new Dimension(boardSize, boardSize));
 		boardPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(),
 				" M E M O R Y      G A M E ", TitledBorder.CENTER, TitledBorder.TOP));
-		currentIconIndexes = new ArrayList<>(boardDimension * boardDimension);
+		currentIcons = new ArrayList<>(boardDimension * boardDimension);
 		boardPanel.setBoardSize(boardSize);
 
 		iconIndexes = new ArrayList<>();
@@ -117,10 +117,10 @@ public class GameView extends JFrame implements ActionListener {
 		iconIndexes = new ArrayList<Integer>(iconIndexes.subList(0, 72 - (72 - (boardDimension * boardDimension / 2))));
 
 		for (int n = 0; n < iconIndexes.size(); n++) {
-			currentIconIndexes.add(iconIndexes.get(n));
-			currentIconIndexes.add(iconIndexes.get(n));
+			currentIcons.add(iconIndexes.get(n));
+			currentIcons.add(iconIndexes.get(n));
 		}
-		Collections.shuffle(currentIconIndexes);
+		Collections.shuffle(currentIcons);
 
 		emojiButtons = new JButton[boardDimension][boardDimension];
 		for (int i = 0; i < boardDimension; i++) {
@@ -215,7 +215,7 @@ public class GameView extends JFrame implements ActionListener {
 	}
 
 	public ArrayList<Integer> getCurrentIconsNames() {
-		return currentIconIndexes;
+		return currentIcons;
 	}
 
 	public JButton[][] getEmojiButtons() {
@@ -240,7 +240,6 @@ public class GameView extends JFrame implements ActionListener {
 		}	
 	}
 	
-	
 
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
@@ -255,20 +254,21 @@ public class GameView extends JFrame implements ActionListener {
 		this.score2Label.setText(newScore + " out of " + tries);
 	}
 
-	public void closeButton(Card card) {
-		int counterTest = 0;
+	public void restoreDefaultIcon(Card card) {
+//		int counterTest = 0;
 		image = new ImageIcon(GameView.class.getResource("/pattern.png"));
 		emojiButtons[card.getCardIndex()[0]][card.getCardIndex()[1]].setIcon(image);
-		counterTest++;
-		if(counterTest==1) {
-			System.out.println("first card closes " + "[" + card.getCardIndex()[0] + "]" + "[" + card.getCardIndex()[1] + "]");			
-		} else if (counterTest ==2) {
-			System.out.println("second card closes " + "[" + card.getCardIndex()[2] + "]" + "[" + card.getCardIndex()[3] + "]");
-			counterTest=0;
-		}
+//		counterTest++;
+		/*
+		 * if(counterTest==1) { System.out.println("first card closes " + "[" +
+		 * card.getCardIndex()[0] + "]" + "[" + card.getCardIndex()[1] + "]"); } else if
+		 * (counterTest ==2) { System.out.println("second card closes " + "[" +
+		 * card.getCardIndex()[2] + "]" + "[" + card.getCardIndex()[3] + "]");
+		 * counterTest=0; }
+		 */
 	}
 
-	public void removeButtons(Card card1, Card card2) {
+	public void removeCards(Card card1, Card card2) {
 		emojiButtons[card1.getCardIndex()[0]][card1.getCardIndex()[1]].setVisible(false);
 		emojiButtons[card2.getCardIndex()[0]][card2.getCardIndex()[1]].setVisible(false);
 		System.out.println("set visible false");

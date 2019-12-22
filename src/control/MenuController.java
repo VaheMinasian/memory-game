@@ -388,10 +388,9 @@ public class MenuController {
 										@Override
 										public void run() {
 
-											gameView.closeButton(gameModel.getFirstCard());
-											gameView.closeButton(gameModel.getSecondCard());
-											gameModel.nullifyButtonsIndex();
-											gameModel.resetCounter();
+											gameView.restoreDefaultIcon(gameModel.getFirstCard());
+											gameView.restoreDefaultIcon(gameModel.getSecondCard());
+//											gameModel.nullifyButtonsIndex();
 											firstNumber=0;
 											secondNumber=0;
 											gameModel.revoke();
@@ -410,9 +409,8 @@ public class MenuController {
 									new java.util.Timer().schedule(new java.util.TimerTask() {
 										@Override
 										public void run() {
-											gameView.removeButtons(gameModel.getFirstCard(), gameModel.getSecondCard());
-											gameModel.nullifyButtonsIndex();
-											gameModel.resetCounter();
+											gameView.removeCards(gameModel.getFirstCard(), gameModel.getSecondCard());
+//											gameModel.nullifyButtonsIndex();
 											firstNumber=0;
 											secondNumber=0;
 											gameModel.update();
@@ -483,10 +481,9 @@ public class MenuController {
 								// TODO Auto-generated catch block
 								interrupt.printStackTrace();
 							}
-							gameView.closeButton(gameModel.getFirstCard());
-							gameView.closeButton(gameModel.getSecondCard());
-							gameModel.nullifyButtonsIndex();
-							gameModel.resetCounter();
+							gameView.restoreDefaultIcon(gameModel.getFirstCard());
+							gameView.restoreDefaultIcon(gameModel.getSecondCard());
+//							gameModel.nullifyButtonsIndex();
 							validClicksOnCards = 0;
 							firstNumber=0;
 							secondNumber=0;
@@ -504,9 +501,8 @@ public class MenuController {
 								// TODO Auto-generated catch block
 								interrupt.printStackTrace();
 							}
-							gameView.removeButtons(gameModel.getFirstCard(), gameModel.getSecondCard());
-							gameModel.nullifyButtonsIndex();
-							gameModel.resetCounter();
+							gameView.removeCards(gameModel.getFirstCard(), gameModel.getSecondCard());
+//							gameModel.nullifyButtonsIndex();
 							validClicksOnCards = 0;
 							firstNumber=0;
 							secondNumber=0;
@@ -538,36 +534,33 @@ public class MenuController {
 		case 0:
 			System.out.println("inside case 0");
 //			gameModel = null;
+			/*
+			 * gameModel.getPlayer1().setScore(0); gameModel.getPlayer1().setTries(0);
+			 * if(!profile.get(0).equals("s")) { gameModel.getPlayer2().setScore(0);
+			 * gameModel.getPlayer2().setTries(0); }
+			 */
+//			gameView.initialize(profile);
+//			gameView.addGameViewListener(new GameListener());
+//			gameView.setScore1Label(0, 0);
+//			gameView.setScore2Label(0, 0);
+			gameModel = new MemoryGame();
+			gameView.dispose();
+			gameView = new GameView();
+			mainMenuView.getPlayButton().doClick();
+			break;
+		case 1:
+			System.out.println("inside case 1");
+//			gameModel = null;
 			gameModel = new MemoryGame();
 			/*
 			 * gameModel.getPlayer1().setScore(0); gameModel.getPlayer1().setTries(0);
 			 * if(!profile.get(0).equals("s")) { gameModel.getPlayer2().setScore(0);
 			 * gameModel.getPlayer2().setTries(0); }
 			 */
-			gameView.dispose();
-			gameView = new GameView();
-//			gameView.initialize(profile);
-//			gameView.addGameViewListener(new GameListener());
-			mainMenuView.getPlayButton().doClick();
-			gameView.revalidate();
-			gameView.setScore1Label(0, 0);
-			gameView.setScore2Label(0, 0);
-			break;
-		case 1:
-			System.out.println("inside case 1");
-//			gameModel = null;
-			gameModel = new MemoryGame();
-			gameModel.getPlayer1().setScore(0);
-			gameModel.getPlayer1().setTries(0);
-			if(!profile.get(0).equals("s")) {
-				gameModel.getPlayer2().setScore(0);
-				gameModel.getPlayer2().setTries(0);														
-			}
 			gameView.dispose();		
 			gameView = new GameView();
 			gameView.setVisible(false);
 			mainMenuView.frame.setVisible(true);
-			gameView.revalidate();
 			break;
 		case 2:
 			System.out.println("inside case 2");
