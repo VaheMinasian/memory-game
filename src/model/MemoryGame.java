@@ -21,6 +21,7 @@ public class MemoryGame implements Game {
 	private Card firstCard = null, secondCard = null;
 	private int counter = 0;
 	private int wincheck = 0;
+	Random randomNo;
 
 //	private static String gameMode;
 //	private static int[] buttonsIndex = new int[4];
@@ -66,6 +67,19 @@ public class MemoryGame implements Game {
 		}
 	}
 
+	
+	public Card getRandomCardIndex() {
+		randomNo = new Random();
+		int cardIndexX, cardIndexY;
+		do {
+			cardIndexX = randomNo.nextInt(boardDimension);
+			cardIndexY = randomNo.nextInt(boardDimension);
+		} while (getCards()[cardIndexX][cardIndexY].getState() != CardState.CLOSED);
+		System.out.println("returning true from gameModel.setRandomIndex cardIndexX & cardIndexY = ("+cardIndexX +","+cardIndexY +")");
+		System.out.println(this.getCards()[cardIndexX][cardIndexY].getState());
+		return getCards()[cardIndexX][cardIndexY];
+	}
+	
 	public void buttonIsOpen() throws ButtonNotAvailableException {
 		if (selectedCard.getState() == CardState.OPEN) {
 			System.out.println("Card Already open: \'selected card\'");

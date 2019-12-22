@@ -8,9 +8,8 @@ public class HumanPlayer extends Player {
 	}
 	
 	
-	@Override
-	public boolean setRandomIndex(MemoryGame model, int i) {
-		// TODO Auto-generated method stub
-		return false;
-	}
+	/*
+	 * @Override public boolean setRandomIndex(MemoryGame model, int i) { // TODO
+	 * Auto-generated method stub return false; }
+	 */
 }

@@ -14,10 +14,10 @@ import java.util.ArrayList;
 
 import javax.swing.JOptionPane;
 
+import model.Card;
 import model.MemoryGame;
 import view.GameView;
 import view.MainMenuView;
-import view.MyPanel;
 import view.OptionsView;
 
 
@@ -373,10 +373,10 @@ public class MenuController {
 
 							if ((secondNumber == 0) && (gameModel.move(i, j))) {
 								if(validClicksOnCards==1) { 
-									firstNumber=gameView.getCurrentIconsNames().get(i * gameView.getCellDimension() + j);
+									firstNumber=gameView.getCurrentIconsNames().get(i * gameView.getBoardDimension() + j);
 									}
 								else if (validClicksOnCards==2){ 
-									secondNumber=gameView.getCurrentIconsNames().get(i * gameView.getCellDimension() + j);
+									secondNumber=gameView.getCurrentIconsNames().get(i * gameView.getBoardDimension() + j);
 									}
 								// if(singletonModel.move(i, j));
 								gameView.updateCardBoard(i, j);
@@ -399,7 +399,8 @@ public class MenuController {
 											if (!profile.get(0).equals("s")){
 												activePlayerLabel = gameModel.switchActivePlayer();
 												gameView.setActivePlayerFont(activePlayerLabel);
-												if (!gameModel.gameOver())
+												System.out.println("active player now is the player named: "+ gameModel.getActivePlayer().getClass().getSimpleName());
+												if (gameModel.getActivePlayer().getClass().getSimpleName().equals("ComputerPlayer"))
 												playTheComputer();
 											}
 										}
@@ -433,6 +434,7 @@ public class MenuController {
 
 	
 	public void playTheComputer() {
+		Card card;
 		int xIndexComp;
 		int yIndexComp;
 
@@ -440,9 +442,11 @@ public class MenuController {
 
 
 		do {
-				if ((gameModel.getActivePlayer().setRandomIndex(gameModel, Integer.parseInt(profile.get(1))))) {
-					xIndexComp = gameModel.getActivePlayer().getCardIndexX();
-					yIndexComp = gameModel.getActivePlayer().getCardIndexY();
+//				if ((gameModel.getActivePlayer().setRandomIndex(gameModel, Integer.parseInt(profile.get(1))))) {
+			
+					card = gameModel.getRandomCardIndex();
+					xIndexComp= card.getCardIndex()[0];
+					yIndexComp = card.getCardIndex()[1];
 					System.out.println("after assigning x and y are: " + xIndexComp + ", " + yIndexComp);
 
 					try {
@@ -452,18 +456,18 @@ public class MenuController {
 						interrupt.printStackTrace();
 					}
 
-					gameModel.setSelectedCard(gameModel.getCards()[xIndexComp][yIndexComp]);
+					gameModel.setSelectedCard(card);
 					validClicksOnCards++;
 					// Check condition to execute first card open
 					if ((secondNumber == 0) && (gameModel.move(xIndexComp, yIndexComp))) {
 
 						if(validClicksOnCards==1) { 
-							firstNumber=gameView.getCurrentIconsNames().get(xIndexComp * gameView.getCellDimension() + yIndexComp);
+							firstNumber=gameView.getCurrentIconsNames().get(xIndexComp * gameView.getBoardDimension() + yIndexComp);
 							System.out.println("FirstNumber is: " + firstNumber);
 
 						}
 						else if (validClicksOnCards==2){ 
-							secondNumber=gameView.getCurrentIconsNames().get(xIndexComp * gameView.getCellDimension() + yIndexComp);
+							secondNumber=gameView.getCurrentIconsNames().get(xIndexComp * gameView.getBoardDimension() + yIndexComp);
 							System.out.println("SecondNumber is: " + secondNumber);
 
 						}
@@ -514,7 +518,7 @@ public class MenuController {
 							}
 						}
 					}
-				}
+//				}
 	} while (gameModel.getActivePlayer().getName().equals("Computer")&& !gameModel.gameOver());
 	}
 
