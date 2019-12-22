@@ -46,7 +46,7 @@ public class MemoryGame implements Game {
 		}
 		setGameMode(profile.get(0));
 		setBoardDimension(new Board(profile.get(1)));
-		this.activePlayer=player1;
+		this.activePlayer = player1;
 		createCards(Integer.parseInt(profile.get(1)));
 	}
 
@@ -107,6 +107,7 @@ public class MemoryGame implements Game {
 		String[] options = { "play", "Main Menu", "Quit" };
 		int dialogBoxReturnValue = -10;
 		wincheck = (s.equals("s")) ? 1 : 2;
+
 		if (wincheck == 1) {
 			System.out.println("inside wincheck==1");
 
@@ -114,7 +115,6 @@ public class MemoryGame implements Game {
 					"Congratulations " + player1.getName() + ", you have won! \nYour socre is " + player1.getScore()
 							+ " out of " + player1.getTries() + " moves.",
 					"Memory", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);
-
 			switch (i) {
 			case 0:
 				dialogBoxReturnValue = 0;
@@ -153,7 +153,7 @@ public class MemoryGame implements Game {
 					dialogBoxReturnValue = 2;
 					break;
 				}
-				break;
+			break;
 			default:
 				int triesOfWinner = (player1.getScore() > numberOfCells / 4) ? player1.getTries() : player2.getTries();
 				int winnerScore = Math.max(player1.getScore(), player2.getScore());
@@ -164,23 +164,22 @@ public class MemoryGame implements Game {
 						"Memory", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options,
 						options[0]);
 
+				switch (i) {
+				case 0:
+					dialogBoxReturnValue = 0;
+					break;
+				case 1:
+					dialogBoxReturnValue = 1;
+					break;
+				case 2:
+					dialogBoxReturnValue = 2;
+					break;
+				default:
+					dialogBoxReturnValue = 2;
+					break;
+				}
+			break;
 			}
-			switch (i) {
-			case 0:
-				dialogBoxReturnValue = 0;
-				break;
-			case 1:
-				dialogBoxReturnValue = 1;
-				break;
-			case 2:
-				dialogBoxReturnValue = 2;
-				break;
-			default:
-				dialogBoxReturnValue = 2;
-				break;
-			}
-			return dialogBoxReturnValue;
-
 		}
 		return dialogBoxReturnValue;
 	}
@@ -244,8 +243,9 @@ public class MemoryGame implements Game {
 
 		for (int i = 0; i < cards.length; i++) {
 			for (int j = 0; j < cards[i].length; j++) {
-				if (cards[i][j].getState() != CardState.NONE)
+				if (cards[i][j].getState() != CardState.NONE) {
 					return false;
+				}
 			}
 		}
 		return true;

@@ -166,13 +166,14 @@ public class OptionsView extends JFrame implements ActionListener, ListSelection
 		class PlayerListListener implements ActionListener, DocumentListener {
 			private boolean alreadyEnabled = false;
 			private JButton addButton;
-
+			private String name;
 			public PlayerListListener(JButton button) {
 				this.addButton = button;
 			}
 
 			public void actionPerformed(ActionEvent e) {
 
+				//V A L I D A T I O N 
 				if (listModel.getSize() + 1 > 2) {
 					if ((humanButton.isSelected()) && (listModel.getSize() + 1 > 2)) {
 						Toolkit.getDefaultToolkit().beep();
@@ -196,10 +197,9 @@ public class OptionsView extends JFrame implements ActionListener, ListSelection
 					playerNameTextField.setText("");
 					playerNameTextField.requestFocusInWindow();
 					return;
-
 				}
 
-				String name = playerNameTextField.getText();
+				name = playerNameTextField.getText();
 
 				// User didn't type in a unique name...
 				if (name.equals("") || listModel.contains(name)) {
