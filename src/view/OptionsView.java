@@ -6,12 +6,16 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.GridLayout;
 import java.awt.Insets;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
+import java.util.Collections;
+import java.util.List;
 
+import javax.swing.AbstractButton;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.ButtonGroup;
@@ -42,6 +46,7 @@ public class OptionsView extends JFrame implements ActionListener, ListSelection
 	private JToggleButton soloButton, humanButton, computerButton, sqrFour, sqrSix, sqrEight, sqrTen;
 	private JRadioButton novice, easy, medium, hard; 
 	private ButtonGroup rButtonGroup, dimensions, gameMode;
+	List<AbstractButton> listRadioButton;
 	private JButton addButton, removeButton, saveButton;
 	private JTextField playerNameTextField;
 	private JList<String> list;
@@ -136,17 +141,28 @@ public class OptionsView extends JFrame implements ActionListener, ListSelection
 
 		
 		
-		novice   = new JRadioButton("Novice");
-        easy    = new JRadioButton("Easy");
+		novice = new JRadioButton("Novice");
+        easy = new JRadioButton("Easy");
         medium = new JRadioButton("Medium");
         hard = new JRadioButton("Hard");
+        novice.setActionCommand("n");
+        easy.setActionCommand("e");
+        medium.setActionCommand("m");
+        hard.setActionCommand("h");
         
+        
+        novice.setEnabled(false);
+        easy.setEnabled(false);
+        medium.setEnabled(false);
+        hard.setEnabled(false);
         //... Create a button group and add the buttons.
         rButtonGroup = new ButtonGroup();
         rButtonGroup.add(novice);
         rButtonGroup.add(easy);
         rButtonGroup.add(medium);
         rButtonGroup.add(hard);
+        
+        listRadioButton = Collections.list(rButtonGroup.getElements());
         //... Arrange buttons vertically in a panel
         levelPanel = new JPanel();
         levelPanel.setPreferredSize(new Dimension(210, 50));
@@ -157,6 +173,7 @@ public class OptionsView extends JFrame implements ActionListener, ListSelection
         levelPanel.add(easy);
         levelPanel.add(medium);
         levelPanel.add(hard);
+        
         
         //... Add a titled border to the button panel.
 
@@ -302,6 +319,25 @@ public class OptionsView extends JFrame implements ActionListener, ListSelection
 		PlayerListListener addListener = new PlayerListListener(addButton);
 		addButton.addActionListener(addListener);
 
+		computerButton.addItemListener(new ItemListener() {
+			   public void itemStateChanged(ItemEvent ev) {
+				      if(ev.getStateChange()==ItemEvent.SELECTED){
+				    	  	novice.setEnabled(true);
+					        easy.setEnabled(true);
+					        medium.setEnabled(true);
+					        hard.setEnabled(true);
+				      } else if(ev.getStateChange()==ItemEvent.DESELECTED){
+				    	  rButtonGroup.clearSelection();
+				    		novice.setEnabled(false);
+					        easy.setEnabled(false);
+					        medium.setEnabled(false);
+					        hard.setEnabled(false);
+				      }
+				   }
+				});
+
+
+		
 		removeButton.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent e) {
@@ -390,6 +426,42 @@ public class OptionsView extends JFrame implements ActionListener, ListSelection
 		frame.setLocationRelativeTo(null);
 		frame.setResizable(false);
 		frame.setVisible(true);
+	}
+
+	public List<AbstractButton> getListRadioButton() {
+		return listRadioButton;
+	}
+
+	public JRadioButton getNovice() {
+		return novice;
+	}
+
+	public void setNovice(JRadioButton novice) {
+		this.novice = novice;
+	}
+
+	public JRadioButton getEasy() {
+		return easy;
+	}
+
+	public void setEasy(JRadioButton easy) {
+		this.easy = easy;
+	}
+
+	public JRadioButton getMedium() {
+		return medium;
+	}
+
+	public void setMedium(JRadioButton medium) {
+		this.medium = medium;
+	}
+
+	public JRadioButton getHard() {
+		return hard;
+	}
+
+	public void setHard(JRadioButton hard) {
+		this.hard = hard;
 	}
 
 	public ButtonGroup getDimensions() {

@@ -1,5 +1,6 @@
-mode:s
-boardsize:4
+mode:c
+boardsize:6
 player1:asdf
-player2:
+player2:Computer
+difficulty:m
 playable:true

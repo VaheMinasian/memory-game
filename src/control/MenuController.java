@@ -12,6 +12,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import javax.swing.AbstractButton;
 import javax.swing.JOptionPane;
 
 import model.Card;
@@ -143,6 +144,24 @@ public class MenuController {
 		default:
 			break;
 		}
+		
+		switch (profile.get(4)) {
+		case "n":
+			optionsView.getNovice().setSelected(true);
+			break;
+		case "e":
+			optionsView.getEasy().setSelected(true);
+			break;
+		case "m":
+			optionsView.getMedium().setSelected(true);
+			break;
+		case "h":
+			optionsView.getHard().setSelected(true);
+			break;
+		default:
+			break;
+		
+		}
 		// checking player name(s) in profile and loading to UI
 		if (!profile.get(2).equals("")) {
 			optionsView.getListModel().insertElementAt(profile.get(2), 0);
@@ -234,7 +253,7 @@ public class MenuController {
 	class OptionsViewListener implements ActionListener {
 		
 		String player1 = "", player2 = "", player3 = "";
-		String selectedGameMode;
+		String selectedGameMode, difficulty;
 		String board;
 
 		// Actions to perform when 'save' is clicked in options menu
@@ -247,7 +266,6 @@ public class MenuController {
 				}else {
 					System.out.println(optionsView.getrButtonGroup().getSelection());
 				}
-System.out.println();
 				// V A L I D A T I O N
 				// narrowing down possible combinations of selections of game mode, board size
 				// and player names.
@@ -267,6 +285,11 @@ System.out.println();
 						if (optionsView.getListModel().getSize() != 1) {
 							Toolkit.getDefaultToolkit().beep();
 							JOptionPane.showMessageDialog(null, "Please register a player!", "Memory",
+									JOptionPane.INFORMATION_MESSAGE);
+							return;
+						} else if (optionsView.getrButtonGroup().getSelection()==null) {
+							Toolkit.getDefaultToolkit().beep();
+							JOptionPane.showMessageDialog(null, "Please select difficulty level!", "Memory",
 									JOptionPane.INFORMATION_MESSAGE);
 							return;
 						}
@@ -296,6 +319,12 @@ System.out.println();
 						selectedGameMode = optionsView.getHumanButton().getActionCommand();
 					} else if (optionsView.getComputerButton().isSelected()) {
 						selectedGameMode = optionsView.getComputerButton().getActionCommand();
+						for (AbstractButton button : optionsView.getListRadioButton()) {
+							if (button.isSelected()) {
+								difficulty=button.getActionCommand();
+								System.out.println(difficulty);
+							}	
+						}
 					}
 
 					if (optionsView.getSqrFour().isSelected()) {
@@ -313,6 +342,7 @@ System.out.println();
 					sbr.append("boardsize:" + board + '\n');
 					sbr.append("player1:" + player1 + '\n');
 					sbr.append("player2:" + player2 + '\n');
+					sbr.append("difficulty:" + difficulty + '\n');
 					sbr.append("playable:true");
 
 					FileOutputStream fos = null;
