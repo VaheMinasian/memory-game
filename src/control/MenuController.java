@@ -21,9 +21,6 @@ import view.GameView;
 import view.MainMenuView;
 import view.OptionsView;
 
-
-
-
 //Controller class for Main menu and options menu using singleton controller object
 public class MenuController {
 
@@ -35,7 +32,7 @@ public class MenuController {
 
 	private MemoryGame gameModel;
 	private GameView gameView;
-	
+
 	private int validClicksOnCards = 0;
 	private boolean firstTimeProfileSave = false;
 
@@ -45,18 +42,16 @@ public class MenuController {
 	public MenuController() {
 		System.out.println("Main constructor invoked");
 	}
-	
-	
+
 	public MenuController(MainMenuView mView, OptionsView oView, MemoryGame mGame, GameView gView) {
 		mainMenuView = mView;
 		optionsView = oView;
-		gameModel = mGame; 
+		gameModel = mGame;
 		gameView = gView;
 		isPlayable();
 		mainMenuView.addMainMenuViewListener(new MainMenuViewListener());
 	}
 
-		
 	// Check if profile file is empty to enable play button (for first run)
 	private static void isPlayable() {
 
@@ -82,7 +77,6 @@ public class MenuController {
 		}
 	}
 
-	
 	// Reading profile data from file
 	private static void loadProfile() {
 		profile.clear();
@@ -109,7 +103,6 @@ public class MenuController {
 
 	}
 
-	
 	// Loading profile components to Options Menu UI
 	private static void loadProfileUI() {
 
@@ -144,7 +137,7 @@ public class MenuController {
 		default:
 			break;
 		}
-		
+
 		switch (profile.get(4)) {
 		case "n":
 			optionsView.getNovice().setSelected(true);
@@ -160,7 +153,7 @@ public class MenuController {
 			break;
 		default:
 			break;
-		
+
 		}
 		// checking player name(s) in profile and loading to UI
 		if (!profile.get(2).equals("")) {
@@ -177,37 +170,36 @@ public class MenuController {
 		} // End of Reading profile data from file
 	}
 
-	
-	
-	
 	class MainMenuViewListener implements ActionListener {
 
 		public void actionPerformed(ActionEvent e) {
 
-			// exit application if     'Q U I T'     button is clicked in main menu
+			// exit application if 'Q U I T' button is clicked in main menu
 			if (e.getSource() == mainMenuView.getExitButton()) {
 				System.exit(0);
 			}
-			
-			// actions performed if    'O P T I O N S'    button is clicked in main menu
+
+			// actions performed if 'O P T I O N S' button is clicked in main menu
 			if (e.getSource() == mainMenuView.getOptionsButton()) {
 
 				// hide main menu when switching to options menu.
 				mainMenuView.frame.setVisible(false);
-				
+
 				// setup and display options menu
 				optionsView.setOptionsMenu();
-				if ((profile.size() != 0) || (firstTimeProfileSave == true) ) {
+				if ((profile.size() != 0) || (firstTimeProfileSave == true)) {
 					loadProfile();
-					//used when options button is clicked more than once within the one game session
+					// used when options button is clicked more than once within the one game
+					// session
 					loadProfileUI();
 				}
 				// Add listeners to options menu
 				optionsView.addOptionsViewListener(new OptionsViewListener());
-				
-				//marker to ensure loading the "profile" file version of profile is loaded into options menu UI
+
+				// marker to ensure loading the "profile" file version of profile is loaded into
+				// options menu UI
 				firstTimeProfileSave = true;
-				
+
 				// override system.exit(0) on options menu to return to main menu
 				optionsView.frame.addWindowListener(new WindowAdapter() {
 					@Override
@@ -217,8 +209,8 @@ public class MenuController {
 					}
 				});
 			}
-			
-			// Initialize game when    'P L A Y'    button is clicked in main menu
+
+			// Initialize game when 'P L A Y' button is clicked in main menu
 			if (e.getSource() == mainMenuView.getPlayButton()) {
 				loadProfile();
 				gameModel.initializeParameters(profile);
@@ -227,7 +219,9 @@ public class MenuController {
 //				gameView.getBoardPanel().setBoardSize(gameView.getBoardDimension());
 				gameView.addGameViewListener(new GameListener());
 //				gameModel.setActivePlayer(gameModel.getPlayer1());
-				gameModel.setMemorySize();
+				if(profile.get(0).equals("c")&&!profile.get(4).equals("n")) {
+				gameModel.setMemorySize(profile.get(4));
+				}	
 				if (!profile.get(0).equals("s")) {
 					gameModel.randomFirstPlayer();
 				}
@@ -240,18 +234,14 @@ public class MenuController {
 						}
 					}, 1000);
 				}
-				String p1Label = gameModel.getActivePlayer()==gameModel.getPlayer1() ? "player1" : "player2";
+				String p1Label = gameModel.getActivePlayer() == gameModel.getPlayer1() ? "player1" : "player2";
 				gameView.setActivePlayerFont(p1Label);
 			}
 		}// End of Action performed
 	} // End of MainMenuViewListener
 
-	
-	
-	
-	
 	class OptionsViewListener implements ActionListener {
-		
+
 		String player1 = "", player2 = "", player3 = "";
 		String selectedGameMode, difficulty;
 		String board;
@@ -260,16 +250,17 @@ public class MenuController {
 		public void actionPerformed(ActionEvent e) {
 
 			if (e.getSource() == optionsView.getSaveButton()) {
-				if (optionsView.getrButtonGroup().getSelection()==null){
+				if (optionsView.getrButtonGroup().getSelection() == null) {
 					System.out.println("no radio button selected");
-					
-				}else {
+
+				} else {
 					System.out.println(optionsView.getrButtonGroup().getSelection());
 				}
 				// V A L I D A T I O N
 				// narrowing down possible combinations of selections of game mode, board size
 				// and player names.
-				if((optionsView.getGameMode().getSelection()!=null)&&(optionsView.getDimensions().getSelection()!=null)){
+				if ((optionsView.getGameMode().getSelection() != null)
+						&& (optionsView.getDimensions().getSelection() != null)) {
 					if (optionsView.getSoloButton().isSelected()) {
 						if (optionsView.getListModel().getSize() != 1) {
 							Toolkit.getDefaultToolkit().beep();
@@ -287,7 +278,7 @@ public class MenuController {
 							JOptionPane.showMessageDialog(null, "Please register a player!", "Memory",
 									JOptionPane.INFORMATION_MESSAGE);
 							return;
-						} else if (optionsView.getrButtonGroup().getSelection()==null) {
+						} else if (optionsView.getrButtonGroup().getSelection() == null) {
 							Toolkit.getDefaultToolkit().beep();
 							JOptionPane.showMessageDialog(null, "Please select difficulty level!", "Memory",
 									JOptionPane.INFORMATION_MESSAGE);
@@ -321,9 +312,8 @@ public class MenuController {
 						selectedGameMode = optionsView.getComputerButton().getActionCommand();
 						for (AbstractButton button : optionsView.getListRadioButton()) {
 							if (button.isSelected()) {
-								difficulty=button.getActionCommand();
-								System.out.println(difficulty);
-							}	
+								difficulty = button.getActionCommand();
+							}
 						}
 					}
 
@@ -373,11 +363,8 @@ public class MenuController {
 		}
 	}
 
-	
-
-	
 	class GameListener implements ActionListener {
-		
+
 		public void actionPerformed(ActionEvent e) {
 			// Double loop to find the clicked button
 			if (gameModel.getActivePlayer().getClass() != null) {
@@ -405,12 +392,13 @@ public class MenuController {
 //								System.out.println("Player2 name is: " + gameModel.getPlayer2().getName());
 
 							if ((secondNumber == 0) && (gameModel.move(i, j))) {
-								if(validClicksOnCards==1) { 
-									firstNumber=gameView.getCurrentIcons().get(i * gameView.getBoardDimension() + j);
-									}
-								else if (validClicksOnCards==2){ 
-									secondNumber=gameView.getCurrentIcons().get(i * gameView.getBoardDimension() + j);
-									}
+								if (validClicksOnCards == 1) {
+									firstNumber = gameView.getCurrentIcons().get(i * gameView.getBoardDimension() + j);
+									gameModel.getFirstCard().setIsClicked();
+								} else if (validClicksOnCards == 2) {
+									secondNumber = gameView.getCurrentIcons().get(i * gameView.getBoardDimension() + j);
+									gameModel.getSecondCard().setIsClicked();
+								}
 								// if(singletonModel.move(i, j));
 								gameView.updateCardBoard(i, j);
 							}
@@ -420,21 +408,26 @@ public class MenuController {
 									new java.util.Timer().schedule(new java.util.TimerTask() {
 										@Override
 										public void run() {
-											gameModel.setMissedButtons(firstNumber, secondNumber, profile.get(0));
+											if (profile.get(0).equals("c")&&!profile.get(4).equals("n")) {
+												gameModel.setMissedButtons(firstNumber, secondNumber, profile.get(4));
+												gameModel.setMissedButtonsOrdered(firstNumber, secondNumber);
+											}
 											gameView.restoreDefaultIcon(gameModel.getFirstCard());
 											gameView.restoreDefaultIcon(gameModel.getSecondCard());
 //											gameModel.nullifyButtonsIndex();
-											firstNumber=0;
-											secondNumber=0;
+											firstNumber = 0;
+											secondNumber = 0;
 											gameModel.revoke();
 											updateScoreBoard();
 											validClicksOnCards = 0;
-											if (!profile.get(0).equals("s")){
+											if (!profile.get(0).equals("s")) {
 												activePlayerLabel = gameModel.switchActivePlayer();
 												gameView.setActivePlayerFont(activePlayerLabel);
-												System.out.println("active player now is the player named: "+ gameModel.getActivePlayer().getClass().getSimpleName());
-												if (gameModel.getActivePlayer().getClass().getSimpleName().equals("ComputerPlayer"))
-												playTheComputer();
+												System.out.println("active player now is the player named: "
+														+ gameModel.getActivePlayer().getClass().getSimpleName());
+												if (gameModel.getActivePlayer().getClass().getSimpleName()
+														.equals("ComputerPlayer"))
+													playTheComputer();
 											}
 										}
 									}, 1000);
@@ -443,10 +436,16 @@ public class MenuController {
 									new java.util.Timer().schedule(new java.util.TimerTask() {
 										@Override
 										public void run() {
+											if (profile.get(0).equals("c")) {
+
+												if (gameModel.getFirstCard().getIsClicked() == true) {
+													gameModel.removeMemoryButtons(firstNumber);
+												}
+											}
 											gameView.removeCards(gameModel.getFirstCard(), gameModel.getSecondCard());
 //											gameModel.nullifyButtonsIndex();
-											firstNumber=0;
-											secondNumber=0;
+											firstNumber = 0;
+											secondNumber = 0;
 											gameModel.update();
 											updateScoreBoard();
 											validClicksOnCards = 0;
@@ -465,7 +464,6 @@ public class MenuController {
 		}
 	}
 
-	
 	public void playTheComputer() {
 		Card card;
 		int xIndexComp;
@@ -473,14 +471,47 @@ public class MenuController {
 
 		System.out.println("Beginning of StartGame...active player is: " + gameModel.getActivePlayer().getName());
 
-
 		do {
 //				if ((gameModel.getActivePlayer().setRandomIndex(gameModel, Integer.parseInt(profile.get(1))))) {
-			
-					card = gameModel.getRandomCardIndex();
-					xIndexComp= card.getCardIndex()[0];
-					yIndexComp = card.getCardIndex()[1];
-					System.out.println("after assigning x and y are: " + xIndexComp + ", " + yIndexComp);
+
+			card = gameModel.getRandomCardIndex(profile.get(4));
+			xIndexComp = card.getCardIndex()[0];
+			yIndexComp = card.getCardIndex()[1];
+			System.out.println("after assigning x and y are: " + xIndexComp + ", " + yIndexComp);
+
+			try {
+				Thread.sleep(300);
+			} catch (InterruptedException interrupt) {
+				// TODO Auto-generated catch block
+				interrupt.printStackTrace();
+			}
+
+			gameModel.setSelectedCard(card);
+			validClicksOnCards++;
+			// Check condition to execute first card open
+			if ((secondNumber == 0) && (gameModel.move(xIndexComp, yIndexComp))) {
+
+				if (validClicksOnCards == 1) {
+					firstNumber = gameView.getCurrentIcons()
+							.get(xIndexComp * gameView.getBoardDimension() + yIndexComp);
+					gameModel.getFirstCard().setIsClicked();
+					System.out.println("FirstNumber is: " + firstNumber);
+
+				} else if (validClicksOnCards == 2) {
+					secondNumber = gameView.getCurrentIcons()
+							.get(xIndexComp * gameView.getBoardDimension() + yIndexComp);
+					gameModel.getSecondCard().setIsClicked();
+
+					System.out.println("SecondNumber is: " + secondNumber);
+
+				}
+				gameView.updateCardBoard(xIndexComp, yIndexComp);
+			}
+
+			if (secondNumber != 0) {
+				System.out.println("inside second number !=0");
+				if (!gameModel.getStatus(firstNumber, secondNumber)) {
+					System.out.println("inside !gameModel.getStatus()");
 
 					try {
 						Thread.sleep(300);
@@ -488,72 +519,45 @@ public class MenuController {
 						// TODO Auto-generated catch block
 						interrupt.printStackTrace();
 					}
-
-					gameModel.setSelectedCard(card);
-					validClicksOnCards++;
-					// Check condition to execute first card open
-					if ((secondNumber == 0) && (gameModel.move(xIndexComp, yIndexComp))) {
-
-						if(validClicksOnCards==1) { 
-							firstNumber=gameView.getCurrentIcons().get(xIndexComp * gameView.getBoardDimension() + yIndexComp);
-							System.out.println("FirstNumber is: " + firstNumber);
-
-						}
-						else if (validClicksOnCards==2){ 
-							secondNumber=gameView.getCurrentIcons().get(xIndexComp * gameView.getBoardDimension() + yIndexComp);
-							System.out.println("SecondNumber is: " + secondNumber);
-
-						}
-						gameView.updateCardBoard(xIndexComp, yIndexComp);
-					}
-
-					if (secondNumber != 0) {
-						System.out.println("inside second number !=0");
-						if (!gameModel.getStatus(firstNumber, secondNumber)) {
-							System.out.println("inside !gameModel.getStatus()");
-
-							try {
-								Thread.sleep(300);
-							} catch (InterruptedException interrupt) {
-								// TODO Auto-generated catch block
-								interrupt.printStackTrace();
-							}
-							gameModel.setMissedButtons(firstNumber, secondNumber, profile.get(0));
-							gameView.restoreDefaultIcon(gameModel.getFirstCard());
-							gameView.restoreDefaultIcon(gameModel.getSecondCard());
+					gameModel.setMissedButtons(firstNumber, secondNumber, profile.get(4));
+					gameModel.setMissedButtonsOrdered(firstNumber, secondNumber);
+					gameView.restoreDefaultIcon(gameModel.getFirstCard());
+					gameView.restoreDefaultIcon(gameModel.getSecondCard());
 //							gameModel.nullifyButtonsIndex();
-							validClicksOnCards = 0;
-							firstNumber=0;
-							secondNumber=0;
-							gameModel.revoke();
-							updateScoreBoard();
-							activePlayerLabel = gameModel.switchActivePlayer();
-							gameView.setActivePlayerFont(activePlayerLabel);
-							
+					validClicksOnCards = 0;
+					firstNumber = 0;
+					secondNumber = 0;
+					gameModel.revoke();
+					updateScoreBoard();
+					activePlayerLabel = gameModel.switchActivePlayer();
+					gameView.setActivePlayerFont(activePlayerLabel);
 
-						} else if (gameModel.getStatus(firstNumber, secondNumber)) {
-							System.out.println("inside gameModel.getStatus()");
-							try {
-								Thread.sleep(400);
-							} catch (InterruptedException interrupt) {
-								// TODO Auto-generated catch block
-								interrupt.printStackTrace();
-							}
-							gameView.removeCards(gameModel.getFirstCard(), gameModel.getSecondCard());
-//							gameModel.nullifyButtonsIndex();
-							validClicksOnCards = 0;
-							firstNumber=0;
-							secondNumber=0;
-							gameModel.update();
-							updateScoreBoard();
-							if (gameModel.gameOver()) {
-									resetGame();
-									return;
-							}
-						}
+				} else if (gameModel.getStatus(firstNumber, secondNumber)) {
+					System.out.println("inside gameModel.getStatus()");
+					try {
+						Thread.sleep(400);
+					} catch (InterruptedException interrupt) {
+						// TODO Auto-generated catch block
+						interrupt.printStackTrace();
 					}
+					if (gameModel.getFirstCard().getIsClicked() == true) {
+						gameModel.removeMemoryButtons(firstNumber);
+					}
+					gameView.removeCards(gameModel.getFirstCard(), gameModel.getSecondCard());
+//							gameModel.nullifyButtonsIndex();
+					validClicksOnCards = 0;
+					firstNumber = 0;
+					secondNumber = 0;
+					gameModel.update();
+					updateScoreBoard();
+					if (gameModel.gameOver()) {
+						resetGame();
+						return;
+					}
+				}
+			}
 //				}
-	} while (gameModel.getActivePlayer().getName().equals("Computer")&& !gameModel.gameOver());
+		} while (gameModel.getActivePlayer().getName().equals("Computer") && !gameModel.gameOver());
 	}
 
 	void updateScoreBoard() {
@@ -568,7 +572,7 @@ public class MenuController {
 	}
 
 	void resetGame() {
-		switch (gameModel.getMessage(profile.get(0))){
+		switch (gameModel.getMessage(profile.get(0))) {
 		case 0:
 			System.out.println("inside case 0");
 //			gameModel = null;
@@ -595,17 +599,17 @@ public class MenuController {
 			 * if(!profile.get(0).equals("s")) { gameModel.getPlayer2().setScore(0);
 			 * gameModel.getPlayer2().setTries(0); }
 			 */
-			gameView.dispose();		
+			gameView.dispose();
 			gameView = new GameView();
 			gameView.setVisible(false);
 			mainMenuView.frame.setVisible(true);
 			break;
 		case 2:
 			System.out.println("inside case 2");
-			System.exit(0);	
+			System.exit(0);
 			break;
 		default:
-			System.exit(0);	
+			System.exit(0);
 		}
 	}
 }
