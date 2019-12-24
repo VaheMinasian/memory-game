@@ -6,10 +6,12 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.GridLayout;
 import java.awt.Insets;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.ButtonGroup;
@@ -21,6 +23,7 @@ import javax.swing.JFrame;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.JToggleButton;
@@ -35,7 +38,7 @@ import javax.swing.event.ListSelectionListener;
 public class OptionsView extends JFrame implements ActionListener, ListSelectionListener {
 
 	public JFrame frame;
-	private JPanel emptyPanel, mainPanel, gameModePanel, boardSizePanel, tableButtonsPanel, executionPanel;
+	private JPanel emptyPanel, mainPanel, gameModePanel, boardSizePanel, tableButtonsPanel, executionPanel, levelPanel;
 	private JToggleButton soloButton, humanButton, computerButton, sqrFour, sqrSix, sqrEight, sqrTen;
 	private JButton addButton, removeButton, saveButton;
 	private JTextField playerNameTextField;
@@ -54,13 +57,13 @@ public class OptionsView extends JFrame implements ActionListener, ListSelection
 
 		mainPanel = new JPanel(new GridBagLayout());
 		frame.getContentPane().add(mainPanel);
-		mainPanel.setPreferredSize(new Dimension(360, 380));
+		mainPanel.setPreferredSize(new Dimension(370, 420));
 		mainPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(),
 				" G A M E    S E T U P ", TitledBorder.CENTER, TitledBorder.TOP));
 		mainPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
 
 		emptyPanel = new JPanel();
-		emptyPanel.setPreferredSize(new Dimension(310, 20));
+		emptyPanel.setPreferredSize(new Dimension(310, 10));
 
 		soloButton = new JToggleButton();
 		soloButton.setPreferredSize(new Dimension(70, 50));
@@ -129,6 +132,42 @@ public class OptionsView extends JFrame implements ActionListener, ListSelection
 		sqrTen.setBorderPainted(false);
 		sqrTen.setActionCommand("10");
 
+		
+		
+		
+		
+		JRadioButton novice   = new JRadioButton("Novice", true);
+        JRadioButton easy    = new JRadioButton("Easy");
+        JRadioButton medium = new JRadioButton("Medium");
+        JRadioButton hard = new JRadioButton("Hard");
+
+        
+        //... Create a button group and add the buttons.
+        ButtonGroup radioButtonGroup = new ButtonGroup();
+        radioButtonGroup.add(novice);
+        radioButtonGroup.add(easy);
+        radioButtonGroup.add(medium);
+        radioButtonGroup.add(hard);
+        
+        //... Arrange buttons vertically in a panel
+        levelPanel = new JPanel();
+        levelPanel.setPreferredSize(new Dimension(210, 50));
+        levelPanel.setBorder(BorderFactory.createTitledBorder(
+        		BorderFactory.createEtchedBorder(), "c h o o s e   l e v e l", TitledBorder.CENTER, TitledBorder.TOP));
+//        levelPanel.setLayout(new GridLayout(1, 4));
+        levelPanel.add(novice);
+        levelPanel.add(easy);
+        levelPanel.add(medium);
+        levelPanel.add(hard);
+        
+        //... Add a titled border to the button panel.
+
+      
+		
+		
+		
+		
+		
 		ButtonGroup dimensions = new ButtonGroup();
 		dimensions.add(sqrFour);
 		dimensions.add(sqrSix);
@@ -161,7 +200,7 @@ public class OptionsView extends JFrame implements ActionListener, ListSelection
 		removeButton.setPreferredSize(new Dimension(77, 28));
 		removeButton.setActionCommand("removePlayer");
 
-		tablePane.setPreferredSize(new Dimension(100, 50));
+		tablePane.setPreferredSize(new Dimension(100, 34));
 
 		class PlayerListListener implements ActionListener, DocumentListener {
 			private boolean alreadyEnabled = false;
@@ -329,19 +368,25 @@ public class OptionsView extends JFrame implements ActionListener, ListSelection
 		gbc.gridx = 0;
 		gbc.gridy = 3;
 		gbc.fill = GridBagConstraints.BOTH;
-		mainPanel.add(tablePane, gbc);
+//		gbc.anchor = GridBagConstraints.SOUTH;
+		mainPanel.add(levelPanel, gbc);
 
 		gbc.gridx = 0;
 		gbc.gridy = 4;
+		gbc.fill = GridBagConstraints.BOTH;
+		mainPanel.add(tablePane, gbc);
+
+		gbc.gridx = 0;
+		gbc.gridy = 5;
 		gbc.fill = GridBagConstraints.HORIZONTAL;
 		mainPanel.add(tableButtonsPanel, gbc);
 
 		gbc.gridx = 0;
-		gbc.gridy = 5;
-		gbc.fill = GridBagConstraints.NONE;
+		gbc.gridy = 6;
+		gbc.fill = GridBagConstraints.BOTH;
 		gbc.anchor = GridBagConstraints.SOUTH;
 		mainPanel.add(executionPanel, gbc);
-
+		
 		frame.setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
 		frame.pack();
 		frame.setLocationRelativeTo(null);

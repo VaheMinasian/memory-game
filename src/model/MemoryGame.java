@@ -1,6 +1,7 @@
 package model;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 import javax.swing.JOptionPane;
@@ -19,6 +20,41 @@ public class MemoryGame implements Game {
 	private Player activePlayer;
 
 	private Card firstCard = null, secondCard = null;
+	private List <Integer> missedButtons= new ArrayList<>();
+	
+	public List<Integer> getMissedButtons() {
+		return missedButtons;
+	}
+
+	
+	  public void setMemorySize() {
+		  for (int i=0; i< boardDimension * boardDimension * 2; i++) {
+			  missedButtons.add(0);
+		  }
+		  //list.add(0)); list.set(9, 51); this.missedButtons = i*i;
+	}
+
+
+	public void setMissedButtons(Integer missedB1, Integer missedB2, String mode) { 
+		 if(mode.equals("c")) {
+			 System.out.println(mode);
+			 int i1 = firstCard.getCardIndex()[0];
+			 int j1 = firstCard.getCardIndex()[1];
+			 int i2 = secondCard.getCardIndex()[0];
+			 int j2 = secondCard.getCardIndex()[1];
+			 missedButtons.set(i1*boardDimension+j1, missedB1);
+			 missedButtons.set(i2*boardDimension+j2, missedB2);
+			 missedButtons.set((i1*boardDimension+j1)+boardDimension*boardDimension, activePlayer.getTries()+1);
+			 missedButtons.set((i2*boardDimension+j2)+boardDimension*boardDimension, activePlayer.getTries()+1);
+			 
+			 System.out.println("Button 1 is: JButton" + "["+i1+"]"+"["+j1+"]" +" = " + missedB1);
+			 System.out.println("Button 2 is: JButton" + "["+i2+"]"+"["+j2+"]" +" = " + missedB2);
+		 }
+		 else return;
+		  
+	  }
+	 
+
 	private int counter = 0;
 	private int wincheck = 0;
 	Random randomNo;
@@ -34,7 +70,7 @@ public class MemoryGame implements Game {
 		// TODO Auto-generated method stub
 		player1 = new HumanPlayer(profile.get(2));
 		if (profile.get(0).equals("c")) {
-			player2 = new ComputerPlayer(profile.get(3));
+			player2 = new ComputerPlayer(profile.get(3));			
 		} else if (profile.get(0).equals("h")) {
 			player2 = new HumanPlayer(profile.get(3));
 		}

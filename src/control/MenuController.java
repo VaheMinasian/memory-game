@@ -208,6 +208,7 @@ public class MenuController {
 //				gameView.getBoardPanel().setBoardSize(gameView.getBoardDimension());
 				gameView.addGameViewListener(new GameListener());
 //				gameModel.setActivePlayer(gameModel.getPlayer1());
+				gameModel.setMemorySize();
 				if (!profile.get(0).equals("s")) {
 					gameModel.randomFirstPlayer();
 				}
@@ -373,10 +374,10 @@ public class MenuController {
 
 							if ((secondNumber == 0) && (gameModel.move(i, j))) {
 								if(validClicksOnCards==1) { 
-									firstNumber=gameView.getCurrentIconsNames().get(i * gameView.getBoardDimension() + j);
+									firstNumber=gameView.getCurrentIcons().get(i * gameView.getBoardDimension() + j);
 									}
 								else if (validClicksOnCards==2){ 
-									secondNumber=gameView.getCurrentIconsNames().get(i * gameView.getBoardDimension() + j);
+									secondNumber=gameView.getCurrentIcons().get(i * gameView.getBoardDimension() + j);
 									}
 								// if(singletonModel.move(i, j));
 								gameView.updateCardBoard(i, j);
@@ -387,7 +388,7 @@ public class MenuController {
 									new java.util.Timer().schedule(new java.util.TimerTask() {
 										@Override
 										public void run() {
-
+											gameModel.setMissedButtons(firstNumber, secondNumber, profile.get(0));
 											gameView.restoreDefaultIcon(gameModel.getFirstCard());
 											gameView.restoreDefaultIcon(gameModel.getSecondCard());
 //											gameModel.nullifyButtonsIndex();
@@ -462,12 +463,12 @@ public class MenuController {
 					if ((secondNumber == 0) && (gameModel.move(xIndexComp, yIndexComp))) {
 
 						if(validClicksOnCards==1) { 
-							firstNumber=gameView.getCurrentIconsNames().get(xIndexComp * gameView.getBoardDimension() + yIndexComp);
+							firstNumber=gameView.getCurrentIcons().get(xIndexComp * gameView.getBoardDimension() + yIndexComp);
 							System.out.println("FirstNumber is: " + firstNumber);
 
 						}
 						else if (validClicksOnCards==2){ 
-							secondNumber=gameView.getCurrentIconsNames().get(xIndexComp * gameView.getBoardDimension() + yIndexComp);
+							secondNumber=gameView.getCurrentIcons().get(xIndexComp * gameView.getBoardDimension() + yIndexComp);
 							System.out.println("SecondNumber is: " + secondNumber);
 
 						}
@@ -485,6 +486,7 @@ public class MenuController {
 								// TODO Auto-generated catch block
 								interrupt.printStackTrace();
 							}
+							gameModel.setMissedButtons(firstNumber, secondNumber, profile.get(0));
 							gameView.restoreDefaultIcon(gameModel.getFirstCard());
 							gameView.restoreDefaultIcon(gameModel.getSecondCard());
 //							gameModel.nullifyButtonsIndex();

@@ -199,7 +199,7 @@ public class GameView extends JFrame implements ActionListener {
 	public void updateCardBoard(int i, int j) {
 		Icon image;
 		int iconName;
-		iconName = getCurrentIconsNames().get(i * getBoardDimension() + j);
+		iconName = getCurrentIcons().get(i * getBoardDimension() + j);
 		image = new ImageIcon(GameView.class.getResource("/" + iconName + ".png"));
 		getEmojiButton(i, j).setIcon(image);
 		System.out.println("CardBoard updated got emojiButton:("+i+","+j+")");
@@ -214,7 +214,7 @@ public class GameView extends JFrame implements ActionListener {
 		return boardDimension;
 	}
 
-	public ArrayList<Integer> getCurrentIconsNames() {
+	public ArrayList<Integer> getCurrentIcons() {
 		return currentIcons;
 	}
 

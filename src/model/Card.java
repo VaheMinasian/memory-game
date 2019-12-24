@@ -6,13 +6,13 @@ package model;
  */
 public class Card {
 	int[] cardIndex = new int[2];
-	
+		
 	public enum CardState {
 		OPEN, CLOSED, NONE
 	}
 
-	private CardState state;
-
+		private CardState state;
+		
 	public Card(int i, int j){
 		this(CardState.CLOSED);
 		this.cardIndex[0]=i;
