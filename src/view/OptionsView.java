@@ -40,6 +40,8 @@ public class OptionsView extends JFrame implements ActionListener, ListSelection
 	public JFrame frame;
 	private JPanel emptyPanel, mainPanel, gameModePanel, boardSizePanel, tableButtonsPanel, executionPanel, levelPanel;
 	private JToggleButton soloButton, humanButton, computerButton, sqrFour, sqrSix, sqrEight, sqrTen;
+	private JRadioButton novice, easy, medium, hard; 
+	private ButtonGroup rButtonGroup, dimensions, gameMode;
 	private JButton addButton, removeButton, saveButton;
 	private JTextField playerNameTextField;
 	private JList<String> list;
@@ -95,7 +97,7 @@ public class OptionsView extends JFrame implements ActionListener, ListSelection
 		computerButton.setFocusable(false);
 		computerButton.setActionCommand("c");
 
-		ButtonGroup gameMode = new ButtonGroup();
+		gameMode = new ButtonGroup();
 		gameMode.add(soloButton);
 		gameMode.add(humanButton);
 		gameMode.add(computerButton);
@@ -134,21 +136,17 @@ public class OptionsView extends JFrame implements ActionListener, ListSelection
 
 		
 		
-		
-		
-		JRadioButton novice   = new JRadioButton("Novice", true);
-        JRadioButton easy    = new JRadioButton("Easy");
-        JRadioButton medium = new JRadioButton("Medium");
-        JRadioButton hard = new JRadioButton("Hard");
-
+		novice   = new JRadioButton("Novice");
+        easy    = new JRadioButton("Easy");
+        medium = new JRadioButton("Medium");
+        hard = new JRadioButton("Hard");
         
         //... Create a button group and add the buttons.
-        ButtonGroup radioButtonGroup = new ButtonGroup();
-        radioButtonGroup.add(novice);
-        radioButtonGroup.add(easy);
-        radioButtonGroup.add(medium);
-        radioButtonGroup.add(hard);
-        
+        rButtonGroup = new ButtonGroup();
+        rButtonGroup.add(novice);
+        rButtonGroup.add(easy);
+        rButtonGroup.add(medium);
+        rButtonGroup.add(hard);
         //... Arrange buttons vertically in a panel
         levelPanel = new JPanel();
         levelPanel.setPreferredSize(new Dimension(210, 50));
@@ -168,7 +166,7 @@ public class OptionsView extends JFrame implements ActionListener, ListSelection
 		
 		
 		
-		ButtonGroup dimensions = new ButtonGroup();
+		dimensions = new ButtonGroup();
 		dimensions.add(sqrFour);
 		dimensions.add(sqrSix);
 		dimensions.add(sqrEight);
@@ -392,6 +390,22 @@ public class OptionsView extends JFrame implements ActionListener, ListSelection
 		frame.setLocationRelativeTo(null);
 		frame.setResizable(false);
 		frame.setVisible(true);
+	}
+
+	public ButtonGroup getDimensions() {
+		return dimensions;
+	}
+
+	public ButtonGroup getGameMode() {
+		return gameMode;
+	}
+
+	public void setrButtonGroup(ButtonGroup rButtonGroup) {
+		this.rButtonGroup = rButtonGroup;
+	}
+
+	public ButtonGroup getrButtonGroup() {
+		return rButtonGroup;
 	}
 
 	// set action listener on all setup view buttons

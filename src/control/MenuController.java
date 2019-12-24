@@ -241,15 +241,17 @@ public class MenuController {
 		public void actionPerformed(ActionEvent e) {
 
 			if (e.getSource() == optionsView.getSaveButton()) {
-
+				if (optionsView.getrButtonGroup().getSelection()==null){
+					System.out.println("no radio button selected");
+					
+				}else {
+					System.out.println(optionsView.getrButtonGroup().getSelection());
+				}
+System.out.println();
 				// V A L I D A T I O N
 				// narrowing down possible combinations of selections of game mode, board size
 				// and player names.
-				if (((optionsView.getSoloButton().isSelected()) || (optionsView.getHumanButton().isSelected())
-						|| (optionsView.getComputerButton().isSelected()))
-						&& ((optionsView.getSqrFour().isSelected()) || (optionsView.getSqrSix().isSelected())
-								|| (optionsView.getSqrEight().isSelected())
-								|| (optionsView.getSqrTen().isSelected()))) {
+				if((optionsView.getGameMode().getSelection()!=null)&&(optionsView.getDimensions().getSelection()!=null)){
 					if (optionsView.getSoloButton().isSelected()) {
 						if (optionsView.getListModel().getSize() != 1) {
 							Toolkit.getDefaultToolkit().beep();
