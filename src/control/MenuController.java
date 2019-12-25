@@ -410,7 +410,7 @@ public class MenuController {
 										public void run() {
 											if (profile.get(0).equals("c")&&!profile.get(4).equals("n")) {
 												gameModel.setMissedButtons(firstNumber, secondNumber, profile.get(4));
-												gameModel.setMissedButtonsOrdered(firstNumber, secondNumber);
+//												gameModel.setMissedButtonsOrdered(firstNumber, secondNumber);
 											}
 											gameView.restoreDefaultIcon(gameModel.getFirstCard());
 											gameView.restoreDefaultIcon(gameModel.getSecondCard());

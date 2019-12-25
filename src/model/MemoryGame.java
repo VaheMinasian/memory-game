@@ -275,7 +275,7 @@ public class MemoryGame implements Game {
 		switch (difficulty) {
 		case "e":
 		case "m":
-			for (int i = 0; i < boardDimension * boardDimension; i++) {
+			for (int i = 0; i < boardDimension * boardDimension * 2; i++) {
 				missedButtons.add(0);
 			}
 			break;
@@ -298,7 +298,7 @@ public class MemoryGame implements Game {
 		j1 = firstCard.getCardIndex()[1];
 		i2 = secondCard.getCardIndex()[0];
 		j2 = secondCard.getCardIndex()[1];
-
+		System.out.println("FIRST CARD\'S X AND Y ARE: " + i1 + " " + j1 + " SECOND CARD\'S X AND Y ARE: " + i2 + " "  + j2 );
 		// IN computer mode difficulty not hard level and active player is computer
 		if (difficulty.equals("h")) {
 			if (activePlayer.getName().equals("Computer")) {
