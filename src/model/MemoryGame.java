@@ -22,7 +22,7 @@ public class MemoryGame implements Game {
 	private Card firstCard = null, secondCard = null;
 	private List<Integer> missedButtons = new ArrayList<>(); // checked
 	private List<Integer> subMissedButtons = new ArrayList<>();
-	private List<Integer> indexArray = new ArrayList<>();
+	private List<Integer> photoMemory = new ArrayList<>();
 
 	private int savedCardNumber, tempIndexValue;
 	private int cardIndexX = 0, cardIndexY = 0;
@@ -120,7 +120,7 @@ public class MemoryGame implements Game {
 		}
 	}
 
-	public void setMissedButtons(Integer missedB1, Integer missedB2, String difficulty) {// checked
+	public void setMissedButtons(Integer firstNumber, Integer secondNumber, String difficulty) {// checked
 		int i1, j1, i2, j2;
 		i1 = firstCard.getCardIndex()[0];
 		j1 = firstCard.getCardIndex()[1];
@@ -130,11 +130,11 @@ public class MemoryGame implements Game {
 		// IN computer mode difficulty not hard level and active player is computer
 		if (difficulty.equals("h")) {
 			if (activePlayer.getName().equals("Computer")) {
-				missedButtons.set(i1 * boardDimension + j1, missedB1);
-				missedButtons.set(i2 * boardDimension + j2, missedB2);
+				missedButtons.set(i1 * boardDimension + j1, firstNumber);
+				missedButtons.set(i2 * boardDimension + j2, secondNumber);
 			} else if (!activePlayer.getName().equals("Computer")) {
-				missedButtons.set((i1 + boardDimension) * boardDimension + j1, missedB1);
-				missedButtons.set((i2 + boardDimension) * boardDimension + j2, missedB1);
+				missedButtons.set((i1 + boardDimension) * boardDimension + j1, firstNumber);
+				missedButtons.set((i2 + boardDimension) * boardDimension + j2, firstNumber);
 			}
 		} else if (!difficulty.equals("h")) {
 			if (activePlayer.getName().equals("Computer")) {
