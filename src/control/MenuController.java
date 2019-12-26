@@ -218,7 +218,7 @@ public class MenuController {
 				gameView.addGameViewListener(new GameListener());
 //				gameModel.setActivePlayer(gameModel.getPlayer1());
 				if(profile.get(0).equals("c")&&!profile.get(4).equals("n")) {
-				gameModel.setMemorySize(profile.get(4));
+//				gameModel.setMemorySize(profile.get(4));
 				}	
 				if (!profile.get(0).equals("s")) {
 					gameModel.randomFirstPlayer();
