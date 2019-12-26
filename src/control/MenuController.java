@@ -94,10 +94,8 @@ public class MenuController {
 			}
 			reader.close();
 		} catch (FileNotFoundException e1) {
-			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		} catch (IOException e1) {
-			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
 
@@ -341,10 +339,8 @@ public class MenuController {
 						fos.write(sbr.toString().getBytes());
 						fos.close();
 					} catch (FileNotFoundException e1) {
-						// TODO Auto-generated catch block
 						e1.printStackTrace();
 					} catch (IOException e1) {
-						// TODO Auto-generated catch block
 						e1.printStackTrace();
 					}
 					// End of writing to a file
@@ -439,7 +435,7 @@ public class MenuController {
 											if (profile.get(0).equals("c")) {
 
 												if (gameModel.getFirstCard().getIsClicked() == true) {
-													gameModel.removeMemoryButtons(firstNumber);
+//													gameModel.removeMemoryButtons(firstNumber);
 												}
 											}
 											gameView.removeCards(gameModel.getFirstCard(), gameModel.getSecondCard());
@@ -472,7 +468,6 @@ public class MenuController {
 		System.out.println("Beginning of StartGame...active player is: " + gameModel.getActivePlayer().getName());
 
 		do {
-//				if ((gameModel.getActivePlayer().setRandomIndex(gameModel, Integer.parseInt(profile.get(1))))) {
 
 			card = gameModel.getRandomCardIndex(profile.get(4));
 			xIndexComp = card.getCardIndex()[0];
@@ -482,13 +477,11 @@ public class MenuController {
 			try {
 				Thread.sleep(300);
 			} catch (InterruptedException interrupt) {
-				// TODO Auto-generated catch block
 				interrupt.printStackTrace();
 			}
-
 			gameModel.setSelectedCard(card);
 			validClicksOnCards++;
-			// Check condition to execute first card open
+			
 			if ((secondNumber == 0) && (gameModel.move(xIndexComp, yIndexComp))) {
 
 				if (validClicksOnCards == 1) {
@@ -503,24 +496,25 @@ public class MenuController {
 					gameModel.getSecondCard().setIsClicked();
 
 					System.out.println("SecondNumber is: " + secondNumber);
-
 				}
 				gameView.updateCardBoard(xIndexComp, yIndexComp);
 			}
 
 			if (secondNumber != 0) {
 				System.out.println("inside second number !=0");
+				
+				
+//				I F   N O T   M A T C H E D
 				if (!gameModel.getStatus(firstNumber, secondNumber)) {
 					System.out.println("inside !gameModel.getStatus()");
 
 					try {
 						Thread.sleep(300);
 					} catch (InterruptedException interrupt) {
-						// TODO Auto-generated catch block
 						interrupt.printStackTrace();
 					}
 					gameModel.setMissedButtons(firstNumber, secondNumber, profile.get(4));
-					gameModel.setMissedButtonsOrdered(firstNumber, secondNumber);
+//					gameModel.setMissedButtonsOrdered(firstNumber, secondNumber);
 					gameView.restoreDefaultIcon(gameModel.getFirstCard());
 					gameView.restoreDefaultIcon(gameModel.getSecondCard());
 //							gameModel.nullifyButtonsIndex();
@@ -532,17 +526,18 @@ public class MenuController {
 					activePlayerLabel = gameModel.switchActivePlayer();
 					gameView.setActivePlayerFont(activePlayerLabel);
 
+					
+//					I F    M A T C H E D
 				} else if (gameModel.getStatus(firstNumber, secondNumber)) {
-					System.out.println("inside gameModel.getStatus()");
+					System.out.println("inside (gameModel.getStatus())");
 					try {
 						Thread.sleep(400);
 					} catch (InterruptedException interrupt) {
-						// TODO Auto-generated catch block
 						interrupt.printStackTrace();
 					}
-					if (gameModel.getFirstCard().getIsClicked() == true) {
-						gameModel.removeMemoryButtons(firstNumber);
-					}
+//					if (gameModel.getFirstCard().getIsClicked() == true) {
+//						gameModel.removeMemoryButtons(firstNumber);
+//					}
 					gameView.removeCards(gameModel.getFirstCard(), gameModel.getSecondCard());
 //							gameModel.nullifyButtonsIndex();
 					validClicksOnCards = 0;
@@ -551,12 +546,12 @@ public class MenuController {
 					gameModel.update();
 					updateScoreBoard();
 					if (gameModel.gameOver()) {
+						System.out.println("going to game over");
 						resetGame();
 						return;
 					}
 				}
 			}
-//				}
 		} while (gameModel.getActivePlayer().getName().equals("Computer") && !gameModel.gameOver());
 	}
 

@@ -52,12 +52,10 @@ public abstract class Player {
 	}
 	
 	public int getCardIndexX() {
-		// TODO Auto-generated method stub
 		return 0;
 	}
 
 	public int getCardIndexY() {
-		// TODO Auto-generated method stub
 		return 0;
 	}	
 }

@@ -27,9 +27,7 @@ public class ComputerPlayer extends Player {
 	
 	
 	public ComputerPlayer(String string) {
-		// TODO Auto-generated constructor stub
 		super(string);
-		System.out.println("computers name is: " + this.getName());
 	}
 
 //	public void setCardIndexX(int cardIndexX) {

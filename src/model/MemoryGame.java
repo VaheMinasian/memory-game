@@ -21,10 +21,13 @@ public class MemoryGame implements Game {
 	private Player activePlayer;
 	private Card firstCard = null, secondCard = null;
 	private List<Integer> missedButtons = new ArrayList<>(); // checked
-	private List<Integer> missedButtonsOrdered = new ArrayList<>();
+	private List<Integer> subMissedButtons = new ArrayList<>();
 	private List<Integer> indexArray = new ArrayList<>();
 
-	private int savedIndexX = -1, savedIndexY = -1;
+	private int savedCardNumber, tempIndexValue;
+	private int cardIndexX = 0, cardIndexY = 0;
+	boolean valid = true;
+
 	int temp = 0;
 	private int counter = 0;
 	private int wincheck = 0;
@@ -38,7 +41,6 @@ public class MemoryGame implements Game {
 	}
 
 	public void initializeParameters(ArrayList<String> profile) {
-		// TODO Auto-generated method stub
 		player1 = new HumanPlayer(profile.get(2));
 		if (profile.get(0).equals("c")) {
 			player2 = new ComputerPlayer(profile.get(3));
@@ -73,12 +75,92 @@ public class MemoryGame implements Game {
 		}
 	}
 
-	public Card getRandomCardIndex(String difficulty) {
+	public List<Integer> getMissedButtons() {
+		return missedButtons;
+	}
+
+	public void setMemorySize(String difficulty) { // Checked
+		switch (difficulty) {
+		case "e":
+		case "m":
+			/*
+			 * for (int i = 0; i < boardDimension * boardDimension * 2; i++) {
+			 * missedButtons.add(0); }
+			 */
+			break;
+		case "h":
+			for (int i = 0; i < boardDimension * boardDimension * 2; i++) {
+				missedButtons.add(0);
+			}
+			break;
+		default:
+			break;
+		}
+		System.out.println(missedButtons.size());
+
+		// list.add(0)); list.set(9, 51); this.missedButtons = i*i;
+	}
+
+	public List<Integer> getMissedButtonsOrdered() {
+		return subMissedButtons;
+	}
+
+	public void setMissedButtonsOrdered(Integer firstButton, Integer secondButton) {
+		subMissedButtons.add(firstButton);
+		subMissedButtons.add(secondButton);
+	}
+
+	public void removeMemoryButtons(Integer emojiNumber) {
+
+		for (int i = 0; i < missedButtons.size(); i++) {
+			if (missedButtons.get(i) == emojiNumber)
+				missedButtons.set(i, -1);
+//			missedButtonsOrdered.set(i, -1);
+			System.out.println("removed button: " + emojiNumber);
+		}
+	}
+
+	public void setMissedButtons(Integer missedB1, Integer missedB2, String difficulty) {// checked
+		int i1, j1, i2, j2;
+		i1 = firstCard.getCardIndex()[0];
+		j1 = firstCard.getCardIndex()[1];
+		i2 = secondCard.getCardIndex()[0];
+		j2 = secondCard.getCardIndex()[1];
+//		System.out.println("FIRST CARD\'S X AND Y ARE: " + i1 + " " + j1 + " SECOND CARD\'S X AND Y ARE: " + i2 + " "  + j2 );
+		// IN computer mode difficulty not hard level and active player is computer
+		if (difficulty.equals("h")) {
+			if (activePlayer.getName().equals("Computer")) {
+				missedButtons.set(i1 * boardDimension + j1, missedB1);
+				missedButtons.set(i2 * boardDimension + j2, missedB2);
+			} else if (!activePlayer.getName().equals("Computer")) {
+				missedButtons.set((i1 + boardDimension) * boardDimension + j1, missedB1);
+				missedButtons.set((i2 + boardDimension) * boardDimension + j2, missedB1);
+			}
+		} else if (!difficulty.equals("h")) {
+			if (activePlayer.getName().equals("Computer")) {
+				missedButtons.add(i1 * boardDimension + j1);
+				missedButtons.add(i2 * boardDimension + j2);
+				missedButtons.add(i2 * boardDimension + j2);
+				missedButtons.add(i1 * boardDimension + j1);
+				System.out.println("this should be a computer player");
+				System.out.println("setting missed first card X index is:: " + firstCard.getCardIndex()[0]
+						+ " first card Y index is:: " + firstCard.getCardIndex()[1]);
+				System.out.println("setting missed second card X index is:: " + secondCard.getCardIndex()[0]
+						+ " second card Y index is:: " + secondCard.getCardIndex()[1]);
+			}
+		}
+
+		for (int i = 0; i < missedButtons.size(); i++) {
 		
+				System.out.println("MissedButtons index " + i + " is " + missedButtons.get(i));
+		
+		}
+	}
+
+	public Card getRandomCardIndex(String difficulty) {
+
 		randomNo = new Random();
-		int cardIndexX = -1, cardIndexY = -1;
-		int tempValue;
-		boolean valid=true;
+		
 
 		switch (difficulty) {
 		case "n":
@@ -90,63 +172,59 @@ public class MemoryGame implements Game {
 					+ "," + cardIndexY + ")");
 			break;
 		case "e":
-
-			if (temp == 0) {
+			if (temp == 1) {
+				System.out.println("entering (temp == 1) : temp value is: " + temp);
 				do {
-
+					valid=true;
 					cardIndexX = randomNo.nextInt(boardDimension);
 					cardIndexY = randomNo.nextInt(boardDimension);
-				} while (getCards()[cardIndexX][cardIndexY].getState() != CardState.CLOSED);
-				savedIndexX = cardIndexX;
-				savedIndexY = cardIndexY;
-				temp++;
-				System.out.println("returning true from gameModel.setRandomIndex cardIndexX & cardIndexY = ("
-						+ cardIndexX + "," + cardIndexY + ")");
-//				System.out.println(this.getCards()[cardIndexX][cardIndexY].getState());
+					tempIndexValue = cardIndexX * boardDimension + cardIndexY;
+					System.out.println("\"tempIndexValue X, Y and value are: " + cardIndexX + " " + cardIndexY + " " + tempIndexValue);
+					subMissedButtons.clear();
 
-			} else if (temp == 1) {
-				do {
-					cardIndexX = randomNo.nextInt(boardDimension);
-					cardIndexY = randomNo.nextInt(boardDimension);
-
-					if (missedButtons.get(cardIndexX * boardDimension + cardIndexY) > 0) {
-						tempValue = missedButtons.get(cardIndexX * boardDimension + cardIndexY);
-//						if(cardIndexX * boardDimension+ cardIndexY % 2 == 1) {
-						for (int i = 0; i < missedButtonsOrdered.size(); i++) {
-							if (missedButtonsOrdered.get(i) == tempValue) {
-								indexArray.add(missedButtonsOrdered.indexOf(tempValue));
-								for (int j = 0; j < indexArray.size(); j++) {
-									if (indexArray.get(j) % 2 == 1) {
-										if (missedButtonsOrdered.get(
-												indexArray.get(j) - 1) == savedIndexX * boardDimension + savedIndexY) {
-											valid = false;
-										}
-									} else if (indexArray.get(j) % 2 == 0) {
-										if (missedButtonsOrdered.get(
-												indexArray.get(j) + 1) == savedIndexX * boardDimension + savedIndexY) {
-											valid = false;
-										}
-									}
-								}
+					for (int i = 0; i < missedButtons.size(); i++) {
+						if (tempIndexValue == missedButtons.get(i)) {
+							if (i % 2 == 0) {
+								subMissedButtons.add(missedButtons.get(i + 1));
+								System.out.println("subMissedButtons.add(missedButtons.get(i+1));" + missedButtons.get(i + 1));
+							} else if (i % 2 == 1) {
+//								subMissedButtons.add(missedButtons.get(i - 1));
+//								System.out.println("subMissedButtons.add(missedButtons.get(i-1));" + missedButtons.get(i - 1));
 							}
 						}
 					}
-				} while ((getCards()[cardIndexX][cardIndexY].getState() != CardState.CLOSED)||(!valid));
+					for (int i = 0; i < subMissedButtons.size(); i++) {
+					System.out.println("submissedButton nr."+ i + " is " + subMissedButtons.get(i));
+					}
+					subMissedButtons.forEach((n) -> {
+						System.out.println("inside foreach no match yet");
+						if (savedCardNumber == n) {
+							System.out.println("savedCardNumber == n --> " + "savedCardNumber == " + savedCardNumber + " n=="+ n);
+							valid = false;
+						}
+					});
+					
+					System.out.println(getCards()[cardIndexX][cardIndexY].getState() + " " + valid);
+				} while ((getCards()[cardIndexX][cardIndexY].getState() != CardState.CLOSED) || (!valid));
 				temp--;
+			} else if (temp == 0) {
+				
+				System.out.println("entering (temp == 0) : temp value is: " + temp);
+				do {
+					cardIndexX = randomNo.nextInt(boardDimension);
+					cardIndexY = randomNo.nextInt(boardDimension);
+				} while (getCards()[cardIndexX][cardIndexY].getState() != CardState.CLOSED);
+				savedCardNumber = cardIndexX * boardDimension + cardIndexY;
+
+				System.out.println("saved number index X, Y and value are: " + cardIndexX + " " + cardIndexY + " " + savedCardNumber);
+				System.out.println("returning true from gameModel.setRandomIndex cardIndexX & cardIndexY = ("
+						+ cardIndexX + "," + cardIndexY + ")");
+				temp++;
 			}
 			break;
 		case "m":
 			break;
 		case "h":
-
-			/*
-			 * Collections.sort(filteredButtons); for (int i = 0; i < filteredButtons.size()
-			 * - 1; i++) { if (filteredButtons.get(i) == (filteredButtons.get(i + 1))) {
-			 * cardIndexX = missedButtons.indexOf(filteredButtons.get(i)); for (int j =
-			 * filteredButtons.size() - 1; j > 0; j--) { if (filteredButtons.get(j) ==
-			 * (filteredButtons.get(j - 1))) { cardIndexY =
-			 * missedButtons.indexOf(filteredButtons.get(j)); } } } }
-			 */
 			break;
 		default:
 			break;
@@ -230,13 +308,13 @@ public class MemoryGame implements Game {
 			player2.setActive(false);
 			player1.setActive(true);
 			setActivePlayer(player1);
-			System.out.println("active player is: " + getActivePlayer().getName());
+			System.out.println("\nactive player is: " + getActivePlayer().getName());
 			return "player1";
 		} else if (activePlayer.equals(player1)) {
 			player1.setActive(false);
 			player2.setActive(true);
 			setActivePlayer(player2);
-			System.out.println("active player is: " + getActivePlayer().getName());
+			System.out.println("\nactive player is: " + getActivePlayer().getName());
 			return "player2";
 		}
 		return "player2";
@@ -251,13 +329,13 @@ public class MemoryGame implements Game {
 		// MemoryModel.getSelectedCard().updateCard(CardState.CLOSED);
 		getFirstCard().updateCard(CardState.CLOSED);
 		getSecondCard().updateCard(CardState.CLOSED);
-		System.out.println("inside mismatch of revoke()\n");
+		System.out.println("inside mismatch of revoke()");
 	}
 
 	public void update() {
 //		firstNumber = 0;
 //		secondNumber = 0;
-		setSelectedCard(null);
+//		setSelectedCard(null);
 		getActivePlayer().incrementTries();
 		getActivePlayer().incrementScore();
 
@@ -267,89 +345,16 @@ public class MemoryGame implements Game {
 		System.out.println("inside MATCH of update()\n");
 	}
 
-	public List<Integer> getMissedButtons() {
-		return missedButtons;
-	}
-
-	public void setMemorySize(String difficulty) { // Checked
-		switch (difficulty) {
-		case "e":
-		case "m":
-			for (int i = 0; i < boardDimension * boardDimension * 2; i++) {
-				missedButtons.add(0);
-			}
-			break;
-		case "h":
-			for (int i = 0; i < boardDimension * boardDimension * 2; i++) {
-				missedButtons.add(0);
-			}
-			break;
-		default:
-			break;
-		}
-		System.out.println(missedButtons.size());
-
-		// list.add(0)); list.set(9, 51); this.missedButtons = i*i;
-	}
-
-	public void setMissedButtons(Integer missedB1, Integer missedB2, String difficulty) {// checked
-		int i1, j1, i2, j2;
-		i1 = firstCard.getCardIndex()[0];
-		j1 = firstCard.getCardIndex()[1];
-		i2 = secondCard.getCardIndex()[0];
-		j2 = secondCard.getCardIndex()[1];
-		System.out.println("FIRST CARD\'S X AND Y ARE: " + i1 + " " + j1 + " SECOND CARD\'S X AND Y ARE: " + i2 + " "  + j2 );
-		// IN computer mode difficulty not hard level and active player is computer
-		if (difficulty.equals("h")) {
-			if (activePlayer.getName().equals("Computer")) {
-				missedButtons.set(i1 * boardDimension + j1, missedB1);
-				missedButtons.set(i2 * boardDimension + j2, missedB2);
-			} else if (!activePlayer.getName().equals("Computer")) {
-				missedButtons.set((i1 + boardDimension) * boardDimension + j1, missedB1);
-				missedButtons.set((i2 + boardDimension) * boardDimension + j2, missedB1);
-			}
-		} else if (!difficulty.equals("h")) {
-			if (activePlayer.getName().equals("Computer")) {
-				missedButtons.set(i1 * boardDimension + j1, missedB1);
-				missedButtons.set(i2 * boardDimension + j2, missedB2);
-			}
-		}
-
-		for (int i = 0; i < missedButtons.size(); i++) {
-			if (missedButtons.get(i) != 0) {
-				System.out.println("Button at index " + i + "is " + missedButtons.get(i));
-			}
-		}
-	}
-
-	public List<Integer> getMissedButtonsOrdered() {
-		return missedButtonsOrdered;
-	}
-
-	public void setMissedButtonsOrdered(Integer firstButton, Integer secondButton) {
-		missedButtonsOrdered.add(firstButton);
-		missedButtonsOrdered.add(secondButton);
-	}
-
-	public void removeMemoryButtons(Integer emojiNumber) {
-		// TODO Auto-generated method stub
-
-		for (int i = 0; i < missedButtons.size(); i++) {
-			if (missedButtons.get(i) == emojiNumber)
-				missedButtons.set(i, -1);
-//			missedButtonsOrdered.set(i, -1);
-		}
-	}
-
 	public boolean gameOver() {
 
 		for (int i = 0; i < cards.length; i++) {
 			for (int j = 0; j < cards[i].length; j++) {
 				if (cards[i][j].getState() != CardState.NONE) {
+					System.out.println("will return false from gameOver");
 					return false;
 				}
 			}
-		}
+		} System.out.println("will return true from gameOver");
 		return true;
 	}
 
@@ -410,3 +415,26 @@ public class MemoryGame implements Game {
 		return selectedCard;
 	}
 }
+
+//if (missedButtons.get(cardIndexX * boardDimension + cardIndexY) > 0) {
+//	tempValue = missedButtons.get(cardIndexX * boardDimension + cardIndexY);
+////	if(cardIndexX * boardDimension+ cardIndexY % 2 == 1) {
+//	for (int i = 0; i < missedButtonsOrdered.size(); i++) {
+//		if (missedButtonsOrdered.get(i) == tempValue) {
+//			indexArray.add(missedButtonsOrdered.indexOf(tempValue));
+//			for (int j = 0; j < indexArray.size(); j++) {
+//				if (indexArray.get(j) % 2 == 1) {
+//					if (missedButtonsOrdered.get(
+//							indexArray.get(j) - 1) == savedIndexX * boardDimension + savedIndexY) {
+//						valid = false;
+//					}
+//				} else if (indexArray.get(j) % 2 == 0) {
+//					if (missedButtonsOrdered.get(
+//							indexArray.get(j) + 1) == savedIndexX * boardDimension + savedIndexY) {
+//						valid = false;
+//					}
+//				}
+//			}
+//		}
+//	}
+//}

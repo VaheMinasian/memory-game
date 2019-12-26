@@ -199,7 +199,7 @@ public class GameView extends JFrame implements ActionListener {
 	public void updateCardBoard(int i, int j) {
 		Icon image;
 		int iconName;
-		iconName = getCurrentIcons().get(i * getBoardDimension() + j);
+		iconName = getCurrentIcons().get(i * boardDimension + j);
 		image = new ImageIcon(GameView.class.getResource("/" + iconName + ".png"));
 		getEmojiButton(i, j).setIcon(image);
 		System.out.println("CardBoard updated got emojiButton:("+i+","+j+")");
@@ -243,7 +243,6 @@ public class GameView extends JFrame implements ActionListener {
 
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
-		// TODO Auto-generated method stub
 	}
 
 	public void setScore1Label(int newScore, int tries) {
