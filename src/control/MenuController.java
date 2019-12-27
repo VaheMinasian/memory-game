@@ -405,7 +405,7 @@ public class MenuController {
 										@Override
 										public void run() {
 											if (profile.get(0).equals("c")&&!profile.get(4).equals("n")) {
-												gameModel.setMissedButtons(firstNumber, secondNumber, profile.get(4));
+												gameModel.setMissedButtons(firstNumber, secondNumber);
 //												gameModel.setMissedButtonsOrdered(firstNumber, secondNumber);
 											}
 											gameView.restoreDefaultIcon(gameModel.getFirstCard());
@@ -469,7 +469,7 @@ public class MenuController {
 
 		do {
 
-			card = gameModel.getRandomCardIndex(profile.get(4));
+			card = gameModel.getRandomCardIndex(profile.get(4), gameView);
 			xIndexComp = card.getCardIndex()[0];
 			yIndexComp = card.getCardIndex()[1];
 			System.out.println("after assigning x and y are: " + xIndexComp + ", " + yIndexComp);
@@ -513,7 +513,7 @@ public class MenuController {
 					} catch (InterruptedException interrupt) {
 						interrupt.printStackTrace();
 					}
-					gameModel.setMissedButtons(firstNumber, secondNumber, profile.get(4));
+					gameModel.setMissedButtons(firstNumber, secondNumber);
 //					gameModel.setMissedButtonsOrdered(firstNumber, secondNumber);
 					gameView.restoreDefaultIcon(gameModel.getFirstCard());
 					gameView.restoreDefaultIcon(gameModel.getSecondCard());
