@@ -35,7 +35,7 @@ public class MenuController {
 
 	private int validClicksOnCards = 0;
 	private boolean firstTimeProfileSave = false;
-
+	private boolean match = false;
 	String activePlayerLabel = null;
 	int firstNumber, secondNumber;
 
@@ -394,6 +394,7 @@ public class MenuController {
 								} else if (validClicksOnCards == 2) {
 									secondNumber = gameView.getCurrentIcons().get(i * gameView.getBoardDimension() + j);
 									gameModel.getSecondCard().setIsClicked();
+
 								}
 								// if(singletonModel.move(i, j));
 								gameView.updateCardBoard(i, j);
@@ -405,9 +406,11 @@ public class MenuController {
 										@Override
 										public void run() {
 											if (profile.get(0).equals("c")&&!profile.get(4).equals("n")) {
-												gameModel.setMissedButtons(firstNumber, secondNumber);
+//												gameModel.setMissedButtons(firstNumber, secondNumber);
 //												gameModel.setMissedButtonsOrdered(firstNumber, secondNumber);
 											}
+											match = false;
+//											gameModel.addToMemory(false);
 											gameView.restoreDefaultIcon(gameModel.getFirstCard());
 											gameView.restoreDefaultIcon(gameModel.getSecondCard());
 //											gameModel.nullifyButtonsIndex();
@@ -438,6 +441,8 @@ public class MenuController {
 //													gameModel.removeMemoryButtons(firstNumber);
 												}
 											}
+											match=true;
+//											gameModel.removeFromMemory();
 											gameView.removeCards(gameModel.getFirstCard(), gameModel.getSecondCard());
 //											gameModel.nullifyButtonsIndex();
 											firstNumber = 0;
@@ -450,10 +455,9 @@ public class MenuController {
 											}
 										}
 									}, 1000);
-								}
+								}					
 							}
-
-						}
+						} gameModel.addToMemory(match);
 					}
 				}
 			}
@@ -468,7 +472,7 @@ public class MenuController {
 		System.out.println("Beginning of StartGame...active player is: " + gameModel.getActivePlayer().getName());
 
 		do {
-
+			gameModel.addToMemory(match);
 			card = gameModel.getRandomCardIndex(profile.get(4), gameView);
 			xIndexComp = card.getCardIndex()[0];
 			yIndexComp = card.getCardIndex()[1];
@@ -513,8 +517,10 @@ public class MenuController {
 					} catch (InterruptedException interrupt) {
 						interrupt.printStackTrace();
 					}
-					gameModel.setMissedButtons(firstNumber, secondNumber);
+//					gameModel.addToMemory(false);
+//					gameModel.setMissedButtons(firstNumber, secondNumber);
 //					gameModel.setMissedButtonsOrdered(firstNumber, secondNumber);
+					match=false;
 					gameView.restoreDefaultIcon(gameModel.getFirstCard());
 					gameView.restoreDefaultIcon(gameModel.getSecondCard());
 //							gameModel.nullifyButtonsIndex();
@@ -538,6 +544,9 @@ public class MenuController {
 //					if (gameModel.getFirstCard().getIsClicked() == true) {
 //						gameModel.removeMemoryButtons(firstNumber);
 //					}
+					match=true;
+//					gameModel.addToMemory(true);
+//					gameModel.removeFromMemory();
 					gameView.removeCards(gameModel.getFirstCard(), gameModel.getSecondCard());
 //							gameModel.nullifyButtonsIndex();
 					validClicksOnCards = 0;
@@ -551,6 +560,8 @@ public class MenuController {
 						return;
 					}
 				}
+				gameModel.addToMemory(match);
+
 			}
 		} while (gameModel.getActivePlayer().getName().equals("Computer") && !gameModel.gameOver());
 	}

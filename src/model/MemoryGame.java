@@ -34,7 +34,12 @@ public class MemoryGame implements Game {
 	private int counter = 0;
 	private int wincheck = 0;
 	Random randomNo;
-
+	int guessHigherPoint=0;
+	int difficultyDepth=0;
+	int depthChangeScale=0;
+	int low = 1;
+	int high = 100;
+	int savedIcon;
 //	private static String gameMode;
 //	private static int[] buttonsIndex = new int[4];
 
@@ -116,45 +121,87 @@ public class MemoryGame implements Game {
 			System.out.println("removed button: " + emojiNumber);
 		}
 	}
-
-	public void setMissedButtons(Integer firstNumber, Integer secondNumber) {// checked
-		int i1, j1, i2, j2, x, y;
-		int excludeLimit = 24;
-		i1 = firstCard.getCardIndex()[0];
-		j1 = firstCard.getCardIndex()[1];
-		i2 = secondCard.getCardIndex()[0];
-		j2 = secondCard.getCardIndex()[1];
+	//remove last pair from memory if matched
+	public void removeFromMemory() {
+		missedButtons.remove(missedButtons.size()-1);
+		missedButtons.remove(missedButtons.size()-1);
+		missedButtons.remove(missedButtons.size()-1);
+	}
+	
+	public void addToMemory(boolean match) {// checked
+		int x, y, z;
+		int excludeLimit = 36;
 
 		if (missedButtons.size() == excludeLimit) {
-			missedButtons.remove(0);
-			missedButtons.remove(0);
-			missedButtons.remove(0);
-			missedButtons.remove(0);
+			for(int n=0; n<3; n++) {
+				missedButtons.remove(3);	
+			}
+			System.out.println("limit excluded removed 6 items from missedButtons.");
 		}
-		x=i1*boardDimension+j1;
-		y=i2*boardDimension+j2;
+			System.out.println(selectedCard.getCardIndex()[0]);
+			x = selectedCard.getCardIndex()[0];
+			y = selectedCard.getCardIndex()[1];
+			z = x*boardDimension+y;
+			missedButtons.add(z);
+			missedButtons.add(x);
+			missedButtons.add(y);
 
-		missedButtons.add(x);
-		missedButtons.add(y);
-		missedButtons.add(firstNumber);
-		missedButtons.add(secondNumber);
 
+			if(match==true) {
+				for(int i=0; i<missedButtons.size(); i++) {
+					if(savedCardNumber==missedButtons.get(i)) {
+						if(missedButtons.get(i)%2==0) {
+							missedButtons.set(i, -1);
+							missedButtons.set(i+1, -1);
+							missedButtons.set(i+2, -1);
+							missedButtons.set(i+3, -1);
+							missedButtons.set(i+4, -1);
+							missedButtons.set(i+5, -1);
+						} else if (missedButtons.get(i)%2==1) {
+							missedButtons.set(i, -1);
+							missedButtons.set(i+1, -1);
+							missedButtons.set(i+2, -1);
+							missedButtons.set(i-1, -1);
+							missedButtons.set(i-2, -1);
+							missedButtons.set(i-3, -1);
+						}
+					} 
+					if(tempIndexValue==missedButtons.get(i)) {
+						if(missedButtons.get(i)%2==0) {
+							missedButtons.set(i, -1);
+							missedButtons.set(i+1, -1);
+							missedButtons.set(i+2, -1);
+							missedButtons.set(i+3, -1);
+							missedButtons.set(i+4, -1);
+							missedButtons.set(i+5, -1);
+						} else if (missedButtons.get(i)%2==1) {
+							missedButtons.set(i, -1);
+							missedButtons.set(i+1, -1);
+							missedButtons.set(i+2, -1);
+							missedButtons.set(i-1, -1);
+							missedButtons.set(i-2, -1);
+							missedButtons.set(i-3, -1);
+						}
+					}
+					
+				}			
+			}
 		System.out.println("\n Current Player is: " + getActivePlayer().getName());
-		for (int i = 0; i < missedButtons.size(); i+=4) {
-			System.out.println("MissedButton 1 is: " + missedButtons.get(i));
-			System.out.println("MissedButton 1 is: " + missedButtons.get(i+1));
-			System.out.println("MissedButton firstNumber is: " + missedButtons.get(i+2));
-			System.out.println("MissedButton secondNumber is: " + missedButtons.get(i+3));	
+		for (int n = 0; n < missedButtons.size(); n++) {
+			System.out.println("MissedButton x " + n + " " + missedButtons.get(n));
 		}
 	}
 
+	
+	
 	public Card getRandomCardIndex(String difficulty, GameView view) {
 		randomNo = new Random();
-		int low = 1;
-		int high = 100;
 		int result = randomNo.nextInt(high - low) + low;
-		int savedIcon;
-
+		
+		guessHigherPoint=95;
+		difficultyDepth=10;
+		depthChangeScale=8;
+		
 		switch (difficulty) {
 		case "n":
 			do {
@@ -176,19 +223,19 @@ public class MemoryGame implements Game {
 							+ tempIndexValue);
 					subMissedButtons.clear();
 
-					for (int i = 0; i < missedButtons.size(); i += 2) {
-						for (int j = 0; j < 2; j++) {
-							if (tempIndexValue == missedButtons.get(j)) {
-								if (j % 2 == 0) {
-									subMissedButtons.add(missedButtons.get(j + 1));
+					for (int i = 0; i < missedButtons.size(); i += 3) {
+					System.out.println("i value is: " + i);
+							if (tempIndexValue == missedButtons.get(i)) {
+								if (i % 2 == 0) {
+									subMissedButtons.add(missedButtons.get(i));
 									System.out.println(
-											"subMissedButtons.add(missedButtons.get(i+1));" + missedButtons.get(j + 1));
-								} else if (j % 2 == 1) {
-//								subMissedButtons.add(missedButtons.get(i - 1));
-//								System.out.println("subMissedButtons.add(missedButtons.get(i-1));" + missedButtons.get(i - 1));
+											"subMissedButtons.add(missedButtons.get(i));" + missedButtons.get(i));
+								} else if (i % 2 == 1) {
+								subMissedButtons.add(missedButtons.get(i - 3));
+								System.out.println("subMissedButtons.add(missedButtons.get(i-3));" + missedButtons.get(i - 3));
 								}
 							}
-						}
+						
 					}
 					for (int i = 0; i < subMissedButtons.size(); i++) {
 						System.out.println("submissedButton nr." + i + " is " + subMissedButtons.get(i));
@@ -277,6 +324,7 @@ public class MemoryGame implements Game {
 			}
 			break;
 		case "h":
+					
 			if (temp == 1) {
 				System.out.println("entering (temp == 1) hard : temp value is: " + temp);
 				savedIcon = view.getCurrentIcons().get(savedCardNumber);
@@ -298,45 +346,60 @@ public class MemoryGame implements Game {
 ////						System.out.println("subMissedButtons.add(missedButtons.get(i-1));" + missedButtons.get(i - 1));
 //					}
 //				}
+				
 				do {
 					valid = true;
-					cardIndexX = randomNo.nextInt(boardDimension);
-					cardIndexY = randomNo.nextInt(boardDimension);
-					tempIndexValue = cardIndexX * boardDimension + cardIndexY;
-
-					System.out.println("\"tempIndexValue and it\'s X, Y values are: " + tempIndexValue + ", " + cardIndexX + ", " + cardIndexY);
-					System.out.println("\"savedCardNumber and it\'s X, Y values are: " + savedCardNumber + ", " + savedIndexX + ", " + savedIndexY);
-					subMissedButtons.clear();
-
-						for (int i = 0; i < missedButtons.size(); i+=4) {
-							for(int j=0; j<2; j++) {
-								if (tempIndexValue == missedButtons.get(j)) {
-									if (j % 2 == 0) {
-										subMissedButtons.add(missedButtons.get(i + 1));
-										System.out.println(
-												"subMissedButtons.add(missedButtons.get(i+1));--> " + missedButtons.get(i + 1));
-									} else if (j % 2 == 1) {
-										subMissedButtons.add(missedButtons.get(i - 1));
-										System.out.println("subMissedButtons.add(missedButtons.get(i-1));--> " + missedButtons.get(i - 1));
-									}
-								}								
+//					for(int i=0; i<missedButtons.size(); i+=2) {
+//							if(savedIcon==view.getCurrentIcons().get(missedButtons.get(i))) {
+//								if
+//								view.getCurrentIcons().get(savedCardNumber);
+//							}
+////								if(savedIcon == missedButtons.get(j+1)) {
+//									if((getCards()[cardIndexX][cardIndexY].getState() != CardState.CLOSED) || (!valid));
+////							}
+//					}
+//					if(missedButtons.size()>0) {
+//						System.out.println("hi");
+//					} else {
+//						System.out.println("hi");
+						
+						cardIndexX = randomNo.nextInt(boardDimension);
+						cardIndexY = randomNo.nextInt(boardDimension);
+						tempIndexValue = cardIndexX * boardDimension + cardIndexY;
+						
+						System.out.println("\"tempIndexValue and it\'s X, Y values are: " + tempIndexValue + ", " + cardIndexX + ", " + cardIndexY);
+						System.out.println("\"savedCardNumber and it\'s X, Y values are: " + savedCardNumber + ", " + savedIndexX + ", " + savedIndexY);
+						subMissedButtons.clear();
+						
+						for (int i = 0; i < missedButtons.size()-3; i+=3) {
+							
+							if (tempIndexValue == missedButtons.get(i)) {
+								if (i % 2 == 0) {
+									subMissedButtons.add(missedButtons.get(i));
+									System.out.println(
+											"subMissedButtons.add(missedButtons.get(i));" + missedButtons.get(i));
+								} else if (i % 2 == 1) {
+								subMissedButtons.add(missedButtons.get(i - 3));
+								System.out.println("subMissedButtons.add(missedButtons.get(i-3));" + missedButtons.get(i - 3));
+								}	
+							}						
+						}						
+						
+						for (int i = 0; i < subMissedButtons.size(); i++) {
+							System.out.println("submissedButton nr." + i + " is " + subMissedButtons.get(i));
+						}
+						
+						subMissedButtons.forEach((n) -> {
+							System.out.println("inside foreach no match yet");
+							if (tempIndexValue == n) {
+								System.out.println(
+										"savedCardNumber == n --> " + "savedCardNumber == " + savedCardNumber + " n==" + n);
+								valid = false;
 							}
-						}
-
-					for (int i = 0; i < subMissedButtons.size(); i++) {
-						System.out.println("submissedButton nr." + i + " is " + subMissedButtons.get(i));
-					}
-
-					subMissedButtons.forEach((n) -> {
-						System.out.println("inside foreach no match yet");
-						if (tempIndexValue == n) {
-							System.out.println(
-									"savedCardNumber == n --> " + "savedCardNumber == " + savedCardNumber + " n==" + n);
-							valid = false;
-						}
-					});
-
-					System.out.println(getCards()[cardIndexX][cardIndexY].getState() + " " + valid);
+						});
+						
+						System.out.println(getCards()[cardIndexX][cardIndexY].getState() + " " + valid);
+//					} 
 				} while ((getCards()[cardIndexX][cardIndexY].getState() != CardState.CLOSED) || (!valid));
 				temp--;
 				System.out.println("exiting temp==1 with temp value of " + temp);
