@@ -159,38 +159,38 @@ public class MemoryGame implements Game {
 		if (firstNumber == secondNumber) {
 			for (int i = 0; i < missedButtons.size(); i+=3) {
 				if (z1 == missedButtons.get(i)) {
-					if (i % 2 == 0) {
+//					if (i % 2 == 0) {
 //						missedButtons.set(i, -1);
 //						missedButtons.set(i + 1, -1);
 //						missedButtons.set(i + 2, -1);
-						missedButtons.set(i + 3, -1);
-						missedButtons.set(i + 4, -1);
-						missedButtons.set(i + 5, -1);
-					} if (i % 2 == 1) {
-//						missedButtons.set(i, -1);
-//						missedButtons.set(i + 1, -1);
-//						missedButtons.set(i + 2, -1);
-						missedButtons.set(i - 1, -1);
-						missedButtons.set(i - 2, -1);
-						missedButtons.set(i - 3, -1);
-					}
+////						missedButtons.set(i + 3, -1);
+////						missedButtons.set(i + 4, -1);
+////						missedButtons.set(i + 5, -1);
+//					} if (i % 2 == 1) {
+						missedButtons.set(i, -1);
+						missedButtons.set(i + 1, -1);
+						missedButtons.set(i + 2, -1);
+//						missedButtons.set(i - 1, -1);
+//						missedButtons.set(i - 2, -1);
+//						missedButtons.set(i - 3, -1);
+//					}
 				}
 				if (z2 == missedButtons.get(i)) {
-					if (i % 2 == 0) {
+//					if (i % 2 == 0) {
 //						missedButtons.set(i, -1);
 //						missedButtons.set(i + 1, -1);
 //						missedButtons.set(i + 2, -1);
-						missedButtons.set(i + 3, -1);
-						missedButtons.set(i + 4, -1);
-						missedButtons.set(i + 5, -1);
-					} if (i % 2 == 1) {
-//						missedButtons.set(i, -1);
-//						missedButtons.set(i + 1, -1);
-//						missedButtons.set(i + 2, -1);
-						missedButtons.set(i - 1, -1);
-						missedButtons.set(i - 2, -1);
-						missedButtons.set(i - 3, -1);
-					}
+////						missedButtons.set(i + 3, -1);
+////						missedButtons.set(i + 4, -1);
+////						missedButtons.set(i + 5, -1);
+//					} if (i % 2 == 1) {
+						missedButtons.set(i, -1);
+						missedButtons.set(i + 1, -1);
+						missedButtons.set(i + 2, -1);
+//						missedButtons.set(i - 1, -1);
+//						missedButtons.set(i - 2, -1);
+//						missedButtons.set(i - 3, -1);
+//					}
 				}
 			}
 		}
@@ -385,32 +385,28 @@ public class MemoryGame implements Game {
 							+ savedIndexX + ", " + savedIndexY);
 					subMissedButtons.clear();
 
-//						for (int i = 0; i < missedButtons.size()-3; i+=3) {
-//							
-//							if (tempIndexValue == missedButtons.get(i)) {
-//								if (i % 2 == 0) {
-//									subMissedButtons.add(missedButtons.get(i));
-//									System.out.println(
-//											"subMissedButtons.add(missedButtons.get(i));" + missedButtons.get(i));
-//								} else if (i % 2 == 1) {
-//								subMissedButtons.add(missedButtons.get(i - 3));
-//								System.out.println("subMissedButtons.add(missedButtons.get(i-3));" + missedButtons.get(i - 3));
-//								}	
-//							}						
-//						}						
-//						
-					for (int i = 0; i < subMissedButtons.size(); i++) {
-						System.out.println("submissedButton nr." + i + " is " + subMissedButtons.get(i));
-					}
-
-					subMissedButtons.forEach((n) -> {
-						System.out.println("inside foreach no match yet");
-						if (tempIndexValue == n) {
-							System.out.println(
-									"savedCardNumber == n --> " + "savedCardNumber == " + savedCardNumber + " n==" + n);
-							valid = false;
-						}
-					});
+						for (int i = 0; i < missedButtons.size()-3; i+=3) {
+							
+							if (savedCardNumber == missedButtons.get(i)) {
+								if ((i % 2 == 0) && (tempIndexValue==missedButtons.get(i+3)) || 
+										(i % 2 == 1) && (tempIndexValue==missedButtons.get(i-3)) ) {
+										valid = false;
+					
+							}						
+						}		}				
+						
+//					for (int i = 0; i < subMissedButtons.size(); i++) {
+//						System.out.println("submissedButton nr." + i + " is " + subMissedButtons.get(i));
+//					}
+//
+//					subMissedButtons.forEach((n) -> {
+//						System.out.println("inside foreach no match yet");
+//						if (tempIndexValue == n) {
+//							System.out.println(
+//									"savedCardNumber == n --> " + "savedCardNumber == " + savedCardNumber + " n==" + n);
+//							valid = false;
+//						}
+//					});
 
 					System.out.println(getCards()[cardIndexX][cardIndexY].getState() + " " + valid);
 //					} 
