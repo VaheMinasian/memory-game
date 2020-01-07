@@ -42,6 +42,8 @@ public class GameView extends JFrame implements ActionListener {
 	private ArrayList<Integer> currentIcons;
 	private final ImageIcon patternIcon = new ImageIcon(GameView.class.getResource("/pattern.png"));
 	private Icon image;
+	int iconName;
+
 
 	public GameView() {
 	}
@@ -198,7 +200,6 @@ public class GameView extends JFrame implements ActionListener {
 	
 	public void updateCardBoard(int i, int j) {
 		Icon image;
-		int iconName;
 		iconName = getCurrentIcons().get(i * boardDimension + j);
 		image = new ImageIcon(GameView.class.getResource("/" + iconName + ".png"));
 		getEmojiButton(i, j).setIcon(image);

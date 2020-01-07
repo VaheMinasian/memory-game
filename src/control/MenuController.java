@@ -389,9 +389,13 @@ public class MenuController {
 								if (validClicksOnCards == 1) {
 									firstNumber = gameView.getCurrentIcons().get(i * gameView.getBoardDimension() + j);
 									gameModel.getFirstCard().setIsClicked();
+									System.out.println("FirstNumber is: " + firstNumber);
+
 								} else if (validClicksOnCards == 2) {
 									secondNumber = gameView.getCurrentIcons().get(i * gameView.getBoardDimension() + j);
 									gameModel.getSecondCard().setIsClicked();
+									System.out.println("SecondNumber is: " + secondNumber);
+
 
 								}
 								// if(singletonModel.move(i, j));

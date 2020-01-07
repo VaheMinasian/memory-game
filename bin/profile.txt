@@ -1,6 +1,0 @@
-mode:c
-boardsize:4
-player1:asdf
-player2:Computer
-difficulty:h
-playable:true
