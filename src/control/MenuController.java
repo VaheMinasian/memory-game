@@ -37,7 +37,7 @@ public class MenuController {
 	private boolean firstTimeProfileSave = false;
 	String activePlayerLabel = null;
 	int firstNumber, secondNumber;
-
+	private int factor;
 	public MenuController() {
 		System.out.println("Main constructor invoked");
 	}
@@ -406,7 +406,7 @@ public class MenuController {
 //											if (profile.get(0).equals("c") && !profile.get(4).equals("n")) {
 ////												gameModel.setMissedButtons(firstNumber, secondNumber);
 //											}
-											gameModel.addToMemory(firstNumber, secondNumber);
+											gameModel.addToMemory(firstNumber, secondNumber, profile.get(4));
 											gameView.restoreDefaultIcon(gameModel.getFirstCard());
 											gameView.restoreDefaultIcon(gameModel.getSecondCard());
 											firstNumber = 0;
@@ -436,7 +436,7 @@ public class MenuController {
 ////													gameModel.removeMemoryButtons(firstNumber);
 //												}
 											}
-											gameModel.addToMemory(firstNumber, secondNumber);
+											gameModel.addToMemory(firstNumber, secondNumber, profile.get(4));
 //											gameModel.removeFromMemory();
 											gameView.removeCards(gameModel.getFirstCard(), gameModel.getSecondCard());
 //											gameModel.nullifyButtonsIndex();
@@ -459,6 +459,27 @@ public class MenuController {
 		}
 	}
 
+	int generateDifficultyFactor() {
+		factor=50;
+		switch(profile.get(4)) {
+		case "n":
+			factor = factor*20;
+			break;
+		case "e":
+			factor = factor*14;
+			break;
+		case "m":
+			factor = factor*9;
+			break;
+		case "h":
+			factor = factor*6;
+			break;
+		default:
+			break;
+		}
+		return factor;
+		}
+	
 	public void playTheComputer() {
 		Card card;
 		int xIndexComp;
@@ -473,7 +494,7 @@ public class MenuController {
 			System.out.println("after assigning x and y are: " + xIndexComp + ", " + yIndexComp);
 
 			try {
-				Thread.sleep(300);
+				Thread.sleep(generateDifficultyFactor());
 			} catch (InterruptedException interrupt) {
 				interrupt.printStackTrace();
 			}
@@ -506,11 +527,11 @@ public class MenuController {
 					System.out.println("inside !gameModel.getStatus()");
 
 					try {
-						Thread.sleep(300);
+						Thread.sleep(generateDifficultyFactor());
 					} catch (InterruptedException interrupt) {
 						interrupt.printStackTrace();
 					}
-					gameModel.addToMemory(firstNumber, secondNumber);
+					gameModel.addToMemory(firstNumber, secondNumber, profile.get(4));
 					gameView.restoreDefaultIcon(gameModel.getFirstCard());
 					gameView.restoreDefaultIcon(gameModel.getSecondCard());
 					validClicksOnCards = 0;
@@ -525,12 +546,12 @@ public class MenuController {
 				} else if (gameModel.getStatus(firstNumber, secondNumber)) {
 					System.out.println("inside (gameModel.getStatus())");
 					try {
-						Thread.sleep(400);
+						Thread.sleep(generateDifficultyFactor());
 					} catch (InterruptedException interrupt) {
 						interrupt.printStackTrace();
 					}
 
-					gameModel.addToMemory(firstNumber, secondNumber);
+					gameModel.addToMemory(firstNumber, secondNumber, profile.get(4));
 					gameView.removeCards(gameModel.getFirstCard(), gameModel.getSecondCard());
 					validClicksOnCards = 0;
 					firstNumber = 0;
