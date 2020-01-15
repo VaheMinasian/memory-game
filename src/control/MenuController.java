@@ -462,9 +462,6 @@ public class MenuController {
 	int generateDifficultyFactor() {
 		factor=50;
 		switch(profile.get(4)) {
-		case "n":
-			factor = factor*20;
-			break;
 		case "e":
 			factor = factor*14;
 			break;
@@ -474,7 +471,8 @@ public class MenuController {
 		case "h":
 			factor = factor*6;
 			break;
-		default:
+		default:// novice level
+			factor = factor*20;
 			break;
 		}
 		return factor;
