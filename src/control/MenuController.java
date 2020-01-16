@@ -406,7 +406,7 @@ public class MenuController {
 //											if (profile.get(0).equals("c") && !profile.get(4).equals("n")) {
 ////												gameModel.setMissedButtons(firstNumber, secondNumber);
 //											}
-											gameModel.addToMemory(firstNumber, secondNumber, profile.get(4));
+											gameModel.addToMemory(firstNumber, secondNumber, gameView, profile.get(4));
 											gameView.restoreDefaultIcon(gameModel.getFirstCard());
 											gameView.restoreDefaultIcon(gameModel.getSecondCard());
 											firstNumber = 0;
@@ -436,7 +436,7 @@ public class MenuController {
 ////													gameModel.removeMemoryButtons(firstNumber);
 //												}
 											}
-											gameModel.addToMemory(firstNumber, secondNumber, profile.get(4));
+											gameModel.addToMemory(firstNumber, secondNumber, gameView, profile.get(4));
 //											gameModel.removeFromMemory();
 											gameView.removeCards(gameModel.getFirstCard(), gameModel.getSecondCard());
 //											gameModel.nullifyButtonsIndex();
@@ -529,7 +529,7 @@ public class MenuController {
 					} catch (InterruptedException interrupt) {
 						interrupt.printStackTrace();
 					}
-					gameModel.addToMemory(firstNumber, secondNumber, profile.get(4));
+					gameModel.addToMemory(firstNumber, secondNumber, gameView, profile.get(4));
 					gameView.restoreDefaultIcon(gameModel.getFirstCard());
 					gameView.restoreDefaultIcon(gameModel.getSecondCard());
 					validClicksOnCards = 0;
@@ -549,7 +549,7 @@ public class MenuController {
 						interrupt.printStackTrace();
 					}
 
-					gameModel.addToMemory(firstNumber, secondNumber, profile.get(4));
+					gameModel.addToMemory(firstNumber, secondNumber, gameView, profile.get(4));
 					gameView.removeCards(gameModel.getFirstCard(), gameModel.getSecondCard());
 					validClicksOnCards = 0;
 					firstNumber = 0;
