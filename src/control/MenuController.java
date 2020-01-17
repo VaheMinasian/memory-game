@@ -32,8 +32,9 @@ public class MenuController {
 	private static BufferedReader reader;
 	private static FileReader file;
 	private static ArrayList<String> profile = new ArrayList<>();
-	Toolkit toolkit = Toolkit.getDefaultToolkit();
-	Cursor hourglassCursor = toolkit.createCustomCursor(toolkit.getImage(getClass().getResource("/pattern.png")), new Point(0,0), "hourGlass");
+//	Toolkit toolkit = Toolkit.getDefaultToolkit();
+//	Cursor hourglassCursor = toolkit.createCustomCursor(toolkit.getImage(getClass().getResource("/pattern.png")), new Point(0,0), "hourGlass");
+	Cursor hourGlassCursor = new Cursor(Cursor.WAIT_CURSOR);
 	Cursor normalCursor = new Cursor(Cursor.DEFAULT_CURSOR);
 	private MemoryGame gameModel;
 	private GameView gameView;
@@ -488,7 +489,7 @@ public class MenuController {
 		int xIndexComp;
 		int yIndexComp;
 //		gameView.setCursor(Toolkit.getDefaultToolkit().createCustomCursor(new ImageIcon(getClass.getResource("/blue-hourglass.gif")).getImage(),new Point(0,0),"custom cursor"));
-		gameView.setCursor(hourglassCursor);
+		gameView.setCursor(hourGlassCursor);
 		System.out.println("Beginning of StartGame...active player is: " + gameModel.getActivePlayer().getName());
 
 		do {
