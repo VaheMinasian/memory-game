@@ -510,18 +510,27 @@ public class MemoryGame implements Game {
 
 				// 4th level ... check if there is 2 matching buttons in missedButtons
 				for (int i = 0; i < missedButtons.size() - 8; i += 4) {
-					if ( ((missedButtons.get(missedButtons.size() - 3) !=  -1) && (missedButtons.get(i + 1) == missedButtons.get(missedButtons.size() - 3))) || 
-						 ((missedButtons.get(missedButtons.size() - 7) !=  -1) && (missedButtons.get(i + 1) == missedButtons.get(missedButtons.size() - 7))) ) 
+					if ( (missedButtons.get(missedButtons.size() - 3) !=  -1) && (missedButtons.get(i + 1) == missedButtons.get(missedButtons.size() - 3)) ) 
 					{
-							cardIndexX = missedButtons.get(i + 2);
-							cardIndexY = missedButtons.get(i + 3);
+							cardIndexX = missedButtons.get(missedButtons.size() - 2);
+							cardIndexY = missedButtons.get(missedButtons.size() - 1);
 							savedCardNumber = cardIndexX * boardDimension + cardIndexY;
 							savedIndexX = cardIndexX;
 							savedIndexY = cardIndexY;
 							temp++;
 							System.out.println("cardIndexX is: " +cardIndexX + "cardIndexY is: " + cardIndexY);
 							return getCards()[cardIndexX][cardIndexY];
-					}
+					} else if ( (missedButtons.get(missedButtons.size() - 7) !=  -1) && (missedButtons.get(i + 1) == missedButtons.get(missedButtons.size() - 7)) ) 
+						{
+								cardIndexX = missedButtons.get(missedButtons.size() - 6);
+								cardIndexY = missedButtons.get(missedButtons.size() - 5);
+								savedCardNumber = cardIndexX * boardDimension + cardIndexY;
+								savedIndexX = cardIndexX;
+								savedIndexY = cardIndexY;
+								temp++;
+								System.out.println("cardIndexX is: " +cardIndexX + "cardIndexY is: " + cardIndexY);
+								return getCards()[cardIndexX][cardIndexY];
+						}
 				}
 
 				do {

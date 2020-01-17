@@ -1,6 +1,6 @@
 mode:c
 boardsize:4
-player1:asdf
+player1:Jacqueline
 player2:Computer
-difficulty:m
+difficulty:h
 playable:true
