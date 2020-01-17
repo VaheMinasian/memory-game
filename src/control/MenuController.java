@@ -1,5 +1,7 @@
 package control;
 
+import java.awt.Cursor;
+import java.awt.Point;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -13,6 +15,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import javax.swing.AbstractButton;
+import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 
 import model.Card;
@@ -29,7 +32,9 @@ public class MenuController {
 	private static BufferedReader reader;
 	private static FileReader file;
 	private static ArrayList<String> profile = new ArrayList<>();
-
+	Toolkit toolkit = Toolkit.getDefaultToolkit();
+	Cursor hourglassCursor = toolkit.createCustomCursor(toolkit.getImage(getClass().getResource("/pattern.png")), new Point(0,0), "hourGlass");
+	Cursor normalCursor = new Cursor(Cursor.DEFAULT_CURSOR);
 	private MemoryGame gameModel;
 	private GameView gameView;
 
@@ -482,7 +487,8 @@ public class MenuController {
 		Card card;
 		int xIndexComp;
 		int yIndexComp;
-
+//		gameView.setCursor(Toolkit.getDefaultToolkit().createCustomCursor(new ImageIcon(getClass.getResource("/blue-hourglass.gif")).getImage(),new Point(0,0),"custom cursor"));
+		gameView.setCursor(hourglassCursor);
 		System.out.println("Beginning of StartGame...active player is: " + gameModel.getActivePlayer().getName());
 
 		do {
@@ -539,6 +545,7 @@ public class MenuController {
 					updateScoreBoard();
 					activePlayerLabel = gameModel.switchActivePlayer();
 					gameView.setActivePlayerFont(activePlayerLabel);
+				    gameView.setCursor(normalCursor);
 
 //					I F    M A T C H E D
 				} else if (gameModel.getStatus(firstNumber, secondNumber)) {
@@ -557,6 +564,7 @@ public class MenuController {
 					gameModel.update();
 					updateScoreBoard();
 					if (gameModel.gameOver()) {
+					    gameView.setCursor(normalCursor);
 						System.out.println("going to game over");
 						resetGame();
 						return;

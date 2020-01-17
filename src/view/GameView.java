@@ -1,10 +1,13 @@
 package view;
 
 import java.awt.Color;
+import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.Image;
+import java.awt.Point;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
@@ -42,7 +45,19 @@ public class GameView extends JFrame implements ActionListener {
 	private ArrayList<Integer> currentIcons;
 	private final ImageIcon patternIcon = new ImageIcon(GameView.class.getResource("/pattern.png"));
 	private Icon image;
+	/*
+	 * Cursor hourglassCursor = new Cursor(Cursor.WAIT_CURSOR); Cursor normalCursor
+	 * = new Cursor(Cursor.DEFAULT_CURSOR);
+	 */
 
+	
+	/*
+	 * public void setCursor() { Toolkit toolkit = Toolkit.getDefaultToolkit();
+	 * Image image = toolkit.getImage(GameView.class.getResource("/hourglass.gif"));
+	 * Point hotspot = new Point(0,0); Cursor cursor =
+	 * toolkit.createCustomCursor(image, hotspot, "pencil"); setCursor(cursor); }
+	 */
+	
 	public GameView() {
 	}
 
