@@ -1,6 +1,6 @@
 mode:c
 boardsize:4
-player1:asdf
+player1:vahe
 player2:Computer
-difficulty:h
+difficulty:1
 playable:true

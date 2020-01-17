@@ -136,16 +136,16 @@ public class MenuController {
 		}
 
 		switch (profile.get(4)) {
-		case "n":
+		case "4":
 			optionsView.getNovice().setSelected(true);
 			break;
-		case "e":
+		case "3":
 			optionsView.getEasy().setSelected(true);
 			break;
-		case "m":
+		case "2":
 			optionsView.getMedium().setSelected(true);
 			break;
-		case "h":
+		case "1":
 			optionsView.getHard().setSelected(true);
 			break;
 		default:
@@ -216,7 +216,7 @@ public class MenuController {
 //				gameView.getBoardPanel().setBoardSize(gameView.getBoardDimension());
 				gameView.addGameViewListener(new GameListener());
 //				gameModel.setActivePlayer(gameModel.getPlayer1());
-				if (profile.get(0).equals("c") && !profile.get(4).equals("n")) {
+				if (profile.get(0).equals("c") && !profile.get(4).equals("4")) {
 //				gameModel.setMemorySize(profile.get(4));
 				}
 				if (!profile.get(0).equals("s")) {
@@ -461,14 +461,14 @@ public class MenuController {
 
 	int generateDifficultyFactor() {
 		factor=50;
-		switch(profile.get(4)) {
-		case "e":
+		switch(Integer.parseInt(profile.get(4))) {
+		case 3:
 			factor = factor*14;
 			break;
-		case "m":
+		case 2:
 			factor = factor*9;
 			break;
-		case "h":
+		case 1:
 			factor = factor*6;
 			break;
 		default:// novice level

@@ -145,10 +145,10 @@ public class OptionsView extends JFrame implements ActionListener, ListSelection
         easy = new JRadioButton("Easy");
         medium = new JRadioButton("Medium");
         hard = new JRadioButton("Hard");
-        novice.setActionCommand("n");
-        easy.setActionCommand("e");
-        medium.setActionCommand("m");
-        hard.setActionCommand("h");
+        novice.setActionCommand("4");
+        easy.setActionCommand("3");
+        medium.setActionCommand("2");
+        hard.setActionCommand("1");
         
         
         novice.setEnabled(false);
