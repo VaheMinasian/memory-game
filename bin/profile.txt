@@ -1,5 +1,5 @@
 mode:c
-boardsize:4
+boardsize:8
 player1:vahe
 player2:Computer
 difficulty:2

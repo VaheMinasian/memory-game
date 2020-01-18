@@ -238,7 +238,7 @@ public class MenuController {
 					}, 1000);
 				}
 				String p1Label = gameModel.getActivePlayer() == gameModel.getPlayer1() ? "player1" : "player2";
-				gameView.setActivePlayerFont(p1Label);
+				gameView.setActivePlayerLight(p1Label);
 			}
 		}// End of Action performed
 	} // End of MainMenuViewListener

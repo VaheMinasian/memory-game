@@ -140,14 +140,14 @@ public class GameView extends JFrame implements ActionListener {
 		player1Label.setText(profile.get(2));
 		player1Label.setVerticalAlignment(SwingConstants.BOTTOM);
 		score1Label = makeLabel("S");
-		player1Label.setFont(planeFont);
+		player1Label.setFont(boldFont);
 		score1Label.setFont(planeFont);
 		setScore1Label(0);
 		score1Label.setVerticalAlignment(SwingConstants.NORTH);
 		namesPanel.add(player1Label);
 
 		player2Label = makeLabel("N");
-		player2Label.setFont(planeFont);
+		player2Label.setFont(boldFont);
 		player2Label.setVerticalAlignment(SwingConstants.BOTTOM);
 		score2Label = makeLabel("S");
 		score2Label.setFont(planeFont);
@@ -302,21 +302,13 @@ public class GameView extends JFrame implements ActionListener {
 		return boardSize;
 	}
 
-	public void setActivePlayerFont(String string) {
+	public void setActivePlayerLight(String string) {
 		if (string == "player1") {
-			player1Label.setFont(boldFont);
-			score1Label.setFont(boldFont);
-			player2Label.setFont(planeFont);
-			score2Label.setFont(planeFont);
 			p1LabelGreen.setIcon(image1);
 			p2LabelGreen.setIcon(image2);
 
 			
 		} else if (string == "player2") {
-			player2Label.setFont(boldFont);
-			score2Label.setFont(boldFont);
-			player1Label.setFont(planeFont);
-			score1Label.setFont(planeFont);
 			p1LabelGreen.setIcon(image2);
 			p2LabelGreen.setIcon(image1);
 		}
@@ -396,6 +388,7 @@ public class GameView extends JFrame implements ActionListener {
 	}
 
 	public void switchActivePlayerLight(String activePlayerLabel) {
+		
 		// TODO Auto-generated method stub
 		if (activePlayerLabel.equals("player1")) {
 			p1LabelGreen.setIcon(image1);
