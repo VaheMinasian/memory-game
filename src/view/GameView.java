@@ -39,7 +39,7 @@ public class GameView extends JFrame implements ActionListener {
 	private JPanel mainPanel, namesPanel, turnPanel;
 	private MyPanel boardPanel;
 	private JLabel player1Label, player2Label, score1Label, score2Label;
-	private JLabel greenOnLabel, greenOffLabel, matchesLabel;
+	private JLabel p1LabelGreen, p2LabelGreen, matchesLabel;
 	private int boardDimension;
 	private int boardSize;
 	private ImageIcon backgroundIcon;
@@ -56,7 +56,7 @@ public class GameView extends JFrame implements ActionListener {
 	private final ImageIcon unselectedImage = new ImageIcon(GameView.class.getResource("/image.png"));
 	private final ImageIcon selectedImage = new ImageIcon(GameView.class.getResource("/46-grey.png"));
 	private ImageIcon tempImage = null;
-	private Icon image;
+	private Icon image, image1, image2;
 	private Image img;
 	boolean buttonState;
 
@@ -99,8 +99,10 @@ public class GameView extends JFrame implements ActionListener {
 //		turnPanel.setPreferredSize(new Dimension(boardSize, boardSize / 8));
 		matchesLabel = new JLabel(getScaledImage(unselectedImage, boardDimension * 8, boardDimension * 8));
 		matchesLabel.setName("unselectedLabel");
-		greenOnLabel = new JLabel(getScaledImage(greenOn, boardDimension * 8, boardDimension * 8));
-		greenOffLabel = new JLabel(getScaledImage(greenOff, boardDimension * 8, boardDimension * 8));
+		image1 = getScaledImage(greenOn, boardDimension * 8, boardDimension * 8);
+		image2 = getScaledImage(greenOff, boardDimension * 8, boardDimension * 8);
+		p1LabelGreen = new JLabel();
+		p2LabelGreen = new JLabel();
 
 		jbtn = new JButton();
 		jbtn.setPreferredSize(new Dimension(60, 60));
@@ -109,28 +111,30 @@ public class GameView extends JFrame implements ActionListener {
 		GridBagConstraints gbc = new GridBagConstraints();
 		gbc.fill = GridBagConstraints.HORIZONTAL;
 
-		gbc.gridx = 0;
-		gbc.gridy = 0;
+		if (!profile.get(0).equals("s")) {
+			gbc.gridx = 0;
+			gbc.gridy = 0;
 //		gbc.weightx=0.1;
-		turnPanel.add(greenOnLabel, gbc);
+			turnPanel.add(p1LabelGreen, gbc);
 
-		gbc.gridx = 1;
-		gbc.gridy = 0;
-		turnPanel.add(Box.createHorizontalStrut(30), gbc);
+			gbc.gridx = 1;
+			gbc.gridy = 0;
+			turnPanel.add(Box.createHorizontalStrut(30), gbc);
 
-		gbc.gridx = 2;
+			gbc.gridx = 2;
 //		gbc.gridwidth = 3;   
-		gbc.gridy = 0;
-		turnPanel.add(jbtn, gbc);
+			gbc.gridy = 0;
+			turnPanel.add(jbtn, gbc);
 
-		gbc.gridx = 3;
-		gbc.gridy = 0;
-		turnPanel.add(Box.createHorizontalStrut(30), gbc);
+			gbc.gridx = 3;
+			gbc.gridy = 0;
+			turnPanel.add(Box.createHorizontalStrut(30), gbc);
 
-		gbc.gridx = 4;
-		gbc.gridy = 0;
+			gbc.gridx = 4;
+			gbc.gridy = 0;
 //		gbc.weightx=0.1;
-		turnPanel.add(greenOffLabel, gbc);
+			turnPanel.add(p2LabelGreen, gbc);
+		}
 
 		player1Label = makeLabel("N");
 		player1Label.setText(profile.get(2));
@@ -154,9 +158,6 @@ public class GameView extends JFrame implements ActionListener {
 		namesPanel.add(score1Label);
 		if (!profile.get(0).equals("s")) {
 			namesPanel.add(score2Label);
-		}
-		if (!profile.get(0).equals("s")) {
-
 		}
 
 		if (profile.get(0).equals("c") || profile.get(0).equals("h")) {
@@ -301,14 +302,25 @@ public class GameView extends JFrame implements ActionListener {
 		return boardSize;
 	}
 
-	/*
-	 * public void setActivePlayerFont(String string) { if (string == "player1") {
-	 * player1Label.setFont(boldFont); score1Label.setFont(boldFont);
-	 * player2Label.setFont(planeFont); score2Label.setFont(planeFont); } else if
-	 * (string=="player2") { player2Label.setFont(boldFont);
-	 * score2Label.setFont(boldFont); player1Label.setFont(planeFont);
-	 * score1Label.setFont(planeFont); } }
-	 */
+	public void setActivePlayerFont(String string) {
+		if (string == "player1") {
+			player1Label.setFont(boldFont);
+			score1Label.setFont(boldFont);
+			player2Label.setFont(planeFont);
+			score2Label.setFont(planeFont);
+			p1LabelGreen.setIcon(image1);
+			p2LabelGreen.setIcon(image2);
+
+			
+		} else if (string == "player2") {
+			player2Label.setFont(boldFont);
+			score2Label.setFont(boldFont);
+			player1Label.setFont(planeFont);
+			score1Label.setFont(planeFont);
+			p1LabelGreen.setIcon(image2);
+			p2LabelGreen.setIcon(image1);
+		}
+	}
 
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
@@ -346,7 +358,7 @@ public class GameView extends JFrame implements ActionListener {
 	}
 
 	public void switchBackground() {
-		if(buttonState==false) {
+		if (buttonState == false) {
 			matchesLabel.setIcon(selectedImage);
 			for (int i = 0; i < emojiButtons.length; i++) {
 				for (int j = 0; j < emojiButtons.length; j++) {
@@ -354,19 +366,19 @@ public class GameView extends JFrame implements ActionListener {
 						emojiButtons[i][j].setVisible(true);
 					}
 				}
-			}			
+			}
 		}
-		if(buttonState==true) {
+		if (buttonState == true) {
 			matchesLabel.setIcon(unselectedImage);
 			for (int i = 0; i < emojiButtons.length; i++) {
 				for (int j = 0; j < emojiButtons.length; j++) {
-					if ((emojiButtons[i][j].isVisible() == true)&&(emojiButtons[i][j].isEnabled()==false)) {
+					if ((emojiButtons[i][j].isVisible() == true) && (emojiButtons[i][j].isEnabled() == false)) {
 						emojiButtons[i][j].setVisible(false);
 					}
 				}
 			}
 		}
-		switchButtonState();			
+		switchButtonState();
 	}
 
 	void switchButtonState() {
@@ -381,6 +393,17 @@ public class GameView extends JFrame implements ActionListener {
 
 	public MyPanel getBoardPanel() {
 		return boardPanel;
+	}
+
+	public void switchActivePlayerLight(String activePlayerLabel) {
+		// TODO Auto-generated method stub
+		if (activePlayerLabel.equals("player1")) {
+			p1LabelGreen.setIcon(image1);
+			p2LabelGreen.setIcon(image2);
+		} else if (activePlayerLabel.equals("player2")) {
+			p2LabelGreen.setIcon(image1);
+			p1LabelGreen.setIcon(image2);
+		}
 	}
 
 }

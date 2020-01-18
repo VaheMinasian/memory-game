@@ -222,9 +222,9 @@ public class MenuController {
 				gameView.addGameViewListener(new GameListener());
 				gameView.addBackgroundButtonListener(new BackgroundButtonListener());
 //				gameModel.setActivePlayer(gameModel.getPlayer1());
-				if (profile.get(0).equals("c") && !profile.get(4).equals("4")) {
+//				if (profile.get(0).equals("c") && !profile.get(4).equals("4")) {
 //				gameModel.setMemorySize(profile.get(4));
-				}
+//				}
 				if (!profile.get(0).equals("s")) {
 					gameModel.randomFirstPlayer();
 				}
@@ -238,7 +238,7 @@ public class MenuController {
 					}, 1000);
 				}
 				String p1Label = gameModel.getActivePlayer() == gameModel.getPlayer1() ? "player1" : "player2";
-//				gameView.setActivePlayerFont(p1Label);
+				gameView.setActivePlayerFont(p1Label);
 			}
 		}// End of Action performed
 	} // End of MainMenuViewListener
@@ -436,7 +436,7 @@ public class MenuController {
 											validClicksOnCards = 0;
 											if (!profile.get(0).equals("s")) {
 												activePlayerLabel = gameModel.switchActivePlayer();
-//												gameView.setActivePlayerFont(activePlayerLabel);
+												gameView.switchActivePlayerLight(activePlayerLabel);
 												System.out.println("active player now is the player named: "
 														+ gameModel.getActivePlayer().getClass().getSimpleName());
 												if (gameModel.getActivePlayer().getClass().getSimpleName()
@@ -559,7 +559,7 @@ public class MenuController {
 					gameModel.revoke();
 					updateScoreBoard();
 					activePlayerLabel = gameModel.switchActivePlayer();
-//					gameView.setActivePlayerFont(activePlayerLabel);
+					gameView.switchActivePlayerLight(activePlayerLabel);
 				    gameView.setCursor(normalCursor);
 
 //					I F    M A T C H E D
