@@ -39,7 +39,7 @@ public class GameView extends JFrame implements ActionListener {
 	private JPanel mainPanel, namesPanel, turnPanel;
 	private MyPanel boardPanel;
 	private JLabel player1Label, player2Label, score1Label, score2Label;
-	private JLabel greenOnLabel, greenOffLabel, unselectedLabel, selectedLabel;
+	private JLabel greenOnLabel, greenOffLabel, matchesLabel;
 	private int boardDimension;
 	private int boardSize;
 	private ImageIcon backgroundIcon;
@@ -97,16 +97,14 @@ public class GameView extends JFrame implements ActionListener {
 		turnPanel.setAlignmentX(CENTER_ALIGNMENT);
 		turnPanel.setLayout(new GridBagLayout());
 //		turnPanel.setPreferredSize(new Dimension(boardSize, boardSize / 8));
-		selectedLabel = new JLabel(getScaledImage(selectedImage, boardDimension * 8, boardDimension * 8));
-		selectedLabel.setName("selectedLabel");
-		unselectedLabel = new JLabel(getScaledImage(unselectedImage, boardDimension * 8, boardDimension * 8));
-		unselectedLabel.setName("unselectedLabel");
+		matchesLabel = new JLabel(getScaledImage(unselectedImage, boardDimension * 8, boardDimension * 8));
+		matchesLabel.setName("unselectedLabel");
 		greenOnLabel = new JLabel(getScaledImage(greenOn, boardDimension * 8, boardDimension * 8));
 		greenOffLabel = new JLabel(getScaledImage(greenOff, boardDimension * 8, boardDimension * 8));
 
 		jbtn = new JButton();
 		jbtn.setPreferredSize(new Dimension(60, 60));
-		jbtn.add(unselectedLabel);
+		jbtn.add(matchesLabel);
 
 		GridBagConstraints gbc = new GridBagConstraints();
 		gbc.fill = GridBagConstraints.HORIZONTAL;
@@ -349,7 +347,7 @@ public class GameView extends JFrame implements ActionListener {
 
 	public void switchBackground() {
 		if(buttonState==false) {
-			unselectedLabel.setIcon(selectedImage);
+			matchesLabel.setIcon(selectedImage);
 			for (int i = 0; i < emojiButtons.length; i++) {
 				for (int j = 0; j < emojiButtons.length; j++) {
 					if (emojiButtons[i][j].isVisible() == false) {
@@ -359,7 +357,7 @@ public class GameView extends JFrame implements ActionListener {
 			}			
 		}
 		if(buttonState==true) {
-			unselectedLabel.setIcon(unselectedImage);
+			matchesLabel.setIcon(unselectedImage);
 			for (int i = 0; i < emojiButtons.length; i++) {
 				for (int j = 0; j < emojiButtons.length; j++) {
 					if ((emojiButtons[i][j].isVisible() == true)&&(emojiButtons[i][j].isEnabled()==false)) {
