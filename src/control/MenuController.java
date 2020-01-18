@@ -220,6 +220,7 @@ public class MenuController {
 				gameView.displayGameWindow(profile);
 //				gameView.getBoardPanel().setBoardSize(gameView.getBoardDimension());
 				gameView.addGameViewListener(new GameListener());
+				gameView.addBackgroundButtonListener(new BackgroundButtonListener());
 //				gameModel.setActivePlayer(gameModel.getPlayer1());
 				if (profile.get(0).equals("c") && !profile.get(4).equals("4")) {
 //				gameModel.setMemorySize(profile.get(4));
@@ -237,7 +238,7 @@ public class MenuController {
 					}, 1000);
 				}
 				String p1Label = gameModel.getActivePlayer() == gameModel.getPlayer1() ? "player1" : "player2";
-				gameView.setActivePlayerFont(p1Label);
+//				gameView.setActivePlayerFont(p1Label);
 			}
 		}// End of Action performed
 	} // End of MainMenuViewListener
@@ -363,9 +364,23 @@ public class MenuController {
 		}
 	}
 
+	class BackgroundButtonListener implements ActionListener{
+
+		@Override
+		public void actionPerformed(ActionEvent arg0) {
+			// TODO Auto-generated method stub
+			if(arg0.getSource()==gameView.getJbtn()) {
+				gameView.switchBackground();
+			}
+		}
+		
+	}
+	
 	class GameListener implements ActionListener {
 
 		public void actionPerformed(ActionEvent e) {
+			
+			
 			// Double loop to find the clicked button
 			if (gameModel.getActivePlayer().getClass() != null) {
 				System.out.println("human playing");
@@ -421,7 +436,7 @@ public class MenuController {
 											validClicksOnCards = 0;
 											if (!profile.get(0).equals("s")) {
 												activePlayerLabel = gameModel.switchActivePlayer();
-												gameView.setActivePlayerFont(activePlayerLabel);
+//												gameView.setActivePlayerFont(activePlayerLabel);
 												System.out.println("active player now is the player named: "
 														+ gameModel.getActivePlayer().getClass().getSimpleName());
 												if (gameModel.getActivePlayer().getClass().getSimpleName()
@@ -544,7 +559,7 @@ public class MenuController {
 					gameModel.revoke();
 					updateScoreBoard();
 					activePlayerLabel = gameModel.switchActivePlayer();
-					gameView.setActivePlayerFont(activePlayerLabel);
+//					gameView.setActivePlayerFont(activePlayerLabel);
 				    gameView.setCursor(normalCursor);
 
 //					I F    M A T C H E D
@@ -577,11 +592,11 @@ public class MenuController {
 	void updateScoreBoard() {
 		if (gameModel.getActivePlayer().equals(gameModel.getPlayer1())) {
 			System.out.println("player1 update inside updateScoreBoard");
-			gameView.setScore1Label(gameModel.getActivePlayer().getScore(), gameModel.getActivePlayer().getTries());
+			gameView.setScore1Label(gameModel.getActivePlayer().getScore());
 		} else {
 			System.out.println(
 					"player2 update inside updateScoreBoard... player2 is: " + gameModel.getActivePlayer().getName());
-			gameView.setScore2Label(gameModel.getActivePlayer().getScore(), gameModel.getActivePlayer().getTries());
+			gameView.setScore2Label(gameModel.getActivePlayer().getScore());
 		}
 	}
 

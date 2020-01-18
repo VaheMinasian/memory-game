@@ -24,7 +24,7 @@ public class MemoryGame implements Game {
 	private Card firstCard = null, secondCard = null;
 	private List<Integer> missedButtons = new ArrayList<>(); // checked
 	LinkedHashMap<Integer, Integer> missedIndexes = new LinkedHashMap<>();
-
+	
 	private int savedCardNumber, tempIndexValue;
 	private int cardIndexX = 0, cardIndexY = 0, savedIndexX, savedIndexY;
 	boolean valid;

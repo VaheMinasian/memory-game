@@ -4,6 +4,8 @@ import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.Point;
@@ -15,10 +17,12 @@ import java.util.Collections;
 import java.util.Random;
 
 import javax.swing.BorderFactory;
+import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -32,32 +36,38 @@ import model.Card;
 @SuppressWarnings("serial")
 public class GameView extends JFrame implements ActionListener {
 
-	private JPanel mainPanel, namesPanel;
+	private JPanel mainPanel, namesPanel, turnPanel;
 	private MyPanel boardPanel;
 	private JLabel player1Label, player2Label, score1Label, score2Label;
+	private JLabel greenOnLabel, greenOffLabel, unselectedLabel, selectedLabel;
 	private int boardDimension;
 	private int boardSize;
-	private ImageIcon titleIcon, backgroundIcon;
+	private ImageIcon backgroundIcon;
 	private JButton[][] emojiButtons;
-	Font boldFont = new Font("Courier", Font.BOLD,18);
-	Font  planeFont = new Font("Courier", Font.PLAIN,17);
+	JButton jbtn;
+	Font boldFont, planeFont;
 	private ArrayList<Integer> iconIndexes;
 	private ArrayList<Integer> currentIcons;
+	private JButton titleIconButton;
+	private final ImageIcon titleIcon = new ImageIcon(GameView.class.getResource("/46.png"));
 	private final ImageIcon patternIcon = new ImageIcon(GameView.class.getResource("/pattern.png"));
+	private final ImageIcon greenOn = new ImageIcon(GameView.class.getResource("/green-on.png"));
+	private final ImageIcon greenOff = new ImageIcon(GameView.class.getResource("/green-off.png"));
+	private final ImageIcon unselectedImage = new ImageIcon(GameView.class.getResource("/image.png"));
+	private final ImageIcon selectedImage = new ImageIcon(GameView.class.getResource("/46-grey.png"));
+	private ImageIcon tempImage = null;
 	private Icon image;
-	/*
-	 * Cursor hourglassCursor = new Cursor(Cursor.WAIT_CURSOR); Cursor normalCursor
-	 * = new Cursor(Cursor.DEFAULT_CURSOR);
-	 */
+	private Image img;
+	boolean buttonState;
 
-	
-	/*
-	 * public void setCursor() { Toolkit toolkit = Toolkit.getDefaultToolkit();
-	 * Image image = toolkit.getImage(GameView.class.getResource("/hourglass.gif"));
-	 * Point hotspot = new Point(0,0); Cursor cursor =
-	 * toolkit.createCustomCursor(image, hotspot, "pencil"); setCursor(cursor); }
-	 */
-	
+	ImageIcon getScaledImage(ImageIcon image, int height, int width) {
+
+		img = image.getImage();
+		img = img.getScaledInstance(width, height, java.awt.Image.SCALE_SMOOTH);
+		tempImage = new ImageIcon(img);
+		return tempImage;
+	}
+
 	public GameView() {
 	}
 
@@ -68,16 +78,61 @@ public class GameView extends JFrame implements ActionListener {
 		boardDimension = Integer.parseInt(profile.get(1));
 		boardSize = boardDimension * 75;
 
+		boldFont = new Font("Courier", Font.BOLD, boardSize / 20);
+		planeFont = new Font("Courier", Font.PLAIN, boardSize / 20);
+
 		mainPanel = new JPanel();
 		boardPanel = new MyPanel();
 		namesPanel = new JPanel();
 
-		titleIcon = new ImageIcon(OptionsView.class.getResource("/46.png"));// smiling emoji
+		// titleIcon = new ImageIcon(OptionsView.class.getResource("/46.png"));//
+		// smiling emoji
 		namesPanel.setAlignmentX(CENTER_ALIGNMENT);
-		namesPanel.setPreferredSize(new Dimension(boardSize, boardSize / 3));
+		namesPanel.setSize(new Dimension(boardSize, boardSize / 3));
 		namesPanel.setLayout(new GridLayout(2, 2));
 		namesPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(),
 				" P L A Y E R S     &     S C O R E S ", TitledBorder.CENTER, TitledBorder.TOP));
+
+		turnPanel = new JPanel();
+		turnPanel.setAlignmentX(CENTER_ALIGNMENT);
+		turnPanel.setLayout(new GridBagLayout());
+//		turnPanel.setPreferredSize(new Dimension(boardSize, boardSize / 8));
+		selectedLabel = new JLabel(getScaledImage(selectedImage, boardDimension * 8, boardDimension * 8));
+		selectedLabel.setName("selectedLabel");
+		unselectedLabel = new JLabel(getScaledImage(unselectedImage, boardDimension * 8, boardDimension * 8));
+		unselectedLabel.setName("unselectedLabel");
+		greenOnLabel = new JLabel(getScaledImage(greenOn, boardDimension * 8, boardDimension * 8));
+		greenOffLabel = new JLabel(getScaledImage(greenOff, boardDimension * 8, boardDimension * 8));
+
+		jbtn = new JButton();
+		jbtn.setPreferredSize(new Dimension(60, 60));
+		jbtn.add(unselectedLabel);
+
+		GridBagConstraints gbc = new GridBagConstraints();
+		gbc.fill = GridBagConstraints.HORIZONTAL;
+
+		gbc.gridx = 0;
+		gbc.gridy = 0;
+//		gbc.weightx=0.1;
+		turnPanel.add(greenOnLabel, gbc);
+
+		gbc.gridx = 1;
+		gbc.gridy = 0;
+		turnPanel.add(Box.createHorizontalStrut(30), gbc);
+
+		gbc.gridx = 2;
+//		gbc.gridwidth = 3;   
+		gbc.gridy = 0;
+		turnPanel.add(jbtn, gbc);
+
+		gbc.gridx = 3;
+		gbc.gridy = 0;
+		turnPanel.add(Box.createHorizontalStrut(30), gbc);
+
+		gbc.gridx = 4;
+		gbc.gridy = 0;
+//		gbc.weightx=0.1;
+		turnPanel.add(greenOffLabel, gbc);
 
 		player1Label = makeLabel("N");
 		player1Label.setText(profile.get(2));
@@ -85,32 +140,31 @@ public class GameView extends JFrame implements ActionListener {
 		score1Label = makeLabel("S");
 		player1Label.setFont(planeFont);
 		score1Label.setFont(planeFont);
-		setScore1Label(0, 0);
+		setScore1Label(0);
 		score1Label.setVerticalAlignment(SwingConstants.NORTH);
 		namesPanel.add(player1Label);
 
-	
-			player2Label = makeLabel("N");
-			player2Label.setFont(planeFont);
-			player2Label.setVerticalAlignment(SwingConstants.BOTTOM);
-			score2Label = makeLabel("S");
-			score2Label.setFont(planeFont);
-			score2Label.setVerticalAlignment(SwingConstants.NORTH);
-			if (!profile.get(0).equals("s")){
-				namesPanel.add(player2Label);				
-			} 
-			namesPanel.add(score1Label);
-			if (!profile.get(0).equals("s")){
+		player2Label = makeLabel("N");
+		player2Label.setFont(planeFont);
+		player2Label.setVerticalAlignment(SwingConstants.BOTTOM);
+		score2Label = makeLabel("S");
+		score2Label.setFont(planeFont);
+		score2Label.setVerticalAlignment(SwingConstants.NORTH);
+		if (!profile.get(0).equals("s")) {
+			namesPanel.add(player2Label);
+		}
+		namesPanel.add(score1Label);
+		if (!profile.get(0).equals("s")) {
 			namesPanel.add(score2Label);
-			}
-			if (!profile.get(0).equals("s")){
-				
-		} 
+		}
+		if (!profile.get(0).equals("s")) {
+
+		}
 
 		if (profile.get(0).equals("c") || profile.get(0).equals("h")) {
 			player2Label.setText(profile.get(3));
-		} 
-		setScore2Label(0, 0);
+		}
+		setScore2Label(0);
 
 		backgroundIcon = getRandomBackGIcon();
 		backgroundIcon = resizeImage(backgroundIcon, getBoardSize(), getBoardSize());
@@ -150,6 +204,7 @@ public class GameView extends JFrame implements ActionListener {
 		SwingUtilities.updateComponentTreeUI(this);
 		mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
 		mainPanel.add(boardPanel);
+		mainPanel.add(turnPanel);
 		mainPanel.add(namesPanel);
 		this.add(mainPanel);
 		this.pack();
@@ -179,7 +234,6 @@ public class GameView extends JFrame implements ActionListener {
 		return temp;
 	}
 
-	
 	private ImageIcon getRandomBackGIcon() {
 		int big = 75, small = 73, random;
 		Random rand = new Random();
@@ -191,7 +245,6 @@ public class GameView extends JFrame implements ActionListener {
 		return icon;
 	}
 
-	
 	public static ImageIcon resizeImage(ImageIcon defaultImage, int width, int height) {
 
 		Image img = defaultImage.getImage();
@@ -201,7 +254,6 @@ public class GameView extends JFrame implements ActionListener {
 		return defaultImage;
 	}
 
-	
 	public void addGameViewListener(ActionListener BottonListener) {
 		for (int i = 0; i < boardDimension; i++) {
 			for (int j = 0; j < boardDimension; j++) {
@@ -210,17 +262,27 @@ public class GameView extends JFrame implements ActionListener {
 		}
 	}
 
-	
+	public void addBackgroundButtonListener(ActionListener bListener) {
+		jbtn.addActionListener(bListener);
+	}
+
+	public JButton getJbtn() {
+		return jbtn;
+	}
+
+	public void setJbtn(JButton jbtn) {
+		this.jbtn = jbtn;
+	}
+
 	public void updateCardBoard(int i, int j) {
 		Icon image;
 		int iconName;
 		iconName = getCurrentIcons().get(i * boardDimension + j);
 		image = new ImageIcon(GameView.class.getResource("/" + iconName + ".png"));
 		getEmojiButton(i, j).setIcon(image);
-		System.out.println("CardBoard updated got emojiButton:("+i+","+j+")");
+		System.out.println("CardBoard updated got emojiButton:(" + i + "," + j + ")");
 	}
 
-	
 	public JButton getEmojiButton(int i, int j) {
 		return emojiButtons[i][j];
 	}
@@ -240,56 +302,87 @@ public class GameView extends JFrame implements ActionListener {
 	public int getBoardSize() {
 		return boardSize;
 	}
-	
-	public void setActivePlayerFont(String string) {
-		if (string == "player1") {
-			player1Label.setFont(boldFont);
-			score1Label.setFont(boldFont);
-			player2Label.setFont(planeFont);
-			score2Label.setFont(planeFont);
-		} else if (string=="player2") {
-			player2Label.setFont(boldFont);
-			score2Label.setFont(boldFont);
-			player1Label.setFont(planeFont);
-			score1Label.setFont(planeFont);
-		}	
-	}
-	
+
+	/*
+	 * public void setActivePlayerFont(String string) { if (string == "player1") {
+	 * player1Label.setFont(boldFont); score1Label.setFont(boldFont);
+	 * player2Label.setFont(planeFont); score2Label.setFont(planeFont); } else if
+	 * (string=="player2") { player2Label.setFont(boldFont);
+	 * score2Label.setFont(boldFont); player1Label.setFont(planeFont);
+	 * score1Label.setFont(planeFont); } }
+	 */
 
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
 	}
 
-	public void setScore1Label(int newScore, int tries) {
-		this.score1Label.setText(newScore + " out of " + tries);
+	public void setScore1Label(int newScore) {
+		this.score1Label.setText("" + newScore);
 	}
 
-	public void setScore2Label(int newScore, int tries) {
-		this.score2Label.setText(newScore + " out of " + tries);
+	public void setScore2Label(int newScore) {
+		this.score2Label.setText("" + newScore);
 	}
 
 	public void restoreDefaultIcon(Card card) {
-//		int counterTest = 0;
 		image = new ImageIcon(GameView.class.getResource("/pattern.png"));
 		emojiButtons[card.getCardIndex()[0]][card.getCardIndex()[1]].setIcon(image);
-//		counterTest++;
-		/*
-		 * if(counterTest==1) { System.out.println("first card closes " + "[" +
-		 * card.getCardIndex()[0] + "]" + "[" + card.getCardIndex()[1] + "]"); } else if
-		 * (counterTest ==2) { System.out.println("second card closes " + "[" +
-		 * card.getCardIndex()[2] + "]" + "[" + card.getCardIndex()[3] + "]");
-		 * counterTest=0; }
-		 */
+
 	}
 
 	public void removeCards(Card card1, Card card2) {
-		emojiButtons[card1.getCardIndex()[0]][card1.getCardIndex()[1]].setVisible(false);
-		emojiButtons[card2.getCardIndex()[0]][card2.getCardIndex()[1]].setVisible(false);
+
+		if (buttonState == false) {
+			emojiButtons[card1.getCardIndex()[0]][card1.getCardIndex()[1]].setEnabled(false);
+			emojiButtons[card2.getCardIndex()[0]][card2.getCardIndex()[1]].setEnabled(false);
+			emojiButtons[card1.getCardIndex()[0]][card1.getCardIndex()[1]].setVisible(false);
+			emojiButtons[card2.getCardIndex()[0]][card2.getCardIndex()[1]].setVisible(false);
+
+		} else if (buttonState == true) {
+			emojiButtons[card1.getCardIndex()[0]][card1.getCardIndex()[1]].setEnabled(false);
+			emojiButtons[card2.getCardIndex()[0]][card2.getCardIndex()[1]].setEnabled(false);
+		}
+
 		System.out.println("set visible false");
 		boardPanel.revalidate();
 	}
 
-	
-	  public MyPanel getBoardPanel() { return boardPanel; }
-	 
+	public void switchBackground() {
+		if(buttonState==false) {
+			unselectedLabel.setIcon(selectedImage);
+			for (int i = 0; i < emojiButtons.length; i++) {
+				for (int j = 0; j < emojiButtons.length; j++) {
+					if (emojiButtons[i][j].isVisible() == false) {
+						emojiButtons[i][j].setVisible(true);
+					}
+				}
+			}			
+		}
+		if(buttonState==true) {
+			unselectedLabel.setIcon(unselectedImage);
+			for (int i = 0; i < emojiButtons.length; i++) {
+				for (int j = 0; j < emojiButtons.length; j++) {
+					if ((emojiButtons[i][j].isVisible() == true)&&(emojiButtons[i][j].isEnabled()==false)) {
+						emojiButtons[i][j].setVisible(false);
+					}
+				}
+			}
+		}
+		switchButtonState();			
+	}
+
+	void switchButtonState() {
+		if (buttonState == false) {
+			buttonState = true;
+			System.out.println(buttonState);
+		} else if (buttonState == true) {
+			buttonState = false;
+			System.out.println(buttonState);
+		}
+	}
+
+	public MyPanel getBoardPanel() {
+		return boardPanel;
+	}
+
 }
