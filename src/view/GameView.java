@@ -8,6 +8,7 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.Image;
+import java.awt.Insets;
 import java.awt.Point;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
@@ -111,33 +112,34 @@ public class GameView extends JFrame implements ActionListener {
 		jbtn.add(matchesLabel);
 
 		GridBagConstraints gbc = new GridBagConstraints();
-		gbc.fill = GridBagConstraints.HORIZONTAL;
-
-		if (!profile.get(0).equals("s")) {
+		gbc.fill = GridBagConstraints.CENTER;
+		
+			
+		
 			gbc.gridx = 0;
 			gbc.gridy = 0;
-//		gbc.weightx=0.1;
+			gbc.weightx = GridBagConstraints.CENTER;
 			turnPanel.add(p1LabelGreen, gbc);
+
+//			gbc.gridx = 1;
+//			gbc.gridy = 0;
+//			turnPanel.add(Box.createHorizontalStrut(boardDimension*7 + (3*(boardDimension/4)-1)), gbc);
 
 			gbc.gridx = 1;
 			gbc.gridy = 0;
-			turnPanel.add(Box.createHorizontalStrut(30), gbc);
-
-			gbc.gridx = 2;
-//		gbc.gridwidth = 3;   
-			gbc.gridy = 0;
 			turnPanel.add(jbtn, gbc);
 
-			gbc.gridx = 3;
-			gbc.gridy = 0;
-			turnPanel.add(Box.createHorizontalStrut(30), gbc);
+//			gbc.gridx = 3;
+//			gbc.gridy = 0;
+//			turnPanel.add(Box.createHorizontalStrut(boardDimension*7+(3*(boardDimension/4)-1)), gbc);
 
-			gbc.gridx = 4;
+			gbc.gridx = 2;
 			gbc.gridy = 0;
-//		gbc.weightx=0.1;
+			gbc.weightx = GridBagConstraints.CENTER;
 			turnPanel.add(p2LabelGreen, gbc);
-		}
-
+	
+			
+			
 		player1Label = makeLabel("N");
 		player1Label.setText(profile.get(2));
 		player1Label.setVerticalAlignment(SwingConstants.BOTTOM);
