@@ -45,7 +45,7 @@ public class GameView extends JFrame implements ActionListener {
 	private int boardSize;
 	private ImageIcon backgroundIcon;
 	private JButton[][] emojiButtons;
-	JButton jbtn;
+	JButton matchesButton;
 	Font boldFont, planeFont;
 	private ArrayList<Integer> iconIndexes;
 	private ArrayList<Integer> currentIcons;
@@ -57,10 +57,10 @@ public class GameView extends JFrame implements ActionListener {
 	private final ImageIcon unselectedImage = new ImageIcon(GameView.class.getResource("/image.png"));
 	private final ImageIcon selectedImage = new ImageIcon(GameView.class.getResource("/46-grey.png"));
 	private ImageIcon tempImage = null;
-	private Icon image, image1, image2;
+	private Icon image, image1, image2, ui, si;
 	private Image img;
 	boolean buttonState;
-
+	
 	ImageIcon getScaledImage(ImageIcon image, int height, int width) {
 
 		img = image.getImage();
@@ -76,6 +76,8 @@ public class GameView extends JFrame implements ActionListener {
 
 //		public void setBoard(int noOfCells, String player1, String player2, String player3){
 
+		
+		
 		boardDimension = Integer.parseInt(profile.get(1));
 		boardSize = boardDimension * 75;
 
@@ -100,21 +102,25 @@ public class GameView extends JFrame implements ActionListener {
 		turnPanel.setPreferredSize(new Dimension(boardSize, boardSize *2 / 11));
 		turnPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(),
 				"", TitledBorder.CENTER, TitledBorder.TOP));
-		matchesLabel = new JLabel(getScaledImage(unselectedImage, boardDimension * 8, boardDimension * 8));
-		matchesLabel.setName("unselectedLabel");
+//		matchesLabel.setName("unselectedLabel");
 		image1 = getScaledImage(greenOn, boardDimension * 8, boardDimension * 8);
 		image2 = getScaledImage(greenOff, boardDimension * 8, boardDimension * 8);
+		ui = getScaledImage(unselectedImage, boardDimension * 8, boardDimension * 8);
+		si = getScaledImage(selectedImage, boardDimension * 8, boardDimension * 8);
+		matchesLabel = new JLabel();
+		matchesLabel.setSize(new Dimension(60,60));
+		matchesLabel.setIcon(ui);
+		matchesLabel.setIcon(si);
 		p1LabelGreen = new JLabel();
 		p2LabelGreen = new JLabel();
 
-		jbtn = new JButton();
-		jbtn.setPreferredSize(new Dimension(60, 60));
-		jbtn.add(matchesLabel);
+		matchesButton = new JButton();
+		matchesButton.setMargin(new Insets(0,3,0,3));
+		matchesButton.setPreferredSize(new Dimension(60, 60));
+		matchesButton.add(matchesLabel);
 
 		GridBagConstraints gbc = new GridBagConstraints();
 		gbc.fill = GridBagConstraints.CENTER;
-		
-			
 		
 			gbc.gridx = 0;
 			gbc.gridy = 0;
@@ -127,7 +133,7 @@ public class GameView extends JFrame implements ActionListener {
 
 			gbc.gridx = 1;
 			gbc.gridy = 0;
-			turnPanel.add(jbtn, gbc);
+			turnPanel.add(matchesButton, gbc);
 
 //			gbc.gridx = 3;
 //			gbc.gridy = 0;
@@ -137,8 +143,6 @@ public class GameView extends JFrame implements ActionListener {
 			gbc.gridy = 0;
 			gbc.weightx = GridBagConstraints.CENTER;
 			turnPanel.add(p2LabelGreen, gbc);
-	
-			
 			
 		player1Label = makeLabel("N");
 		player1Label.setText(profile.get(2));
@@ -266,15 +270,15 @@ public class GameView extends JFrame implements ActionListener {
 	}
 
 	public void addBackgroundButtonListener(ActionListener bListener) {
-		jbtn.addActionListener(bListener);
+		matchesButton.addActionListener(bListener);
 	}
 
 	public JButton getJbtn() {
-		return jbtn;
+		return matchesButton;
 	}
 
 	public void setJbtn(JButton jbtn) {
-		this.jbtn = jbtn;
+		this.matchesButton = jbtn;
 	}
 
 	public void updateCardBoard(int i, int j) {
@@ -355,7 +359,7 @@ public class GameView extends JFrame implements ActionListener {
 
 	public void switchBackground() {
 		if (buttonState == false) {
-			matchesLabel.setIcon(selectedImage);
+			matchesLabel.setIcon(si);
 			for (int i = 0; i < emojiButtons.length; i++) {
 				for (int j = 0; j < emojiButtons.length; j++) {
 					if (emojiButtons[i][j].isVisible() == false) {
@@ -365,7 +369,7 @@ public class GameView extends JFrame implements ActionListener {
 			}
 		}
 		if (buttonState == true) {
-			matchesLabel.setIcon(unselectedImage);
+			matchesLabel.setIcon(ui);
 			for (int i = 0; i < emojiButtons.length; i++) {
 				for (int j = 0; j < emojiButtons.length; j++) {
 					if ((emojiButtons[i][j].isVisible() == true) && (emojiButtons[i][j].isEnabled() == false)) {
