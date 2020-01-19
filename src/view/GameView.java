@@ -96,7 +96,9 @@ public class GameView extends JFrame implements ActionListener {
 		turnPanel = new JPanel();
 		turnPanel.setAlignmentX(CENTER_ALIGNMENT);
 		turnPanel.setLayout(new GridBagLayout());
-//		turnPanel.setPreferredSize(new Dimension(boardSize, boardSize / 8));
+		turnPanel.setPreferredSize(new Dimension(boardSize, boardSize *2 / 11));
+		turnPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(),
+				"", TitledBorder.CENTER, TitledBorder.TOP));
 		matchesLabel = new JLabel(getScaledImage(unselectedImage, boardDimension * 8, boardDimension * 8));
 		matchesLabel.setName("unselectedLabel");
 		image1 = getScaledImage(greenOn, boardDimension * 8, boardDimension * 8);
@@ -223,7 +225,7 @@ public class GameView extends JFrame implements ActionListener {
 		temp.setHorizontalAlignment(JLabel.CENTER);
 		temp.setOpaque(true);
 		temp.setBackground(Color.black);
-//		temp.setFont((new Font("dialog", Font.BOLD, fontSize)));
+		temp.setFont((boldFont));
 		if (sort == "S")
 			temp.setForeground(Color.ORANGE);
 		else if (sort == "N")

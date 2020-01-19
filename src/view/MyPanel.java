@@ -17,7 +17,7 @@ public class MyPanel extends JPanel {
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
 
-		g.drawImage( background, 5, 5, boardSize, boardSize, this );
+		g.drawImage( background, 5, 12, boardSize-boardSize*2/250, boardSize-boardSize*3/100, this );
 	}
 
 	public void setImage( ImageIcon imgIcon ) {
