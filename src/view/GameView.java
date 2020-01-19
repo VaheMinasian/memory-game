@@ -88,7 +88,7 @@ public class GameView extends JFrame implements ActionListener {
 		// titleIcon = new ImageIcon(OptionsView.class.getResource("/46.png"));//
 		// smiling emoji
 		namesPanel.setAlignmentX(CENTER_ALIGNMENT);
-		namesPanel.setSize(new Dimension(boardSize, boardSize / 3));
+		namesPanel.setPreferredSize(new Dimension(boardSize, boardSize *2 / 7));
 		namesPanel.setLayout(new GridLayout(2, 2));
 		namesPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(),
 				" P L A Y E R S     &     S C O R E S ", TitledBorder.CENTER, TitledBorder.TOP));
