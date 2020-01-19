@@ -16,6 +16,7 @@ import java.util.ArrayList;
 
 import javax.swing.AbstractButton;
 import javax.swing.ImageIcon;
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
 import model.Card;
@@ -54,6 +55,7 @@ public class MenuController {
 		gameView = gView;
 		isPlayable();
 		mainMenuView.addMainMenuViewListener(new MainMenuViewListener());
+		
 	}
 
 	// Check if profile file is empty to enable play button (for first run)
@@ -224,7 +226,33 @@ public class MenuController {
 //				gameModel.setActivePlayer(gameModel.getPlayer1());
 //				if (profile.get(0).equals("c") && !profile.get(4).equals("4")) {
 //				gameModel.setMemorySize(profile.get(4));
-//				}
+				gameView.fr.addWindowListener(new WindowAdapter() {
+					public void windowClosing(WindowEvent e) {
+						switch(gameModel.getInterruptionMessage(profile.get(0))){
+						case 0:
+							System.out.println("inside case 0");
+							gameView.fr.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+							break;
+						case 1:
+							System.out.println("inside case 1");
+							gameModel = new MemoryGame();				
+							gameView.dispose();
+							gameView = new GameView();
+							gameView.setVisible(false);
+							mainMenuView.frame.setVisible(true);
+							break;
+						case 2:
+							System.out.println("inside case 2");
+							System.exit(0);
+							break;
+						default:
+							gameView.fr.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+						}
+						
+						
+					}
+				});
+
 				if (!profile.get(0).equals("s")) {
 					gameModel.randomFirstPlayer();
 				}
@@ -378,6 +406,8 @@ public class MenuController {
 	
 	class GameListener implements ActionListener {
 
+		
+		
 		public void actionPerformed(ActionEvent e) {
 			
 			

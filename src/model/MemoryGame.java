@@ -352,6 +352,13 @@ public class MemoryGame implements Game {
 		}
 	}
 
+	public int getInterruptionMessage(String s) {
+		String[] options = { "resume", "Main Menu", "Quit" };
+		int dialogReturnValue=-1;
+		dialogReturnValue = JOptionPane.showOptionDialog(null, "", "Memory", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);
+		return dialogReturnValue;
+	}
+	
 	@Override
 	public int getMessage(String s) {
 		int dialogBoxReturnValue = -1;

@@ -1,7 +1,6 @@
 package view;
 
 import java.awt.Color;
-import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
@@ -9,21 +8,19 @@ import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.Insets;
-import java.awt.Point;
-import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Random;
 
 import javax.swing.BorderFactory;
-import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JCheckBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -38,6 +35,7 @@ import model.Card;
 @SuppressWarnings("serial")
 public class GameView extends JFrame implements ActionListener {
 
+	public JFrame fr;
 	private JPanel mainPanel, namesPanel, turnPanel;
 	private MyPanel boardPanel;
 	private JLabel player1Label, player2Label, score1Label, score2Label;
@@ -50,16 +48,14 @@ public class GameView extends JFrame implements ActionListener {
 	Font boldFont, planeFont;
 	private ArrayList<Integer> iconIndexes;
 	private ArrayList<Integer> currentIcons;
-	private JButton titleIconButton;
 	private final ImageIcon titleIcon = new ImageIcon(GameView.class.getResource("/46.png"));
 	private final ImageIcon patternIcon = new ImageIcon(GameView.class.getResource("/pattern.png"));
 	private final ImageIcon greenOn = new ImageIcon(GameView.class.getResource("/green-on.png"));
 	private final ImageIcon greenOff = new ImageIcon(GameView.class.getResource("/green-off.png"));
 	private final ImageIcon unselectedImage = new ImageIcon(GameView.class.getResource("/image.png"));
 	private final ImageIcon selectedImage = new ImageIcon(GameView.class.getResource("/46-grey.png"));
-	private ImageIcon tempImage = null;
 	private Icon image, image1, image2, ui, si;
-	private Image img;
+	private Image img, img1;
 	boolean buttonState;
 	Border emptyBorder; 
 	
@@ -67,8 +63,8 @@ public class GameView extends JFrame implements ActionListener {
 
 		img = image.getImage();
 		img = img.getScaledInstance(width, height, java.awt.Image.SCALE_SMOOTH);
-		tempImage = new ImageIcon(img);
-		return tempImage;
+		image.setImage(img);
+		return image;
 	}
 
 	public GameView() {
@@ -78,7 +74,7 @@ public class GameView extends JFrame implements ActionListener {
 
 //		public void setBoard(int noOfCells, String player1, String player2, String player3){
 
-		
+		fr=new JFrame();
 		
 		boardDimension = Integer.parseInt(profile.get(1));
 		boardSize = boardDimension * 75;
@@ -90,8 +86,6 @@ public class GameView extends JFrame implements ActionListener {
 		boardPanel = new MyPanel();
 		namesPanel = new JPanel();
 
-		// titleIcon = new ImageIcon(OptionsView.class.getResource("/46.png"));//
-		// smiling emoji
 		namesPanel.setAlignmentX(CENTER_ALIGNMENT);
 		namesPanel.setPreferredSize(new Dimension(boardSize, boardSize *2 / 7));
 		namesPanel.setLayout(new GridLayout(2, 2));
@@ -104,7 +98,7 @@ public class GameView extends JFrame implements ActionListener {
 		turnPanel.setPreferredSize(new Dimension(boardSize, boardSize *2 / 11));
 		turnPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(),
 				"", TitledBorder.CENTER, TitledBorder.TOP));
-//		matchesLabel.setName("unselectedLabel");
+		
 		image1 = getScaledImage(greenOn, boardDimension * 8, boardDimension * 8);
 		image2 = getScaledImage(greenOff, boardDimension * 8, boardDimension * 8);
 		ui = getScaledImage(unselectedImage, boardDimension * 8 , boardDimension * 8);
@@ -127,6 +121,7 @@ public class GameView extends JFrame implements ActionListener {
 		GridBagConstraints gbc = new GridBagConstraints();
 		gbc.fill = GridBagConstraints.CENTER;
 		
+		if (!profile.get(0).equals("s")) {
 			gbc.gridx = 0;
 			gbc.gridy = 0;
 			gbc.weightx = GridBagConstraints.CENTER;
@@ -140,6 +135,12 @@ public class GameView extends JFrame implements ActionListener {
 			gbc.gridy = 0;
 			gbc.weightx = GridBagConstraints.CENTER;
 			turnPanel.add(p2LabelGreen, gbc);
+			
+		} else {
+			gbc.gridx = 0;
+			gbc.gridy = 0;
+			turnPanel.add(matchesButton, gbc);
+		}
 			
 		player1Label = makeLabel("N");
 		player1Label.setText(profile.get(2));
@@ -215,10 +216,14 @@ public class GameView extends JFrame implements ActionListener {
 		this.setPreferredSize(new Dimension(boardSize, boardSize + 100));
 		this.setIconImage(titleIcon.getImage());
 		this.setLocationRelativeTo(null);
-		this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+		this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		this.setResizable(false);
 		this.setVisible(true);
 
+		
+		fr=this;
+		
+		
 	}
 
 	private JLabel makeLabel(String sort) {
@@ -252,8 +257,8 @@ public class GameView extends JFrame implements ActionListener {
 	public static ImageIcon resizeImage(ImageIcon defaultImage, int width, int height) {
 
 		Image img = defaultImage.getImage();
-		Image newImg = img.getScaledInstance(width, height, Image.SCALE_SMOOTH);
-		defaultImage = new ImageIcon(newImg);
+		img = img.getScaledInstance(width, height, Image.SCALE_SMOOTH);
+		defaultImage.setImage(img);
 
 		return defaultImage;
 	}
