@@ -30,6 +30,7 @@ import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
+import javax.swing.border.Border;
 import javax.swing.border.TitledBorder;
 
 import model.Card;
@@ -60,6 +61,7 @@ public class GameView extends JFrame implements ActionListener {
 	private Icon image, image1, image2, ui, si;
 	private Image img;
 	boolean buttonState;
+	Border emptyBorder; 
 	
 	ImageIcon getScaledImage(ImageIcon image, int height, int width) {
 
@@ -112,8 +114,12 @@ public class GameView extends JFrame implements ActionListener {
 		matchesLabel.setIcon(ui);
 		p1LabelGreen = new JLabel();
 		p2LabelGreen = new JLabel();
-
+		
+		emptyBorder= BorderFactory.createEmptyBorder();
 		matchesButton = new JButton();
+		matchesButton.setBorder(emptyBorder);
+		matchesButton.setBackground(new java.awt.Color(238,238,238));
+		matchesButton.setOpaque(true);
 		matchesButton.setMargin(new Insets(0,3,0,3));
 		matchesButton.setPreferredSize( new Dimension( (int)Math.pow(boardDimension, 3), (int)Math.pow(boardDimension, 3) ) );
 		matchesButton.add(matchesLabel);
@@ -126,17 +132,9 @@ public class GameView extends JFrame implements ActionListener {
 			gbc.weightx = GridBagConstraints.CENTER;
 			turnPanel.add(p1LabelGreen, gbc);
 
-//			gbc.gridx = 1;
-//			gbc.gridy = 0;
-//			turnPanel.add(Box.createHorizontalStrut(boardDimension*7 + (3*(boardDimension/4)-1)), gbc);
-
 			gbc.gridx = 1;
 			gbc.gridy = 0;
 			turnPanel.add(matchesButton, gbc);
-
-//			gbc.gridx = 3;
-//			gbc.gridy = 0;
-//			turnPanel.add(Box.createHorizontalStrut(boardDimension*7+(3*(boardDimension/4)-1)), gbc);
 
 			gbc.gridx = 2;
 			gbc.gridy = 0;
