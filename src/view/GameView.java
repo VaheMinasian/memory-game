@@ -105,18 +105,17 @@ public class GameView extends JFrame implements ActionListener {
 //		matchesLabel.setName("unselectedLabel");
 		image1 = getScaledImage(greenOn, boardDimension * 8, boardDimension * 8);
 		image2 = getScaledImage(greenOff, boardDimension * 8, boardDimension * 8);
-		ui = getScaledImage(unselectedImage, boardDimension * 8, boardDimension * 8);
+		ui = getScaledImage(unselectedImage, boardDimension * 8 , boardDimension * 8);
 		si = getScaledImage(selectedImage, boardDimension * 8, boardDimension * 8);
 		matchesLabel = new JLabel();
-		matchesLabel.setSize(new Dimension(60,60));
+		matchesLabel.setSize(new Dimension((int)Math.pow(boardDimension, 2),(int)Math.pow(boardDimension, 2)));
 		matchesLabel.setIcon(ui);
-		matchesLabel.setIcon(si);
 		p1LabelGreen = new JLabel();
 		p2LabelGreen = new JLabel();
 
 		matchesButton = new JButton();
 		matchesButton.setMargin(new Insets(0,3,0,3));
-		matchesButton.setPreferredSize(new Dimension(60, 60));
+		matchesButton.setPreferredSize( new Dimension( (int)Math.pow(boardDimension, 3), (int)Math.pow(boardDimension, 3) ) );
 		matchesButton.add(matchesLabel);
 
 		GridBagConstraints gbc = new GridBagConstraints();
