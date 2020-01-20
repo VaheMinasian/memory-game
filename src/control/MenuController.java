@@ -44,6 +44,7 @@ public class MenuController {
 	String activePlayerLabel = null;
 	int firstNumber, secondNumber;
 	private int factor;
+	
 	public MenuController() {
 		System.out.println("Main constructor invoked");
 	}
@@ -54,6 +55,7 @@ public class MenuController {
 		gameModel = mGame;
 		gameView = gView;
 		isPlayable();
+		
 		mainMenuView.addMainMenuViewListener(new MainMenuViewListener());
 		
 	}
@@ -227,8 +229,9 @@ public class MenuController {
 //				if (profile.get(0).equals("c") && !profile.get(4).equals("4")) {
 //				gameModel.setMemorySize(profile.get(4));
 				gameView.fr.addWindowListener(new WindowAdapter() {
+					
 					public void windowClosing(WindowEvent e) {
-						switch(gameModel.getInterruptionMessage(profile.get(0))){
+						switch(gameModel.getInterruptionMessage(profile.get(0), gameView)){
 						case 0:
 							System.out.println("inside case 0");
 							gameView.fr.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
@@ -252,6 +255,7 @@ public class MenuController {
 						
 					}
 				});
+				
 
 				if (!profile.get(0).equals("s")) {
 					gameModel.randomFirstPlayer();
