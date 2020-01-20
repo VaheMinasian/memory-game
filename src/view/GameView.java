@@ -38,19 +38,19 @@ import model.Card;
 @SuppressWarnings("serial")
 public class GameView extends JFrame implements ActionListener {
 
-	public JFrame fr;
-	private JPanel mainPanel, namesPanel, turnPanel;
+	private JPanel mainPanel, namesPanel, turnPanel, timePanel;
 	private MyPanel boardPanel;
 	private JLabel player1Label, player2Label, score1Label, score2Label;
 	private JLabel p1LabelGreen, p2LabelGreen, matchesLabel;
+	private JLabel timerLabel;
 	private int boardDimension;
 	private int boardSize;
-	private ImageIcon backgroundIcon;
 	private JButton[][] emojiButtons;
 	JButton matchesButton;
 	Font boldFont, planeFont;
 	private ArrayList<Integer> iconIndexes;
 	private ArrayList<Integer> currentIcons;
+	private ImageIcon backgroundIcon;
 	private final ImageIcon titleIcon = new ImageIcon(GameView.class.getResource("/46.png"));
 	private final ImageIcon patternIcon = new ImageIcon(GameView.class.getResource("/pattern.png"));
 	private final ImageIcon greenOn = new ImageIcon(GameView.class.getResource("/green-on.png"));
@@ -75,16 +75,18 @@ public class GameView extends JFrame implements ActionListener {
 
 	public void displayGameWindow(ArrayList<String> profile) {
 
-//		public void setBoard(int noOfCells, String player1, String player2, String player3){
 
-		fr=new JFrame();
-		LayerUI<JPanel> layerUI = new MyLayerUISubclass();
-		JLayer<JPanel> jlayer = new JLayer<JPanel>(mainPanel, layerUI);
-
-		fr.add (jlayer);
+		
 		boardDimension = Integer.parseInt(profile.get(1));
 		boardSize = boardDimension * 75;
-
+		timePanel=new JPanel();
+		timerLabel = new JLabel("00:00:00");
+		timerLabel.setAlignmentY(RIGHT_ALIGNMENT);
+		timerLabel.setFont(new Font("Tahoma", Font.PLAIN, 20 ));
+//		timerLabel.setForeground(Color.ORANGE);
+		timerLabel.setBounds(96,221,200,220);
+		timePanel.add(timerLabel);
+		
 		boldFont = new Font("Courier", Font.BOLD, boardSize / 20);
 		planeFont = new Font("Courier", Font.PLAIN, boardSize / 20);
 
@@ -209,7 +211,6 @@ public class GameView extends JFrame implements ActionListener {
 				boardPanel.add(emojiButtons[i][j]);
 			}
 		}
-		// Collections.shuffle(Arrays.asList(emojiButtons));
 
 		UIManager.put("ToggleButton.select", Color.BLACK);
 		SwingUtilities.updateComponentTreeUI(this);
@@ -217,19 +218,30 @@ public class GameView extends JFrame implements ActionListener {
 		mainPanel.add(boardPanel);
 		mainPanel.add(turnPanel);
 		mainPanel.add(namesPanel);
+		mainPanel.add(timePanel);
+//		this.add(timePanel);
 		this.add(mainPanel);
 		this.pack();
+		
+//		this.add(timerLabel);
 		this.setPreferredSize(new Dimension(boardSize, boardSize + 100));
 		this.setIconImage(titleIcon.getImage());
 		this.setLocationRelativeTo(null);
 		this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-		this.setResizable(false);
+//		this.setResizable(false);
 		this.setVisible(true);
 
-		fr=this;
 
 	
 		
+	}
+
+	public JLabel getTimerLabel() {
+		return timerLabel;
+	}
+
+	public void setTimerLabel(JLabel timerLabel) {
+		this.timerLabel = timerLabel;
 	}
 
 	private JLabel makeLabel(String sort) {

@@ -1,6 +1,6 @@
 package control;
 
-import java.awt.Cursor;
+import java.awt.Cursor; 
 import java.awt.Point;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
@@ -12,12 +12,14 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 import javax.swing.AbstractButton;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import javax.swing.Timer;
 
 import model.Card;
 import model.MemoryGame;
@@ -228,13 +230,13 @@ public class MenuController {
 //				gameModel.setActivePlayer(gameModel.getPlayer1());
 //				if (profile.get(0).equals("c") && !profile.get(4).equals("4")) {
 //				gameModel.setMemorySize(profile.get(4));
-				gameView.fr.addWindowListener(new WindowAdapter() {
+				gameView.addWindowListener(new WindowAdapter() {
 					
 					public void windowClosing(WindowEvent e) {
 						switch(gameModel.getInterruptionMessage(profile.get(0), gameView)){
 						case 0:
 							System.out.println("inside case 0");
-							gameView.fr.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+							gameView.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 							break;
 						case 1:
 							System.out.println("inside case 1");
@@ -249,12 +251,26 @@ public class MenuController {
 							System.exit(0);
 							break;
 						default:
-							gameView.fr.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+							gameView.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 						}
 						
 						
 					}
 				});
+				
+				
+						Timer t = new Timer(1000, new ActionListener() {
+
+							@Override
+							public void actionPerformed(ActionEvent arg0) {
+								// TODO Auto-generated method stub
+								
+								SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
+								gameView.getTimerLabel().setText(sdf.format(new java.util.Date()));
+							}
+							
+						});
+						t.start();
 				
 
 				if (!profile.get(0).equals("s")) {
@@ -539,7 +555,7 @@ public class MenuController {
 
 		gameView.setCursor(waitingCursor);
 		System.out.println("Beginning of StartGame...active player is: " + gameModel.getActivePlayer().getName());
-
+		
 		do {
 			card = gameModel.getRandomCardIndex(profile.get(4), gameView);
 			xIndexComp = card.getCardIndex()[0];

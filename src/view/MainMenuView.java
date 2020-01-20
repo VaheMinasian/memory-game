@@ -1,18 +1,20 @@
 package view;
 
-import java.awt.Dimension; 
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.Timer;
 import javax.swing.border.TitledBorder;
 
 @SuppressWarnings("serial")
@@ -80,8 +82,10 @@ public class MainMenuView extends JFrame implements ActionListener {
 		optionsButton.addActionListener(selected);
 		playButton.addActionListener(selected);
 		exitButton.addActionListener(selected);
+
 	}
 
+	
 	public JButton getOptionsButton() {
 		return optionsButton;
 	}
