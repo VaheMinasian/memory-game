@@ -13,9 +13,12 @@ import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.BufferedReader;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.Random;
+import java.util.TimeZone;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
@@ -61,6 +64,12 @@ public class GameView extends JFrame implements ActionListener {
 	private Image img, img1;
 	boolean buttonState;
 	Border emptyBorder; 
+	private Date elapsed;
+	SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
+
+
+	
+
 	
 	ImageIcon getScaledImage(ImageIcon image, int height, int width) {
 
@@ -230,12 +239,20 @@ public class GameView extends JFrame implements ActionListener {
 		this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 //		this.setResizable(false);
 		this.setVisible(true);
-
-
-	
 		
 	}
 
+	public void updateClock(long startTime) {
+		sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
+        elapsed = new Date(System.currentTimeMillis()-startTime);
+   
+        timerLabel.setText(sdf.format(elapsed));
+    }
+	
+	public Date getElapsed() {
+		return elapsed;
+	}
+	
 	public JLabel getTimerLabel() {
 		return timerLabel;
 	}

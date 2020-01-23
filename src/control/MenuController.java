@@ -14,6 +14,8 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.logging.Handler;
 
 import javax.swing.AbstractButton;
 import javax.swing.ImageIcon;
@@ -40,12 +42,15 @@ public class MenuController {
 	Cursor normalCursor = new Cursor(Cursor.DEFAULT_CURSOR);
 	private MemoryGame gameModel;
 	private GameView gameView;
-
+    private final ClockListener clock = new ClockListener();
 	private int validClicksOnCards = 0;
 	private boolean firstTimeProfileSave = false;
 	String activePlayerLabel = null;
 	int firstNumber, secondNumber;
 	private int factor;
+	private long startTime, stopTime, stopDuration;
+	Timer timer = new Timer(153, clock);
+	Handler timerHandler;
 	
 	public MenuController() {
 		System.out.println("Main constructor invoked");
@@ -233,50 +238,37 @@ public class MenuController {
 				gameView.addWindowListener(new WindowAdapter() {
 					
 					public void windowClosing(WindowEvent e) {
+						timer.stop();
+						stopTime = System.currentTimeMillis();		
+						System.out.println("stoptime before switching: " +stopTime);
 						switch(gameModel.getInterruptionMessage(profile.get(0), gameView)){
-						case 0:
-							System.out.println("inside case 0");
+						case 0://resuming game
+							timer = new Timer(53, clock);
+							startTime=System.currentTimeMillis()-stopTime+startTime;
+							timer.start();
 							gameView.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 							break;
-						case 1:
-							System.out.println("inside case 1");
+						case 1://go to main menu
 							gameModel = new MemoryGame();				
 							gameView.dispose();
 							gameView = new GameView();
 							gameView.setVisible(false);
 							mainMenuView.frame.setVisible(true);
 							break;
-						case 2:
-							System.out.println("inside case 2");
+						case 2://quit game
 							System.exit(0);
 							break;
 						default:
 							gameView.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 						}
-						
-						
 					}
-				});
-				
-				
-						Timer t = new Timer(1000, new ActionListener() {
-
-							@Override
-							public void actionPerformed(ActionEvent arg0) {
-								// TODO Auto-generated method stub
-								
-								SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
-								gameView.getTimerLabel().setText(sdf.format(new java.util.Date()));
-							}
-							
-						});
-						t.start();
-				
-
+				});							
+							startTime = System.currentTimeMillis();					
+							System.out.println("in listener " +startTime);
+							timer.start();				//	gameView.getTimerLabel().setText(sdf.format(new java.util.Date()));
 				if (!profile.get(0).equals("s")) {
 					gameModel.randomFirstPlayer();
 				}
-
 				if (gameModel.getActivePlayer().getName().equals("Computer")) {
 					new java.util.Timer().schedule(new java.util.TimerTask() {
 						@Override
@@ -290,7 +282,16 @@ public class MenuController {
 			}
 		}// End of Action performed
 	} // End of MainMenuViewListener
+	private class ClockListener implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            gameView.updateClock(startTime);
+        }
+    }
 
+	
+	
+	
 	class OptionsViewListener implements ActionListener {
 
 		String player1 = "", player2 = "", player3 = "";
@@ -421,15 +422,11 @@ public class MenuController {
 				gameView.switchBackground();
 			}
 		}
-		
 	}
 	
 	class GameListener implements ActionListener {
-
-		
 		
 		public void actionPerformed(ActionEvent e) {
-			
 			
 			// Double loop to find the clicked button
 			if (gameModel.getActivePlayer().getClass() != null) {
