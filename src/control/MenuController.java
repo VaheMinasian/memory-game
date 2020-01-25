@@ -292,17 +292,15 @@ public class MenuController {
 		}// End of Action performed
 
 		void serialize() {
-			List<Integer> cardStates = new ArrayList<>(); // checked
-			int openButtonX = -1, openButtonY=-1;
-			for (int i = 0; i < gameModel.getCards().length; i++) {
-				for (int j = 0; j < gameModel.getCards()[i].length; j++) {
-					if (gameModel.getCards()[i][j].getState() == CardState.OPEN) {
-						openButtonX=i;openButtonY=j;
-					} 
-				}
-			}
 			
-
+//			int openButtonX = -1, openButtonY=-1;
+//			for (int i = 0; i < gameModel.getCards().length; i++) {
+//				for (int j = 0; j < gameModel.getCards()[i].length; j++) {
+//					if (gameModel.getCards()[i][j].getState() == CardState.OPEN) {
+//						openButtonX=i; openButtonY=j;
+//					} 
+//				}
+//			}
 			try {
 				// create a new file with an ObjectOutputStream
 				FileOutputStream fos = new FileOutputStream("resources/data.txt");
@@ -329,6 +327,8 @@ public class MenuController {
 				oos.writeObject(gameModel.getSavedIcon());
 				oos.writeObject(gameModel.getTempIndexValue());
 				oos.writeObject(gameModel.getSavedCardNumber());
+				oos.writeObject(gameModel.getSelectedCard().getCardIndex()[0]*Integer.parseInt(profile.get(1))+gameModel.getSelectedCard().getCardIndex()[1]);
+				
 
 				System.out.println("should all be written by now");
 
@@ -346,7 +346,7 @@ public class MenuController {
 				ObjectInputStream ois = new ObjectInputStream(fis);
 
 				// read and print what we wrote before
-				for(int i=0; i<20; i++) {
+				for(int i=0; i<21; i++) {
 					System.out.println(ois.readObject());
 				}
 

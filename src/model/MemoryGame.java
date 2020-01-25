@@ -22,7 +22,6 @@ public class MemoryGame implements Game {
 	private Player activePlayer;
 	private Card firstCard = null, secondCard = null;
 	private List<Integer> missedButtons = new ArrayList<>(); // checked
-	
 	private int savedCardNumber, tempIndexValue;
 	private int cardIndexX = 0, cardIndexY = 0, savedIndexX, savedIndexY;
 	
