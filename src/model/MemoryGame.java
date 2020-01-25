@@ -1,7 +1,6 @@
 package model;
 
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Random;
 
@@ -26,6 +25,8 @@ public class MemoryGame implements Game {
 	
 	private int savedCardNumber, tempIndexValue;
 	private int cardIndexX = 0, cardIndexY = 0, savedIndexX, savedIndexY;
+	
+	
 	boolean valid;
 
 	int temp = 0;
@@ -538,4 +539,61 @@ public class MemoryGame implements Game {
 	public Card getSelectedCard() {
 		return selectedCard;
 	}
+	
+	public int getSavedCardNumber() {
+		return savedCardNumber;
+	}
+
+	public void setSavedCardNumber(int savedCardNumber) {
+		this.savedCardNumber = savedCardNumber;
+	}
+
+	public int getCardIndexX() {
+		return cardIndexX;
+	}
+
+	public void setCardIndexX(int cardIndexX) {
+		this.cardIndexX = cardIndexX;
+	}
+
+	public int getCardIndexY() {
+		return cardIndexY;
+	}
+
+	public void setCardIndexY(int cardIndexY) {
+		this.cardIndexY = cardIndexY;
+	}
+
+	public int getSavedIndexX() {
+		return savedIndexX;
+	}
+
+	public void setSavedIndexX(int savedIndexX) {
+		this.savedIndexX = savedIndexX;
+	}
+
+	public int getSavedIndexY() {
+		return savedIndexY;
+	}
+
+	public void setSavedIndexY(int savedIndexY) {
+		this.savedIndexY = savedIndexY;
+	}
+
+	public int getTempIndexValue() {
+		return tempIndexValue;
+	}
+
+	public void setTempIndexValue(int tempIndexValue) {
+		this.tempIndexValue = tempIndexValue;
+	}
+
+	public int getSavedIcon() {
+		return savedIcon;
+	}
+
+	public void setSavedIcon(int savedIcon) {
+		this.savedIcon = savedIcon;
+	}
+
 }

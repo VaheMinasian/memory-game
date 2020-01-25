@@ -63,6 +63,8 @@ public class GameView extends JFrame implements ActionListener {
 	private Icon image, image1, image2, ui, si;
 	private Image img, img1;
 	boolean buttonState;
+	
+
 	Border emptyBorder; 
 	private Date elapsed;
 	SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
@@ -360,6 +362,14 @@ public class GameView extends JFrame implements ActionListener {
 		}
 	}
 
+	public boolean getButtonState() {
+		return buttonState;
+	}
+
+	public void setButtonState(boolean buttonState) {
+		this.buttonState = buttonState;
+	}	
+	
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
 	}
@@ -385,7 +395,8 @@ public class GameView extends JFrame implements ActionListener {
 			emojiButtons[card2.getCardIndex()[0]][card2.getCardIndex()[1]].setEnabled(false);
 			emojiButtons[card1.getCardIndex()[0]][card1.getCardIndex()[1]].setVisible(false);
 			emojiButtons[card2.getCardIndex()[0]][card2.getCardIndex()[1]].setVisible(false);
-
+			
+			
 		} else if (buttonState == true) {
 			emojiButtons[card1.getCardIndex()[0]][card1.getCardIndex()[1]].setEnabled(false);
 			emojiButtons[card2.getCardIndex()[0]][card2.getCardIndex()[1]].setEnabled(false);
@@ -443,6 +454,11 @@ public class GameView extends JFrame implements ActionListener {
 			p2LabelGreen.setIcon(image1);
 			p1LabelGreen.setIcon(image2);
 		}
+	}
+
+	public void removeIcons(int firstNumber, int secondNumber) {
+		currentIcons.set(currentIcons.indexOf(firstNumber),0);
+		currentIcons.set(currentIcons.indexOf(secondNumber),0);
 	}
 
 }

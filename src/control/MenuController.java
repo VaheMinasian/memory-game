@@ -1,6 +1,6 @@
 package control;
 
-import java.awt.Cursor; 
+import java.awt.Cursor;
 import java.awt.Point;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
@@ -8,13 +8,17 @@ import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.BufferedReader;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.logging.Handler;
 
 import javax.swing.AbstractButton;
@@ -24,6 +28,7 @@ import javax.swing.JOptionPane;
 import javax.swing.Timer;
 
 import model.Card;
+import model.Card.CardState;
 import model.MemoryGame;
 import view.GameView;
 import view.MainMenuView;
@@ -42,7 +47,7 @@ public class MenuController {
 	Cursor normalCursor = new Cursor(Cursor.DEFAULT_CURSOR);
 	private MemoryGame gameModel;
 	private GameView gameView;
-    private final ClockListener clock = new ClockListener();
+	private final ClockListener clock = new ClockListener();
 	private int validClicksOnCards = 0;
 	private boolean firstTimeProfileSave = false;
 	String activePlayerLabel = null;
@@ -51,7 +56,7 @@ public class MenuController {
 	private long startTime, stopTime, stopDuration;
 	Timer timer = new Timer(153, clock);
 	Handler timerHandler;
-	
+
 	public MenuController() {
 		System.out.println("Main constructor invoked");
 	}
@@ -62,9 +67,9 @@ public class MenuController {
 		gameModel = mGame;
 		gameView = gView;
 		isPlayable();
-		
+
 		mainMenuView.addMainMenuViewListener(new MainMenuViewListener());
-		
+
 	}
 
 	// Check if profile file is empty to enable play button (for first run)
@@ -235,37 +240,41 @@ public class MenuController {
 //				gameModel.setActivePlayer(gameModel.getPlayer1());
 //				if (profile.get(0).equals("c") && !profile.get(4).equals("4")) {
 //				gameModel.setMemorySize(profile.get(4));
+
+				deserialize();
+
 				gameView.addWindowListener(new WindowAdapter() {
-					
+
 					public void windowClosing(WindowEvent e) {
 						timer.stop();
-						stopTime = System.currentTimeMillis();		
-						System.out.println("stoptime before switching: " +stopTime);
-						switch(gameModel.getInterruptionMessage(profile.get(0), gameView)){
-						case 0://resuming game
+						stopTime = System.currentTimeMillis();
+						System.out.println("stoptime before switching: " + stopTime);
+						switch (gameModel.getInterruptionMessage(profile.get(0), gameView)) {
+						case 0:// resuming game
 							timer = new Timer(53, clock);
-							startTime=System.currentTimeMillis()-stopTime+startTime;
+							startTime = System.currentTimeMillis() - stopTime + startTime;
 							timer.start();
 							gameView.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 							break;
-						case 1://go to main menu
-							gameModel = new MemoryGame();				
+						case 1:// go to main menu
+							gameModel = new MemoryGame();
 							gameView.dispose();
 							gameView = new GameView();
 							gameView.setVisible(false);
 							mainMenuView.frame.setVisible(true);
 							break;
-						case 2://quit game
+						case 2:// quit game
+							serialize();
 							System.exit(0);
 							break;
 						default:
 							gameView.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 						}
 					}
-				});							
-							startTime = System.currentTimeMillis();					
-							System.out.println("in listener " +startTime);
-							timer.start();				//	gameView.getTimerLabel().setText(sdf.format(new java.util.Date()));
+				});
+				startTime = System.currentTimeMillis();
+				System.out.println("in listener " + startTime);
+				timer.start(); // gameView.getTimerLabel().setText(sdf.format(new java.util.Date()));
 				if (!profile.get(0).equals("s")) {
 					gameModel.randomFirstPlayer();
 				}
@@ -281,17 +290,80 @@ public class MenuController {
 				gameView.setActivePlayerLight(p1Label);
 			}
 		}// End of Action performed
-	} // End of MainMenuViewListener
-	private class ClockListener implements ActionListener {
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            gameView.updateClock(startTime);
-        }
-    }
 
-	
-	
-	
+		void serialize() {
+			List<Integer> cardStates = new ArrayList<>(); // checked
+			int openButtonX = -1, openButtonY=-1;
+			for (int i = 0; i < gameModel.getCards().length; i++) {
+				for (int j = 0; j < gameModel.getCards()[i].length; j++) {
+					if (gameModel.getCards()[i][j].getState() == CardState.OPEN) {
+						openButtonX=i;openButtonY=j;
+					} 
+				}
+			}
+			
+
+			try {
+				// create a new file with an ObjectOutputStream
+				FileOutputStream fos = new FileOutputStream("resources/data.txt");
+				ObjectOutputStream oos = new ObjectOutputStream(fos);
+
+				// write something in the file
+				oos.writeObject(profile.get(0));
+				oos.writeObject(profile.get(1));
+				oos.writeObject(profile.get(2));
+				oos.writeObject(profile.get(3));
+				oos.writeObject(profile.get(4));
+				oos.writeObject(gameModel.getActivePlayer().getName());
+				oos.writeObject(gameModel.getPlayer1().getScore());
+				oos.writeObject(gameModel.getPlayer2().getScore());
+				oos.writeObject(gameModel.getPlayer1().getTries());
+				oos.writeObject(gameModel.getPlayer2().getTries());
+				oos.writeObject(gameView.getButtonState());
+				oos.writeObject(gameModel.getMissedButtons());
+				oos.writeObject(gameView.getCurrentIcons());
+				oos.writeObject(gameModel.getCardIndexX());
+				oos.writeObject(gameModel.getCardIndexY());
+				oos.writeObject(gameModel.getSavedIndexY());
+				oos.writeObject(gameModel.getSavedIndexX());
+				oos.writeObject(gameModel.getSavedIcon());
+				oos.writeObject(gameModel.getTempIndexValue());
+				oos.writeObject(gameModel.getSavedCardNumber());
+
+				System.out.println("should all be written by now");
+
+				// close the stream
+				oos.close();
+
+			} catch (Exception ex) {
+				ex.printStackTrace();
+			}
+		}
+
+		void deserialize() {
+			try {
+				FileInputStream fis = new FileInputStream("resources/data.txt");
+				ObjectInputStream ois = new ObjectInputStream(fis);
+
+				// read and print what we wrote before
+				for(int i=0; i<20; i++) {
+					System.out.println(ois.readObject());
+				}
+
+			} catch (Exception ex) {
+				ex.printStackTrace();
+			}
+		}
+
+	} // End of MainMenuViewListener
+
+	private class ClockListener implements ActionListener {
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			gameView.updateClock(startTime);
+		}
+	}
+
 	class OptionsViewListener implements ActionListener {
 
 		String player1 = "", player2 = "", player3 = "";
@@ -413,21 +485,21 @@ public class MenuController {
 		}
 	}
 
-	class BackgroundButtonListener implements ActionListener{
+	class BackgroundButtonListener implements ActionListener {
 
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
 			// TODO Auto-generated method stub
-			if(arg0.getSource()==gameView.getJbtn()) {
+			if (arg0.getSource() == gameView.getJbtn()) {
 				gameView.switchBackground();
 			}
 		}
 	}
-	
+
 	class GameListener implements ActionListener {
-		
+
 		public void actionPerformed(ActionEvent e) {
-			
+
 			// Double loop to find the clicked button
 			if (gameModel.getActivePlayer().getClass() != null) {
 				System.out.println("human playing");
@@ -506,6 +578,8 @@ public class MenuController {
 											gameModel.addToMemory(firstNumber, secondNumber, gameView, profile.get(4));
 //											gameModel.removeFromMemory();
 											gameView.removeCards(gameModel.getFirstCard(), gameModel.getSecondCard());
+											gameView.removeIcons(firstNumber, secondNumber);
+
 //											gameModel.nullifyButtonsIndex();
 											firstNumber = 0;
 											secondNumber = 0;
@@ -527,24 +601,24 @@ public class MenuController {
 	}
 
 	int generateDifficultyFactor() {
-		factor=50;
-		switch(Integer.parseInt(profile.get(4))) {
+		factor = 50;
+		switch (Integer.parseInt(profile.get(4))) {
 		case 3:
-			factor = factor*14;
+			factor = factor * 14;
 			break;
 		case 2:
-			factor = factor*9;
+			factor = factor * 9;
 			break;
 		case 1:
-			factor = factor*6;
+			factor = factor * 6;
 			break;
 		default:// novice level
-			factor = factor*20;
+			factor = factor * 20;
 			break;
 		}
 		return factor;
-		}
-	
+	}
+
 	public void playTheComputer() {
 		Card card;
 		int xIndexComp;
@@ -552,7 +626,7 @@ public class MenuController {
 
 		gameView.setCursor(waitingCursor);
 		System.out.println("Beginning of StartGame...active player is: " + gameModel.getActivePlayer().getName());
-		
+
 		do {
 			card = gameModel.getRandomCardIndex(profile.get(4), gameView);
 			xIndexComp = card.getCardIndex()[0];
@@ -607,7 +681,7 @@ public class MenuController {
 					updateScoreBoard();
 					activePlayerLabel = gameModel.switchActivePlayer();
 					gameView.switchActivePlayerLight(activePlayerLabel);
-				    gameView.setCursor(normalCursor);
+					gameView.setCursor(normalCursor);
 
 //					I F    M A T C H E D
 				} else if (gameModel.getStatus(firstNumber, secondNumber)) {
@@ -620,13 +694,14 @@ public class MenuController {
 
 					gameModel.addToMemory(firstNumber, secondNumber, gameView, profile.get(4));
 					gameView.removeCards(gameModel.getFirstCard(), gameModel.getSecondCard());
+					gameView.removeIcons(firstNumber, secondNumber);
 					validClicksOnCards = 0;
 					firstNumber = 0;
 					secondNumber = 0;
 					gameModel.update();
 					updateScoreBoard();
 					if (gameModel.gameOver()) {
-					    gameView.setCursor(normalCursor);
+						gameView.setCursor(normalCursor);
 						System.out.println("going to game over");
 						resetGame();
 						return;
