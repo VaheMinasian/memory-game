@@ -295,6 +295,7 @@ public class MenuController {
 			}
 		}// End of Action performed
 
+		@SuppressWarnings("null")
 		void serialize() {
 			try {
 				// create a new file with an ObjectOutputStream
@@ -317,15 +318,14 @@ public class MenuController {
 				oos.writeObject(gameView.getCurrentIcons());
 				oos.writeObject(gameModel.getCardIndexX());
 				oos.writeObject(gameModel.getCardIndexY());
-				oos.writeObject(gameModel.getSavedIndexY());
 				oos.writeObject(gameModel.getSavedIndexX());
+				oos.writeObject(gameModel.getSavedIndexY());
 				oos.writeObject(gameModel.getSavedIcon());
 				oos.writeObject(gameModel.getTempIndexValue());
 				oos.writeObject(gameModel.getSavedCardNumber());
-				if (gameModel.getSelectedCard()!=null) {
-					oos.writeObject(gameModel.getSelectedCard().getCardIndex()[0] * Integer.parseInt(profile.get(1))
-							+ gameModel.getSelectedCard().getCardIndex()[1]);
-				}
+
+				
+				
 				System.out.println("should all be written by now");
 				oos.close();
 			} catch (Exception ex) {
@@ -333,6 +333,7 @@ public class MenuController {
 			}
 		}
 
+		@SuppressWarnings("unchecked")
 		void deserialize() {
 			ArrayList<Integer> temp;
 			try {
@@ -378,40 +379,54 @@ public class MenuController {
 				gameView.getMatchesButton().doClick();
 				}
 				System.out.println("Button state is: " + gameView.getButtonState());//check if button is pressed
-
-				 try
-			        {		 
-			            temp = (ArrayList) ois.readObject();       
-			        } 
-			        catch (IOException ioe) 
-			        {
-			            ioe.printStackTrace();
-			            return;
-			        } 
-			        catch (ClassNotFoundException c) 
-			        {
-			            System.out.println("temp not found");
-			            c.printStackTrace();
-			            return;
-			        }
+				
+				//restoring missedButtons
+			    temp = (ArrayList) ois.readObject();       
 			         
 			        //Verify list data
 			        for (Integer name : temp) {
 			            System.out.println(name);
 			            gameModel.getMissedButtons().add(name);
 			        }
-				
+				temp.clear();
 			       
-			        
-				System.out.println(ois.readObject());
-				System.out.println(ois.readObject());
-				System.out.println(ois.readObject());
-				System.out.println(ois.readObject());
-				System.out.println(ois.readObject());
-				System.out.println(ois.readObject());
-				System.out.println(ois.readObject());
-				System.out.println(ois.readObject());
+				System.out.println("Space Here");
 
+				//restoring currentIcons	 
+			    temp = (ArrayList) ois.readObject();       
+			      
+			        //Verify list data
+			   for (int i=0; i<temp.size()-1;i++) {
+				   gameView.getCurrentIcons().set(i, temp.get(i));
+			   } 
+  
+				temp.clear();
+				
+				
+				
+				//restore cardIndexX
+				gameModel.setCardIndexX(Integer.parseInt(ois.readObject().toString()));
+
+				//restore cardIndexY
+				gameModel.setCardIndexY(Integer.parseInt(ois.readObject().toString()));
+
+				//restore savedIndexX
+				gameModel.setSavedIndexX(Integer.parseInt(ois.readObject().toString()));
+				
+				//restore savedIndexY
+				gameModel.setSavedIndexY(Integer.parseInt(ois.readObject().toString()));
+				
+				//restore savedIcon
+				gameModel.setSavedIcon(Integer.parseInt(ois.readObject().toString()));
+			
+				// restore tempIndexValue
+				gameModel.setTempIndexValue(Integer.parseInt(ois.readObject().toString()));
+				
+				// restore saved card Number
+				gameModel.setSavedCardNumber(Integer.parseInt(ois.readObject().toString()));
+				
+			
+						
 			} catch (Exception ex) {
 				ex.printStackTrace();
 			}
