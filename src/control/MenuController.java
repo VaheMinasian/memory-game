@@ -15,8 +15,12 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.logging.Handler;
@@ -292,18 +296,17 @@ public class MenuController {
 		}// End of Action performed
 
 		void serialize() {
-
 			try {
 				// create a new file with an ObjectOutputStream
 				FileOutputStream fos = new FileOutputStream("resources/data.txt");
 				ObjectOutputStream oos = new ObjectOutputStream(fos);
 
 				// write something in the file
-				oos.writeObject(profile.get(0));
-				oos.writeObject(profile.get(1));
-				oos.writeObject(profile.get(2));
-				oos.writeObject(profile.get(3));
-				oos.writeObject(profile.get(4));
+				oos.writeObject(profile.get(0));//game mode
+				oos.writeObject(profile.get(1));//board size
+				oos.writeObject(profile.get(2));//player 1
+				oos.writeObject(profile.get(3));//player 2
+				oos.writeObject(profile.get(4));//difficulty
 				oos.writeObject(gameModel.getActivePlayer().getName());
 				oos.writeObject(gameModel.getPlayer1().getScore());
 				oos.writeObject(gameModel.getPlayer2().getScore());
@@ -323,30 +326,26 @@ public class MenuController {
 					oos.writeObject(gameModel.getSelectedCard().getCardIndex()[0] * Integer.parseInt(profile.get(1))
 							+ gameModel.getSelectedCard().getCardIndex()[1]);
 				}
-
 				System.out.println("should all be written by now");
-
-				// close the stream
 				oos.close();
-
 			} catch (Exception ex) {
 				ex.printStackTrace();
 			}
 		}
 
 		void deserialize() {
+			ArrayList<Integer> temp;
 			try {
 				FileInputStream fis = new FileInputStream("resources/data.txt");
 				ObjectInputStream ois = new ObjectInputStream(fis);
 
-				// read and print what we wrote before
-
-				System.out.println(ois.readObject());
-				System.out.println(ois.readObject());
-				System.out.println(ois.readObject());
-				System.out.println(ois.readObject());
-				System.out.println(ois.readObject());
-//				System.out.println(ois.readObject());
+				System.out.println(ois.readObject()); //game mode
+				System.out.println(ois.readObject()); //board size
+				System.out.println(ois.readObject()); //player 1
+				System.out.println(ois.readObject()); //player 2
+				System.out.println(ois.readObject()); //difficulty
+				
+				//restoring active player
 				if (profile.get(0) == "s") {
 					gameModel.setActivePlayer(gameModel.getPlayer1());
 				} else if (profile.get(0) != "s") {
@@ -354,16 +353,56 @@ public class MenuController {
 						gameModel.setActivePlayer(gameModel.getPlayer1());
 					} else if (gameModel.getPlayer2().getName().equals(ois.readObject())) {
 						gameModel.setActivePlayer(gameModel.getPlayer2());
-
 					}
 				}
-				System.out.println("deserialized current player is: " + gameModel.getActivePlayer().getName());
-				System.out.println(ois.readObject());
-				System.out.println(ois.readObject());
-				System.out.println(ois.readObject());
-				System.out.println(ois.readObject());
-				System.out.println(ois.readObject());
-				System.out.println(ois.readObject());
+				System.out.println("deserialized current player is: " + gameModel.getActivePlayer().getName());//check if item is restored
+				
+				//set player 1 score
+				gameModel.getPlayer1().setScore(Integer.parseInt(ois.readObject().toString()));
+				System.out.println("player 1 score is: " + gameModel.getPlayer1().getScore());//check that player 1 score is restored
+				
+				//set player 2 score
+				gameModel.getPlayer2().setScore(Integer.parseInt(ois.readObject().toString()));
+				System.out.println("player 2 score is: " + gameModel.getPlayer2().getScore());//check that player 2 score is restored
+				
+				//set player 1 tries
+				gameModel.getPlayer1().setTries(Integer.parseInt(ois.readObject().toString()));
+				System.out.println("player 1 tries is: " + gameModel.getPlayer1().getTries());//check that player 1 tries is restored
+				
+				//set player 2 tries
+				gameModel.getPlayer2().setTries(Integer.parseInt(ois.readObject().toString()));
+				System.out.println("player 2 tries is: " + gameModel.getPlayer2().getTries());//check that player 2 tries is restored
+				
+				//showRemovedIcons button state
+				if((boolean)ois.readObject()) {
+				gameView.getMatchesButton().doClick();
+				}
+				System.out.println("Button state is: " + gameView.getButtonState());//check if button is pressed
+
+				 try
+			        {		 
+			            temp = (ArrayList) ois.readObject();       
+			        } 
+			        catch (IOException ioe) 
+			        {
+			            ioe.printStackTrace();
+			            return;
+			        } 
+			        catch (ClassNotFoundException c) 
+			        {
+			            System.out.println("temp not found");
+			            c.printStackTrace();
+			            return;
+			        }
+			         
+			        //Verify list data
+			        for (Integer name : temp) {
+			            System.out.println(name);
+			            gameModel.getMissedButtons().add(name);
+			        }
+				
+			       
+			        
 				System.out.println(ois.readObject());
 				System.out.println(ois.readObject());
 				System.out.println(ois.readObject());
@@ -513,7 +552,7 @@ public class MenuController {
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
 			// TODO Auto-generated method stub
-			if (arg0.getSource() == gameView.getJbtn()) {
+			if (arg0.getSource() == gameView.getMatchesButton()) {
 				gameView.switchBackground();
 			}
 		}

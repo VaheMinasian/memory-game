@@ -80,6 +80,8 @@ public class MemoryGame implements Game {
 		return missedButtons;
 	}
 
+	
+	
 	// determining size of memory according to selected difficulty level.
 	public void addToMemory(int firstNumber, int secondNumber, GameView view, String difficulty) {// checked
 		boolean firstRun=true;

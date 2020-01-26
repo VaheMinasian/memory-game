@@ -313,12 +313,12 @@ public class GameView extends JFrame implements ActionListener {
 		matchesButton.addActionListener(bListener);
 	}
 
-	public JButton getJbtn() {
+	public JButton getMatchesButton() {
 		return matchesButton;
 	}
 
-	public void setJbtn(JButton jbtn) {
-		this.matchesButton = jbtn;
+	public void setMatchesButton(JButton matchesButton) {
+		this.matchesButton = matchesButton;
 	}
 
 	public void updateCardBoard(int i, int j) {
