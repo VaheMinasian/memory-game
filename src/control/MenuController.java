@@ -328,6 +328,7 @@ public class MenuController {
 				
 				System.out.println("should all be written by now");
 				oos.close();
+				fos.close();
 			} catch (Exception ex) {
 				ex.printStackTrace();
 			}
@@ -396,8 +397,9 @@ public class MenuController {
 			    temp = (ArrayList) ois.readObject();       
 			      
 			        //Verify list data
-			   for (int i=0; i<temp.size()-1;i++) {
+			   for (int i=0; i<temp.size();i++) {
 				   gameView.getCurrentIcons().set(i, temp.get(i));
+				   System.out.println(gameView.getCurrentIcons().get(i));
 			   } 
   
 				temp.clear();
