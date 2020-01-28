@@ -326,14 +326,14 @@ public class MenuController {
 //				oos.writeObject(gameModel.getMissedButtons());
 				oos.writeObject(gameModel.getActivePlayer().getName());
 				oos.writeObject(gameView.getCurrentIcons());
-				oos.writeObject(gameModel.getCardIndexX());
-				oos.writeObject(gameModel.getCardIndexY());
-				oos.writeObject(gameModel.getSavedIndexX());
-				oos.writeObject(gameModel.getSavedIndexY());
-				oos.writeObject(gameModel.getSavedIcon());
-				oos.writeObject(gameModel.getTempIndexValue());
-				oos.writeObject(gameModel.getSavedCardNumber());
-				System.out.println("activeplayeris: " + gameModel.getActivePlayer());
+//				oos.writeObject(gameModel.getCardIndexX());
+//				oos.writeObject(gameModel.getCardIndexY());
+//				oos.writeObject(gameModel.getSavedIndexX());
+//				oos.writeObject(gameModel.getSavedIndexY());
+//				oos.writeObject(gameModel.getSavedIcon());
+//				oos.writeObject(gameModel.getTempIndexValue());
+//				oos.writeObject(gameModel.getSavedCardNumber());
+
 				System.out.println("should all be written by now");
 				oos.close();
 				fos.close();
@@ -376,11 +376,14 @@ public class MenuController {
 				//set player 1 score
 				gameModel.getPlayer1().setScore(Integer.parseInt(ois.readObject().toString()));
 				System.out.println("player 1 score is: " + gameModel.getPlayer1().getScore());//check that player 1 score is restored
+				gameView.setScore1Label(gameModel.getPlayer1().getScore());
 				
 				//set player 2 score
 				gameModel.getPlayer2().setScore(Integer.parseInt(ois.readObject().toString()));
 				System.out.println("player 2 score is: " + gameModel.getPlayer2().getScore());//check that player 2 score is restored
+				gameView.setScore2Label(gameModel.getPlayer2().getScore());
 				
+
 				//set player 1 tries
 				gameModel.getPlayer1().setTries(Integer.parseInt(ois.readObject().toString()));
 				System.out.println("player 1 tries is: " + gameModel.getPlayer1().getTries());//check that player 1 tries is restored
@@ -389,8 +392,6 @@ public class MenuController {
 				gameModel.getPlayer2().setTries(Integer.parseInt(ois.readObject().toString()));
 				System.out.println("player 2 tries is: " + gameModel.getPlayer2().getTries());//check that player 2 tries is restored
 				
-				gameView.setScore1Label(gameModel.getPlayer1().getScore());
-				gameView.setScore2Label(gameModel.getPlayer2().getScore());
 
 				//showRemovedIcons button state
 				if((boolean)ois.readObject()) {
@@ -398,12 +399,14 @@ public class MenuController {
 				}
 				System.out.println("Button state is: " + gameView.getButtonState());//check if button is pressed
 				
+				
+				//restoring active player
 				if(gameModel.getPlayer1().getName().equals(ois.readObject().toString())) {
 										gameModel.setActivePlayer(gameModel.getPlayer1());
 				}
 				else
 					gameModel.setActivePlayer(gameModel.getPlayer2());
-				System.out.println("deserialized current player is: " + gameModel.getActivePlayer().getName());//check if item is restored
+				System.out.println("deserialized current player is: " + gameModel.getActivePlayer().getName());
 				
 				
 				//restoring currentIcons	 
@@ -417,26 +420,26 @@ public class MenuController {
   
 				temp.clear();
 				
-				//restore cardIndexX
-				gameModel.setCardIndexX(Integer.parseInt(ois.readObject().toString()));
-
-				//restore cardIndexY
-				gameModel.setCardIndexY(Integer.parseInt(ois.readObject().toString()));
-
-				//restore savedIndexX
-				gameModel.setSavedIndexX(Integer.parseInt(ois.readObject().toString()));
-				
-				//restore savedIndexY
-				gameModel.setSavedIndexY(Integer.parseInt(ois.readObject().toString()));
-				
-				//restore savedIcon
-				gameModel.setSavedIcon(Integer.parseInt(ois.readObject().toString()));
-			
-				// restore tempIndexValue
-				gameModel.setTempIndexValue(Integer.parseInt(ois.readObject().toString()));
-				
-				// restore saved card Number
-				gameModel.setSavedCardNumber(Integer.parseInt(ois.readObject().toString()));
+//				//restore cardIndexX
+//				gameModel.setCardIndexX(Integer.parseInt(ois.readObject().toString()));
+//
+//				//restore cardIndexY
+//				gameModel.setCardIndexY(Integer.parseInt(ois.readObject().toString()));
+//
+//				//restore savedIndexX
+//				gameModel.setSavedIndexX(Integer.parseInt(ois.readObject().toString()));
+//				
+//				//restore savedIndexY
+//				gameModel.setSavedIndexY(Integer.parseInt(ois.readObject().toString()));
+//				
+//				//restore savedIcon
+//				gameModel.setSavedIcon(Integer.parseInt(ois.readObject().toString()));
+//			
+//				// restore tempIndexValue
+//				gameModel.setTempIndexValue(Integer.parseInt(ois.readObject().toString()));
+//				
+//				// restore saved card Number
+//				gameModel.setSavedCardNumber(Integer.parseInt(ois.readObject().toString()));
 						
 			} catch (Exception ex) {
 				ex.printStackTrace();
