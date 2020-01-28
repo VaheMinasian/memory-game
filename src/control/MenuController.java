@@ -308,8 +308,7 @@ public class MenuController {
 				file.createNewFile(); // if file already exists will do nothing 
 				FileOutputStream fos = new FileOutputStream(file, false); 
 				ObjectOutputStream oos = new ObjectOutputStream(fos);
-				
-//				
+					
 //				FileOutputStream fos = new FileOutputStream("resources/data.txt");
 //				ObjectOutputStream oos = new ObjectOutputStream(fos);
 
@@ -319,13 +318,13 @@ public class MenuController {
 				oos.writeObject(profile.get(2));//player 1
 				oos.writeObject(profile.get(3));//player 2
 				oos.writeObject(profile.get(4));//difficulty
-				oos.writeObject(gameModel.getActivePlayer().getName());
 				oos.writeObject(gameModel.getPlayer1().getScore());
 				oos.writeObject(gameModel.getPlayer2().getScore());
 				oos.writeObject(gameModel.getPlayer1().getTries());
 				oos.writeObject(gameModel.getPlayer2().getTries());
 				oos.writeObject(gameView.getButtonState());
 //				oos.writeObject(gameModel.getMissedButtons());
+				oos.writeObject(gameModel.getActivePlayer().getName());
 				oos.writeObject(gameView.getCurrentIcons());
 				oos.writeObject(gameModel.getCardIndexX());
 				oos.writeObject(gameModel.getCardIndexY());
@@ -334,9 +333,7 @@ public class MenuController {
 				oos.writeObject(gameModel.getSavedIcon());
 				oos.writeObject(gameModel.getTempIndexValue());
 				oos.writeObject(gameModel.getSavedCardNumber());
-
-				
-				
+				System.out.println("activeplayeris: " + gameModel.getActivePlayer());
 				System.out.println("should all be written by now");
 				oos.close();
 				fos.close();
@@ -375,22 +372,7 @@ public class MenuController {
 				System.out.println(ois.readObject()); //player 1
 				System.out.println(ois.readObject()); //player 2
 				System.out.println(ois.readObject()); //difficulty
-				
-				//restoring active player
-				if (profile.get(0) == "s") {
-					gameModel.setActivePlayer(gameModel.getPlayer1());
-				} else if (profile.get(0) != "s") {
-					if (gameModel.getPlayer1().getName().equals(ois.readObject())) {
-						gameModel.setActivePlayer(gameModel.getPlayer1());
-						System.out.println("TheActive player is: " + gameModel.getPlayer1().getName());
-					} else if (gameModel.getPlayer2().getName().equals(ois.readObject())) {
-						gameModel.setActivePlayer(gameModel.getPlayer2());
-						System.out.println("TheActive player is: " + gameModel.getPlayer2().getName());
-					}
-				}
-				
-				System.out.println("deserialized current player is: " + gameModel.getActivePlayer().getName());//check if item is restored
-				
+								
 				//set player 1 score
 				gameModel.getPlayer1().setScore(Integer.parseInt(ois.readObject().toString()));
 				System.out.println("player 1 score is: " + gameModel.getPlayer1().getScore());//check that player 1 score is restored
@@ -407,24 +389,23 @@ public class MenuController {
 				gameModel.getPlayer2().setTries(Integer.parseInt(ois.readObject().toString()));
 				System.out.println("player 2 tries is: " + gameModel.getPlayer2().getTries());//check that player 2 tries is restored
 				
+				gameView.setScore1Label(gameModel.getPlayer1().getScore());
+				gameView.setScore2Label(gameModel.getPlayer2().getScore());
+
 				//showRemovedIcons button state
 				if((boolean)ois.readObject()) {
 				gameView.getMatchesButton().doClick();
 				}
 				System.out.println("Button state is: " + gameView.getButtonState());//check if button is pressed
 				
-//				//restoring missedButtons
-//			    temp = (ArrayList) ois.readObject();       
-//			         
-//			        //Verify list data
-//			        for (Integer name : temp) {
-//			            System.out.println(name);
-//			            gameModel.getMissedButtons().add(name);
-//			        }
-//				temp.clear();
-//			       
-//				System.out.println("Space Here");
-
+				if(gameModel.getPlayer1().getName().equals(ois.readObject().toString())) {
+										gameModel.setActivePlayer(gameModel.getPlayer1());
+				}
+				else
+					gameModel.setActivePlayer(gameModel.getPlayer2());
+				System.out.println("deserialized current player is: " + gameModel.getActivePlayer().getName());//check if item is restored
+				
+				
 				//restoring currentIcons	 
 			    temp = (ArrayList) ois.readObject();       
 			      
@@ -435,8 +416,6 @@ public class MenuController {
 			   } 
   
 				temp.clear();
-				
-				
 				
 				//restore cardIndexX
 				gameModel.setCardIndexX(Integer.parseInt(ois.readObject().toString()));
@@ -458,14 +437,11 @@ public class MenuController {
 				
 				// restore saved card Number
 				gameModel.setSavedCardNumber(Integer.parseInt(ois.readObject().toString()));
-				
-			
 						
 			} catch (Exception ex) {
 				ex.printStackTrace();
 			}
 		}
-
 	} // End of MainMenuViewListener
 
 	private class ClockListener implements ActionListener {
