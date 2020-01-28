@@ -8,6 +8,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -245,34 +246,36 @@ public class MenuController {
 //				if (profile.get(0).equals("c") && !profile.get(4).equals("4")) {
 //				gameModel.setMemorySize(profile.get(4));
 
-				deserialize();
+				
 
 				gameView.addWindowListener(new WindowAdapter() {
 
 					public void windowClosing(WindowEvent e) {
-						timer.stop();
-						stopTime = System.currentTimeMillis();
-						System.out.println("stoptime before switching: " + stopTime);
-						switch (gameModel.getInterruptionMessage(profile.get(0), gameView)) {
-						case 0:// resuming game
-							timer = new Timer(53, clock);
-							startTime = System.currentTimeMillis() - stopTime + startTime;
-							timer.start();
-							gameView.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-							break;
-						case 1:// go to main menu
-							gameModel = new MemoryGame();
-							gameView.dispose();
-							gameView = new GameView();
-							gameView.setVisible(false);
-							mainMenuView.frame.setVisible(true);
-							break;
-						case 2:// quit game
-							serialize();
-							System.exit(0);
-							break;
-						default:
-							gameView.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+						if(!gameModel.getActivePlayer().getName().equals("Computer")) {
+							timer.stop();
+							stopTime = System.currentTimeMillis();
+							System.out.println("stoptime before switching: " + stopTime);
+							switch (gameModel.getInterruptionMessage(profile.get(0), gameView)) {
+							case 0:// resuming game
+								timer = new Timer(53, clock);
+								startTime = System.currentTimeMillis() - stopTime + startTime;
+								timer.start();
+								gameView.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+								break;
+							case 1:// go to main menu
+								gameModel = new MemoryGame();
+								gameView.dispose();
+								gameView = new GameView();
+								gameView.setVisible(false);
+								mainMenuView.frame.setVisible(true);
+								break;
+							case 2:// quit game
+								serialize();
+								System.exit(0);
+								break;
+							default:
+								gameView.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+							}							
 						}
 					}
 				});
@@ -282,6 +285,7 @@ public class MenuController {
 				if (!profile.get(0).equals("s")) {
 					gameModel.randomFirstPlayer();
 				}
+				deserialize();
 				if (gameModel.getActivePlayer().getName().equals("Computer")) {
 					new java.util.Timer().schedule(new java.util.TimerTask() {
 						@Override
@@ -298,9 +302,16 @@ public class MenuController {
 		@SuppressWarnings("null")
 		void serialize() {
 			try {
+				
 				// create a new file with an ObjectOutputStream
-				FileOutputStream fos = new FileOutputStream("resources/data.txt");
+				File file = new File("resources/data.txt");
+				file.createNewFile(); // if file already exists will do nothing 
+				FileOutputStream fos = new FileOutputStream(file, false); 
 				ObjectOutputStream oos = new ObjectOutputStream(fos);
+				
+//				
+//				FileOutputStream fos = new FileOutputStream("resources/data.txt");
+//				ObjectOutputStream oos = new ObjectOutputStream(fos);
 
 				// write something in the file
 				oos.writeObject(profile.get(0));//game mode
@@ -314,7 +325,7 @@ public class MenuController {
 				oos.writeObject(gameModel.getPlayer1().getTries());
 				oos.writeObject(gameModel.getPlayer2().getTries());
 				oos.writeObject(gameView.getButtonState());
-				oos.writeObject(gameModel.getMissedButtons());
+//				oos.writeObject(gameModel.getMissedButtons());
 				oos.writeObject(gameView.getCurrentIcons());
 				oos.writeObject(gameModel.getCardIndexX());
 				oos.writeObject(gameModel.getCardIndexY());
@@ -336,6 +347,24 @@ public class MenuController {
 
 		@SuppressWarnings("unchecked")
 		void deserialize() {
+			BufferedReader br;
+			File file;
+			file = new File("resources/data.txt");
+			try {
+				file.createNewFile(); // if file already exists will do nothing 
+				br = new BufferedReader(new FileReader("resources/data.txt"));
+				if (br.readLine() == null) {
+					return;
+				}
+			} catch (FileNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}     
+			catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
 			ArrayList<Integer> temp;
 			try {
 				FileInputStream fis = new FileInputStream("resources/data.txt");
@@ -353,10 +382,13 @@ public class MenuController {
 				} else if (profile.get(0) != "s") {
 					if (gameModel.getPlayer1().getName().equals(ois.readObject())) {
 						gameModel.setActivePlayer(gameModel.getPlayer1());
+						System.out.println("TheActive player is: " + gameModel.getPlayer1().getName());
 					} else if (gameModel.getPlayer2().getName().equals(ois.readObject())) {
 						gameModel.setActivePlayer(gameModel.getPlayer2());
+						System.out.println("TheActive player is: " + gameModel.getPlayer2().getName());
 					}
 				}
+				
 				System.out.println("deserialized current player is: " + gameModel.getActivePlayer().getName());//check if item is restored
 				
 				//set player 1 score
@@ -381,17 +413,17 @@ public class MenuController {
 				}
 				System.out.println("Button state is: " + gameView.getButtonState());//check if button is pressed
 				
-				//restoring missedButtons
-			    temp = (ArrayList) ois.readObject();       
-			         
-			        //Verify list data
-			        for (Integer name : temp) {
-			            System.out.println(name);
-			            gameModel.getMissedButtons().add(name);
-			        }
-				temp.clear();
-			       
-				System.out.println("Space Here");
+//				//restoring missedButtons
+//			    temp = (ArrayList) ois.readObject();       
+//			         
+//			        //Verify list data
+//			        for (Integer name : temp) {
+//			            System.out.println(name);
+//			            gameModel.getMissedButtons().add(name);
+//			        }
+//				temp.clear();
+//			       
+//				System.out.println("Space Here");
 
 				//restoring currentIcons	 
 			    temp = (ArrayList) ois.readObject();       
@@ -655,7 +687,6 @@ public class MenuController {
 //												}
 											}
 											gameModel.addToMemory(firstNumber, secondNumber, gameView, profile.get(4));
-//											gameModel.removeFromMemory();
 											gameView.removeCards(gameModel.getFirstCard(), gameModel.getSecondCard());
 											gameView.removeIcons(firstNumber, secondNumber);
 
@@ -702,7 +733,7 @@ public class MenuController {
 		Card card;
 		int xIndexComp;
 		int yIndexComp;
-
+		
 		gameView.setCursor(waitingCursor);
 		System.out.println("Beginning of StartGame...active player is: " + gameModel.getActivePlayer().getName());
 
@@ -761,6 +792,7 @@ public class MenuController {
 					activePlayerLabel = gameModel.switchActivePlayer();
 					gameView.switchActivePlayerLight(activePlayerLabel);
 					gameView.setCursor(normalCursor);
+
 
 //					I F    M A T C H E D
 				} else if (gameModel.getStatus(firstNumber, secondNumber)) {
