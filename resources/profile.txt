@@ -1,6 +1,6 @@
-mode:h
-boardsize:4
+mode:c
+boardsize:6
 player1:vahe
-player2:kevork
-difficulty:null
+player2:Computer
+difficulty:3
 playable:true

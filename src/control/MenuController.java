@@ -77,6 +77,17 @@ public class MenuController {
 
 	}
 
+	void startTimer() {
+		timer = new Timer(53, clock);
+		startTime = System.currentTimeMillis() - stopTime + startTime;
+		timer.start();
+	}
+	
+	void stopTimer() {
+		timer.stop();
+		stopTime = System.currentTimeMillis();
+	}
+	
 	// Check if profile file is empty to enable play button (for first run)
 	private static void isPlayable() {
 
@@ -195,6 +206,8 @@ public class MenuController {
 
 	class MainMenuViewListener implements ActionListener {
 
+		
+		
 		public void actionPerformed(ActionEvent e) {
 
 			// exit application if 'Q U I T' button is clicked in main menu
@@ -252,14 +265,11 @@ public class MenuController {
 
 					public void windowClosing(WindowEvent e) {
 						if(!gameModel.getActivePlayer().getName().equals("Computer")) {
-							timer.stop();
-							stopTime = System.currentTimeMillis();
+							stopTimer();
 							System.out.println("stoptime before switching: " + stopTime);
 							switch (gameModel.getInterruptionMessage(profile.get(0), gameView)) {
 							case 0:// resuming game
-								timer = new Timer(53, clock);
-								startTime = System.currentTimeMillis() - stopTime + startTime;
-								timer.start();
+								startTimer();
 								gameView.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 								break;
 							case 1:// go to main menu
@@ -305,6 +315,7 @@ public class MenuController {
 				
 				// create a new file with an ObjectOutputStream
 				File file = new File("resources/data.txt");
+				file.delete();
 				file.createNewFile(); // if file already exists will do nothing 
 				FileOutputStream fos = new FileOutputStream(file, false); 
 				ObjectOutputStream oos = new ObjectOutputStream(fos);
@@ -813,6 +824,7 @@ public class MenuController {
 	}
 
 	void resetGame() {
+		stopTimer();
 		switch (gameModel.getMessage(profile.get(0))) {
 		case 0:
 			System.out.println("inside case 0");
