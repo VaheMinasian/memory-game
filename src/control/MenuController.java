@@ -105,6 +105,20 @@ public class MenuController {
 		}
 	}
 
+	void removeSerialization() {
+		try {
+			FileOutputStream fos = new FileOutputStream("resources/data.txt");
+			fos.write(("").getBytes());
+			fos.close();
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} 													
+	}
+	
 	// Reading profile data from file
 	private static void loadProfile() {
 		profile.clear();
@@ -678,6 +692,8 @@ public class MenuController {
 											updateScoreBoard();
 											validClicksOnCards = 0;
 											if (gameModel.gameOver()) {
+												removeSerialization();												
+											
 												resetGame();
 											}
 										}
@@ -796,6 +812,7 @@ public class MenuController {
 					if (gameModel.gameOver()) {
 						gameView.setCursor(normalCursor);
 						System.out.println("going to game over");
+						removeSerialization();
 						resetGame();
 						return;
 					}
