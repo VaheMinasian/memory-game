@@ -50,7 +50,7 @@ public class MenuController {
 	int firstNumber, secondNumber;
 	private int factor;
 	private long startTime, stopTime;
-	Timer timer = new Timer(153, clock);
+	Timer timer = new Timer(53, clock);
 	Handler timerHandler;
 	ArrayList<Integer> temp = new ArrayList<>();
 	
@@ -269,10 +269,13 @@ public class MenuController {
 				gameView.addWindowListener(new WindowAdapter() {
 
 					public void windowClosing(WindowEvent e) {
+						System.out.println("window closing listener should work here");
 						if(!gameModel.getActivePlayer().getName().equals("Computer")) {
+							System.out.println("timer should stop here");
 							stopTimer();
 							System.out.println("stoptime before switching: " + stopTime);
 							switch (gameModel.getInterruptionMessage(profile.get(0), gameView)) {
+							case -1:
 							case 0:// resuming game
 								startTimer();
 								gameView.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
@@ -339,6 +342,7 @@ public class MenuController {
 //				oos.writeObject(gameModel.getMissedButtons());
 				oos.writeObject(gameModel.getActivePlayer().getName());
 				oos.writeObject(gameView.getCurrentIcons());
+				//save removed guessed cards
 				for (int i = 0; i < Integer.parseInt(profile.get(1)); i++) {
 					for (int j = 0; j < Integer.parseInt(profile.get(1)); j++) {
 						if(gameModel.getCards()[i][j].getState() == CardState.NONE) {
@@ -348,7 +352,8 @@ public class MenuController {
 					}
 				}
 				oos.writeObject(temp);
-				
+				oos.writeObject(startTime);
+				oos.writeObject(stopTime);
 				System.out.println("temp items are: " + temp);
 //				oos.writeObject(gameModel.getCardIndexX());
 //				oos.writeObject(gameModel.getCardIndexY());
@@ -376,6 +381,8 @@ public class MenuController {
 				if (br.readLine() == null) {
 					return;
 				}
+				br.close();
+
 			} catch (FileNotFoundException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -450,16 +457,20 @@ public class MenuController {
 					gameView.updateCardBoard(temp.get(i), temp.get(i+1));
 					gameView.removeCard(gameModel.getCards()[temp.get(i)][temp.get(i+1)]);
 					gameModel.getCards()[temp.get(i)][temp.get(i+1)].updateCard(CardState.NONE);
-//					System.out.println("gameModel.getCard index is: " + i + ", " + (i+1));
-//					System.out.println("getCards()[i][i+1] should be i*dimension+j: " + i*Integer.parseInt(profile.get(1)+(i+1)));
+
+					startTime= Long.parseLong(ois.readObject().toString());
+					stopTime= Long.parseLong(ois.readObject().toString());
+					System.out.println("startTime is " + startTime);
+					System.out.println("stopTime is " + stopTime);
+//					timer = new Timer(53, clock);
+					startTime = System.currentTimeMillis() - stopTime + startTime;
+//					timer.start();
 					
-					
-//					gameView.updateCardBoard(temp.get(i), temp.get(i+1));
-//					gameView.updateCardBoard(temp.get(i+2), temp.get(i+3));
-//					gameView.removeCards(gameModel.getCards()[i][i+1], gameModel.getCards()[i+2][i+3]);
-//					gameModel.getCards()[i][i+1].updateCard(CardState.NONE);
-//					gameModel.getCards()[i+2][i+3].updateCard(CardState.NONE);
-					
+					System.out.println("the active player: "+ gameModel.getActivePlayer().getName());
+
+//					oos.writeObject(stopTime);
+					ois.close();
+					fis.close();
 				}
 			} catch (Exception ex) {
 				ex.printStackTrace();
