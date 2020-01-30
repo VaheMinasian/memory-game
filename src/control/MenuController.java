@@ -1,7 +1,6 @@
 package control;
 
 import java.awt.Cursor;
-import java.awt.Point;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -16,18 +15,10 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Date;
-import java.util.List;
 import java.util.logging.Handler;
 
 import javax.swing.AbstractButton;
-import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.Timer;
@@ -58,10 +49,11 @@ public class MenuController {
 	String activePlayerLabel = null;
 	int firstNumber, secondNumber;
 	private int factor;
-	private long startTime, stopTime, stopDuration;
+	private long startTime, stopTime;
 	Timer timer = new Timer(153, clock);
 	Handler timerHandler;
-
+	ArrayList<Integer> temp = new ArrayList<>();
+	
 	public MenuController() {
 		System.out.println("Main constructor invoked");
 	}
@@ -203,11 +195,10 @@ public class MenuController {
 
 		} // End of Reading profile data from file
 	}
-
+	
+	
+	
 	class MainMenuViewListener implements ActionListener {
-
-		
-		
 		public void actionPerformed(ActionEvent e) {
 
 			// exit application if 'Q U I T' button is clicked in main menu
@@ -312,16 +303,13 @@ public class MenuController {
 		@SuppressWarnings("null")
 		void serialize() {
 			try {
-				
+				temp.clear();
 				// create a new file with an ObjectOutputStream
 				File file = new File("resources/data.txt");
-				file.delete();
 				file.createNewFile(); // if file already exists will do nothing 
+				
 				FileOutputStream fos = new FileOutputStream(file, false); 
 				ObjectOutputStream oos = new ObjectOutputStream(fos);
-					
-//				FileOutputStream fos = new FileOutputStream("resources/data.txt");
-//				ObjectOutputStream oos = new ObjectOutputStream(fos);
 
 				// write something in the file
 				oos.writeObject(profile.get(0));//game mode
@@ -337,6 +325,17 @@ public class MenuController {
 //				oos.writeObject(gameModel.getMissedButtons());
 				oos.writeObject(gameModel.getActivePlayer().getName());
 				oos.writeObject(gameView.getCurrentIcons());
+				for (int i = 0; i < Integer.parseInt(profile.get(1)); i++) {
+					for (int j = 0; j < Integer.parseInt(profile.get(1)); j++) {
+						if(gameModel.getCards()[i][j].getState() == CardState.NONE) {
+							temp.add(i);
+							temp.add(j);
+						}
+					}
+				}
+				oos.writeObject(temp);
+				
+				System.out.println("temp items are: " + temp);
 //				oos.writeObject(gameModel.getCardIndexX());
 //				oos.writeObject(gameModel.getCardIndexY());
 //				oos.writeObject(gameModel.getSavedIndexX());
@@ -345,7 +344,6 @@ public class MenuController {
 //				oos.writeObject(gameModel.getTempIndexValue());
 //				oos.writeObject(gameModel.getSavedCardNumber());
 
-				System.out.println("should all be written by now");
 				oos.close();
 				fos.close();
 			} catch (Exception ex) {
@@ -353,7 +351,7 @@ public class MenuController {
 			}
 		}
 
-		@SuppressWarnings("unchecked")
+		@SuppressWarnings({ "unchecked", "resource", "rawtypes" })
 		void deserialize() {
 			BufferedReader br;
 			File file;
@@ -373,7 +371,7 @@ public class MenuController {
 				e.printStackTrace();
 			}
 			
-			ArrayList<Integer> temp;
+			
 			try {
 				FileInputStream fis = new FileInputStream("resources/data.txt");
 				ObjectInputStream ois = new ObjectInputStream(fis);
@@ -410,7 +408,6 @@ public class MenuController {
 				}
 				System.out.println("Button state is: " + gameView.getButtonState());//check if button is pressed
 				
-				
 				//restoring active player
 				if(gameModel.getPlayer1().getName().equals(ois.readObject().toString())) {
 										gameModel.setActivePlayer(gameModel.getPlayer1());
@@ -420,7 +417,8 @@ public class MenuController {
 				System.out.println("deserialized current player is: " + gameModel.getActivePlayer().getName());
 				
 				
-				//restoring currentIcons	 
+				//restoring currentIcons	
+				temp.clear();
 			    temp = (ArrayList) ois.readObject();       
 			      
 			        //Verify list data
@@ -428,30 +426,27 @@ public class MenuController {
 				   gameView.getCurrentIcons().set(i, temp.get(i));
 				   System.out.println(gameView.getCurrentIcons().get(i));
 			   } 
-  
 				temp.clear();
+				temp.trimToSize();
 				
-//				//restore cardIndexX
-//				gameModel.setCardIndexX(Integer.parseInt(ois.readObject().toString()));
-//
-//				//restore cardIndexY
-//				gameModel.setCardIndexY(Integer.parseInt(ois.readObject().toString()));
-//
-//				//restore savedIndexX
-//				gameModel.setSavedIndexX(Integer.parseInt(ois.readObject().toString()));
-//				
-//				//restore savedIndexY
-//				gameModel.setSavedIndexY(Integer.parseInt(ois.readObject().toString()));
-//				
-//				//restore savedIcon
-//				gameModel.setSavedIcon(Integer.parseInt(ois.readObject().toString()));
-//			
-//				// restore tempIndexValue
-//				gameModel.setTempIndexValue(Integer.parseInt(ois.readObject().toString()));
-//				
-//				// restore saved card Number
-//				gameModel.setSavedCardNumber(Integer.parseInt(ois.readObject().toString()));
-						
+				temp = (ArrayList) ois.readObject();    
+				System.out.println(temp);
+				for (int i = 0; i < temp.size(); i+=2) {
+
+					gameView.updateCardBoard(temp.get(i), temp.get(i+1));
+					gameView.removeCard(gameModel.getCards()[temp.get(i)][temp.get(i+1)]);
+					gameModel.getCards()[temp.get(i)][temp.get(i+1)].updateCard(CardState.NONE);
+//					System.out.println("gameModel.getCard index is: " + i + ", " + (i+1));
+//					System.out.println("getCards()[i][i+1] should be i*dimension+j: " + i*Integer.parseInt(profile.get(1)+(i+1)));
+					
+					
+//					gameView.updateCardBoard(temp.get(i), temp.get(i+1));
+//					gameView.updateCardBoard(temp.get(i+2), temp.get(i+3));
+//					gameView.removeCards(gameModel.getCards()[i][i+1], gameModel.getCards()[i+2][i+3]);
+//					gameModel.getCards()[i][i+1].updateCard(CardState.NONE);
+//					gameModel.getCards()[i+2][i+3].updateCard(CardState.NONE);
+					
+				}
 			} catch (Exception ex) {
 				ex.printStackTrace();
 			}
@@ -670,15 +665,11 @@ public class MenuController {
 									new java.util.Timer().schedule(new java.util.TimerTask() {
 										@Override
 										public void run() {
-											if (profile.get(0).equals("c")) {
-
-//												if (gameModel.getFirstCard().getIsClicked() == true) {
-////													gameModel.removeMemoryButtons(firstNumber);
-//												}
-											}
+											
 											gameModel.addToMemory(firstNumber, secondNumber, gameView, profile.get(4));
-											gameView.removeCards(gameModel.getFirstCard(), gameModel.getSecondCard());
-											gameView.removeIcons(firstNumber, secondNumber);
+											gameView.removeCard(gameModel.getFirstCard());
+											gameView.removeCard(gameModel.getSecondCard());
+//											gameView.removeIcons(firstNumber, secondNumber);
 
 //											gameModel.nullifyButtonsIndex();
 											firstNumber = 0;
@@ -794,8 +785,9 @@ public class MenuController {
 					}
 
 					gameModel.addToMemory(firstNumber, secondNumber, gameView, profile.get(4));
-					gameView.removeCards(gameModel.getFirstCard(), gameModel.getSecondCard());
-					gameView.removeIcons(firstNumber, secondNumber);
+					gameView.removeCard(gameModel.getFirstCard());
+					gameView.removeCard(gameModel.getSecondCard());
+//					gameView.removeIcons(firstNumber, secondNumber);
 					validClicksOnCards = 0;
 					firstNumber = 0;
 					secondNumber = 0;
@@ -866,3 +858,24 @@ public class MenuController {
 		}
 	}
 }
+
+////restore cardIndexX
+//gameModel.setCardIndexX(Integer.parseInt(ois.readObject().toString()));
+//
+////restore cardIndexY
+//gameModel.setCardIndexY(Integer.parseInt(ois.readObject().toString()));
+//
+////restore savedIndexX
+//gameModel.setSavedIndexX(Integer.parseInt(ois.readObject().toString()));
+//
+////restore savedIndexY
+//gameModel.setSavedIndexY(Integer.parseInt(ois.readObject().toString()));
+//
+////restore savedIcon
+//gameModel.setSavedIcon(Integer.parseInt(ois.readObject().toString()));
+//
+//// restore tempIndexValue
+//gameModel.setTempIndexValue(Integer.parseInt(ois.readObject().toString()));
+//
+//// restore saved card Number
+//gameModel.setSavedCardNumber(Integer.parseInt(ois.readObject().toString()));

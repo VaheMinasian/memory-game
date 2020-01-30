@@ -10,9 +10,6 @@ import java.awt.Image;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
-import java.io.BufferedReader;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -27,14 +24,12 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JLayer;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.border.Border;
 import javax.swing.border.TitledBorder;
-import javax.swing.plaf.LayerUI;
 
 import model.Card;
 
@@ -61,7 +56,7 @@ public class GameView extends JFrame implements ActionListener {
 	private final ImageIcon unselectedImage = new ImageIcon(GameView.class.getResource("/image.png"));
 	private final ImageIcon selectedImage = new ImageIcon(GameView.class.getResource("/46-grey.png"));
 	private Icon image, image1, image2, ui, si;
-	private Image img, img1;
+	private Image img;
 	boolean buttonState;
 	
 
@@ -321,9 +316,25 @@ public class GameView extends JFrame implements ActionListener {
 		this.matchesButton = matchesButton;
 	}
 
+	public void removeCard(Card card) {
+
+		if (buttonState == false) {
+			emojiButtons[card.getCardIndex()[0]][card.getCardIndex()[1]].setEnabled(false);
+			emojiButtons[card.getCardIndex()[0]][card.getCardIndex()[1]].setVisible(false);
+		
+		} else if (buttonState == true) {
+			emojiButtons[card.getCardIndex()[0]][card.getCardIndex()[1]].setEnabled(false);
+		}
+
+		System.out.println("set visible false");
+		boardPanel.revalidate();
+	}
+	
 	public void updateCardBoard(int i, int j) {
 		Icon image;
 		int iconName;
+		System.out.println("i is: " + i);
+		System.out.println("j is: " + j);
 		iconName = getCurrentIcons().get(i * boardDimension + j);
 		image = new ImageIcon(GameView.class.getResource("/" + iconName + ".png"));
 		getEmojiButton(i, j).setIcon(image);
@@ -333,7 +344,7 @@ public class GameView extends JFrame implements ActionListener {
 	public JButton getEmojiButton(int i, int j) {
 		return emojiButtons[i][j];
 	}
-
+	
 	public int getBoardDimension() {
 		return boardDimension;
 	}
@@ -386,24 +397,6 @@ public class GameView extends JFrame implements ActionListener {
 		image = new ImageIcon(GameView.class.getResource("/pattern.png"));
 		emojiButtons[card.getCardIndex()[0]][card.getCardIndex()[1]].setIcon(image);
 
-	}
-
-	public void removeCards(Card card1, Card card2) {
-
-		if (buttonState == false) {
-			emojiButtons[card1.getCardIndex()[0]][card1.getCardIndex()[1]].setEnabled(false);
-			emojiButtons[card2.getCardIndex()[0]][card2.getCardIndex()[1]].setEnabled(false);
-			emojiButtons[card1.getCardIndex()[0]][card1.getCardIndex()[1]].setVisible(false);
-			emojiButtons[card2.getCardIndex()[0]][card2.getCardIndex()[1]].setVisible(false);
-			
-			
-		} else if (buttonState == true) {
-			emojiButtons[card1.getCardIndex()[0]][card1.getCardIndex()[1]].setEnabled(false);
-			emojiButtons[card2.getCardIndex()[0]][card2.getCardIndex()[1]].setEnabled(false);
-		}
-
-		System.out.println("set visible false");
-		boardPanel.revalidate();
 	}
 
 	public void switchBackground() {
