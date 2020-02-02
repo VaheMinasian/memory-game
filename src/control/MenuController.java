@@ -341,7 +341,10 @@ public class MenuController {
 				oos.writeObject(gameView.getButtonState());
 //				oos.writeObject(gameModel.getMissedButtons());
 				oos.writeObject(gameModel.getActivePlayer().getName());
+				
+				//save current icons
 				oos.writeObject(gameView.getCurrentIcons());
+				
 				//save removed guessed cards
 				for (int i = 0; i < Integer.parseInt(profile.get(1)); i++) {
 					for (int j = 0; j < Integer.parseInt(profile.get(1)); j++) {
@@ -437,7 +440,6 @@ public class MenuController {
 					gameModel.setActivePlayer(gameModel.getPlayer2());
 				System.out.println("deserialized current player is: " + gameModel.getActivePlayer().getName());
 				
-				
 				//restoring currentIcons	
 				temp.clear();
 			    temp = (ArrayList) ois.readObject();       
@@ -450,28 +452,28 @@ public class MenuController {
 				temp.clear();
 				temp.trimToSize();
 				
+				//restore removed guessed cards
 				temp = (ArrayList) ois.readObject();    
 				System.out.println(temp);
 				for (int i = 0; i < temp.size(); i+=2) {
-
 					gameView.updateCardBoard(temp.get(i), temp.get(i+1));
 					gameView.removeCard(gameModel.getCards()[temp.get(i)][temp.get(i+1)]);
 					gameModel.getCards()[temp.get(i)][temp.get(i+1)].updateCard(CardState.NONE);
 
-					startTime= Long.parseLong(ois.readObject().toString());
-					stopTime= Long.parseLong(ois.readObject().toString());
-					System.out.println("startTime is " + startTime);
-					System.out.println("stopTime is " + stopTime);
-//					timer = new Timer(53, clock);
-					startTime = System.currentTimeMillis() - stopTime + startTime;
-//					timer.start();
-					
-					System.out.println("the active player: "+ gameModel.getActivePlayer().getName());
-
 //					oos.writeObject(stopTime);
-					ois.close();
-					fis.close();
 				}
+				
+				startTime= Long.parseLong(ois.readObject().toString());
+				stopTime= Long.parseLong(ois.readObject().toString());
+				System.out.println("startTime is " + startTime);
+				System.out.println("stopTime is " + stopTime);
+//				timer = new Timer(53, clock);
+				startTime = System.currentTimeMillis() - stopTime + startTime;
+//				timer.start();
+				
+				
+				ois.close();
+				fis.close();
 			} catch (Exception ex) {
 				ex.printStackTrace();
 			}
