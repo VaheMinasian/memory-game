@@ -52,9 +52,7 @@ public class OptionsView extends JFrame implements ActionListener, ListSelection
 	private JList<String> list;
 	private DefaultListModel<String> listModel;
 
-	public OptionsView() {
-
-	}
+	public OptionsView() {}
 
 //	  this method creates the options view dialog for the class SetupView. 
 	public void setOptionsMenu() {
@@ -68,7 +66,6 @@ public class OptionsView extends JFrame implements ActionListener, ListSelection
 		mainPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(),
 				" G A M E    S E T U P ", TitledBorder.CENTER, TitledBorder.TOP));
 		mainPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
-
 		emptyPanel = new JPanel();
 		emptyPanel.setPreferredSize(new Dimension(310, 10));
 
@@ -140,7 +137,6 @@ public class OptionsView extends JFrame implements ActionListener, ListSelection
 		sqrTen.setActionCommand("10");
 
 		
-		
 		novice = new JRadioButton("Novice");
         easy = new JRadioButton("Easy");
         medium = new JRadioButton("Medium");
@@ -149,7 +145,6 @@ public class OptionsView extends JFrame implements ActionListener, ListSelection
         easy.setActionCommand("3");
         medium.setActionCommand("2");
         hard.setActionCommand("1");
-        
         
         novice.setEnabled(false);
         easy.setEnabled(false);
@@ -173,15 +168,9 @@ public class OptionsView extends JFrame implements ActionListener, ListSelection
         levelPanel.add(easy);
         levelPanel.add(medium);
         levelPanel.add(hard);
-        
-        
         //... Add a titled border to the button panel.
 
       
-		
-		
-		
-		
 		
 		dimensions = new ButtonGroup();
 		dimensions.add(sqrFour);

@@ -53,10 +53,9 @@ public class MenuController {
 	Timer timer = new Timer(53, clock);
 	Handler timerHandler;
 	ArrayList<Integer> temp = new ArrayList<>();
-	
-	public MenuController() {
-		System.out.println("Main constructor invoked");
-	}
+	File serializeFile = new File("resources/data.txt");
+	BufferedReader br;
+	public MenuController() {	}
 
 	public MenuController(MainMenuView mView, OptionsView oView, MemoryGame mGame, GameView gView) {
 		mainMenuView = mView;
@@ -67,6 +66,25 @@ public class MenuController {
 
 		mainMenuView.addMainMenuViewListener(new MainMenuViewListener());
 
+		try {
+			serializeFile.createNewFile(); // if file already exists will do nothing 
+			br = new BufferedReader(new FileReader("resources/data.txt"));
+			if (br.readLine() != null) {
+				mainMenuView.getResumeButton().setEnabled(true);
+//				return;
+			}
+			br.close();
+
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}     
+		catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
 	}
 
 	void startTimer() {
@@ -220,6 +238,11 @@ public class MenuController {
 				System.exit(0);
 			}
 
+			if (e.getSource() == mainMenuView.getResumeButton()) {
+				mainMenuView.getPlayButton().doClick();
+				deserialize();
+			}
+			
 			// actions performed if 'O P T I O N S' button is clicked in main menu
 			if (e.getSource() == mainMenuView.getOptionsButton()) {
 
@@ -286,6 +309,8 @@ public class MenuController {
 								gameView = new GameView();
 								gameView.setVisible(false);
 								mainMenuView.frame.setVisible(true);
+								mainMenuView.getResumeButton().setEnabled(false);
+								
 								break;
 							case 2:// quit game
 								serialize();
@@ -303,7 +328,6 @@ public class MenuController {
 				if (!profile.get(0).equals("s")) {
 					gameModel.randomFirstPlayer();
 				}
-				deserialize();
 				if (gameModel.getActivePlayer().getName().equals("Computer")) {
 					new java.util.Timer().schedule(new java.util.TimerTask() {
 						@Override
@@ -319,13 +343,14 @@ public class MenuController {
 
 		@SuppressWarnings("null")
 		void serialize() {
+			
 			try {
 				temp.clear();
 				// create a new file with an ObjectOutputStream
-				File file = new File("resources/data.txt");
-				file.createNewFile(); // if file already exists will do nothing 
 				
-				FileOutputStream fos = new FileOutputStream(file, false); 
+				serializeFile.createNewFile(); // if file already exists will do nothing 
+				
+				FileOutputStream fos = new FileOutputStream(serializeFile, false); 
 				ObjectOutputStream oos = new ObjectOutputStream(fos);
 
 				// write something in the file
@@ -375,109 +400,92 @@ public class MenuController {
 
 		@SuppressWarnings({ "unchecked", "resource", "rawtypes" })
 		void deserialize() {
-			BufferedReader br;
-			File file;
-			file = new File("resources/data.txt");
-			try {
-				file.createNewFile(); // if file already exists will do nothing 
-				br = new BufferedReader(new FileReader("resources/data.txt"));
-				if (br.readLine() == null) {
-					return;
-				}
-				br.close();
-
-			} catch (FileNotFoundException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}     
-			catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			
-			
-			try {
-				FileInputStream fis = new FileInputStream("resources/data.txt");
-				ObjectInputStream ois = new ObjectInputStream(fis);
-
-				System.out.println(ois.readObject()); //game mode
-				System.out.println(ois.readObject()); //board size
-				System.out.println(ois.readObject()); //player 1
-				System.out.println(ois.readObject()); //player 2
-				System.out.println(ois.readObject()); //difficulty
-								
-				//set player 1 score
-				gameModel.getPlayer1().setScore(Integer.parseInt(ois.readObject().toString()));
-				System.out.println("player 1 score is: " + gameModel.getPlayer1().getScore());//check that player 1 score is restored
-				gameView.setScore1Label(gameModel.getPlayer1().getScore());
-				
-				//set player 2 score
-				gameModel.getPlayer2().setScore(Integer.parseInt(ois.readObject().toString()));
-				System.out.println("player 2 score is: " + gameModel.getPlayer2().getScore());//check that player 2 score is restored
-				gameView.setScore2Label(gameModel.getPlayer2().getScore());
-				
-
-				//set player 1 tries
-				gameModel.getPlayer1().setTries(Integer.parseInt(ois.readObject().toString()));
-				System.out.println("player 1 tries is: " + gameModel.getPlayer1().getTries());//check that player 1 tries is restored
-				
-				//set player 2 tries
-				gameModel.getPlayer2().setTries(Integer.parseInt(ois.readObject().toString()));
-				System.out.println("player 2 tries is: " + gameModel.getPlayer2().getTries());//check that player 2 tries is restored
-				
-
-				//showRemovedIcons button state
-				if((boolean)ois.readObject()) {
-				gameView.getMatchesButton().doClick();
-				}
-				System.out.println("Button state is: " + gameView.getButtonState());//check if button is pressed
-				
-				//restoring active player
-				if(gameModel.getPlayer1().getName().equals(ois.readObject().toString())) {
-										gameModel.setActivePlayer(gameModel.getPlayer1());
-				}
-				else
-					gameModel.setActivePlayer(gameModel.getPlayer2());
-				System.out.println("deserialized current player is: " + gameModel.getActivePlayer().getName());
-				
-				//restoring currentIcons	
-				temp.clear();
-			    temp = (ArrayList) ois.readObject();       
-			      
-			        //Verify list data
-			   for (int i=0; i<temp.size();i++) {
-				   gameView.getCurrentIcons().set(i, temp.get(i));
-				   System.out.println(gameView.getCurrentIcons().get(i));
-			   } 
-				temp.clear();
-				temp.trimToSize();
-				
-				//restore removed guessed cards
-				temp = (ArrayList) ois.readObject();    
-				System.out.println(temp);
-				for (int i = 0; i < temp.size(); i+=2) {
-					gameView.updateCardBoard(temp.get(i), temp.get(i+1));
-					gameView.removeCard(gameModel.getCards()[temp.get(i)][temp.get(i+1)]);
-					gameModel.getCards()[temp.get(i)][temp.get(i+1)].updateCard(CardState.NONE);
-
+		
+			if(mainMenuView.getResumeButton().isEnabled()==true) {
+				try {
+					FileInputStream fis = new FileInputStream("resources/data.txt");
+					ObjectInputStream ois = new ObjectInputStream(fis);
+					
+					System.out.println(ois.readObject()); //game mode
+					System.out.println(ois.readObject()); //board size
+					System.out.println(ois.readObject()); //player 1
+					System.out.println(ois.readObject()); //player 2
+					System.out.println(ois.readObject()); //difficulty
+					
+					//set player 1 score
+					gameModel.getPlayer1().setScore(Integer.parseInt(ois.readObject().toString()));
+					System.out.println("player 1 score is: " + gameModel.getPlayer1().getScore());//check that player 1 score is restored
+					gameView.setScore1Label(gameModel.getPlayer1().getScore());
+					
+					//set player 2 score
+					gameModel.getPlayer2().setScore(Integer.parseInt(ois.readObject().toString()));
+					System.out.println("player 2 score is: " + gameModel.getPlayer2().getScore());//check that player 2 score is restored
+					gameView.setScore2Label(gameModel.getPlayer2().getScore());
+					
+					
+					//set player 1 tries
+					gameModel.getPlayer1().setTries(Integer.parseInt(ois.readObject().toString()));
+					System.out.println("player 1 tries is: " + gameModel.getPlayer1().getTries());//check that player 1 tries is restored
+					
+					//set player 2 tries
+					gameModel.getPlayer2().setTries(Integer.parseInt(ois.readObject().toString()));
+					System.out.println("player 2 tries is: " + gameModel.getPlayer2().getTries());//check that player 2 tries is restored
+					
+					
+					//showRemovedIcons button state
+					if((boolean)ois.readObject()) {
+						gameView.getMatchesButton().doClick();
+					}
+					System.out.println("Button state is: " + gameView.getButtonState());//check if button is pressed
+					
+					//restoring active player
+					if(gameModel.getPlayer1().getName().equals(ois.readObject().toString())) {
+						gameModel.setActivePlayer(gameModel.getPlayer1());
+					}
+					else
+						gameModel.setActivePlayer(gameModel.getPlayer2());
+					System.out.println("deserialized current player is: " + gameModel.getActivePlayer().getName());
+					
+					//restoring currentIcons	
+					temp.clear();
+					temp = (ArrayList) ois.readObject();       
+					
+					//Verify list data
+					for (int i=0; i<temp.size();i++) {
+						gameView.getCurrentIcons().set(i, temp.get(i));
+						System.out.println(gameView.getCurrentIcons().get(i));
+					} 
+					temp.clear();
+					temp.trimToSize();
+					
+					//restore removed guessed cards
+					temp = (ArrayList) ois.readObject();    
+					System.out.println(temp);
+					for (int i = 0; i < temp.size(); i+=2) {
+						gameView.updateCardBoard(temp.get(i), temp.get(i+1));
+						gameView.removeCard(gameModel.getCards()[temp.get(i)][temp.get(i+1)]);
+						gameModel.getCards()[temp.get(i)][temp.get(i+1)].updateCard(CardState.NONE);
+						
 //					oos.writeObject(stopTime);
-				}
-				
-				startTime= Long.parseLong(ois.readObject().toString());
-				stopTime= Long.parseLong(ois.readObject().toString());
-				System.out.println("startTime is " + startTime);
-				System.out.println("stopTime is " + stopTime);
+					}
+					
+					startTime= Long.parseLong(ois.readObject().toString());
+					stopTime= Long.parseLong(ois.readObject().toString());
+					System.out.println("startTime is " + startTime);
+					System.out.println("stopTime is " + stopTime);
 //				timer = new Timer(53, clock);
-				startTime = System.currentTimeMillis() - stopTime + startTime;
+					startTime = System.currentTimeMillis() - stopTime + startTime;
 //				timer.start();
-				
-				
-				ois.close();
-				fis.close();
-			} catch (Exception ex) {
-				ex.printStackTrace();
+					
+					
+					ois.close();
+					fis.close();
+				} catch (Exception ex) {
+					ex.printStackTrace();
+				}
 			}
-		}
+				
+			}
 	} // End of MainMenuViewListener
 
 	private class ClockListener implements ActionListener {
@@ -563,7 +571,10 @@ public class MenuController {
 							}
 						}
 					}
-
+					if(selectedGameMode!=profile.get(0)||board!=profile.get(1)||player1!=profile.get(2)||player2!=profile.get(3)||difficulty!=profile.get(4)) {
+						removeSerialization();
+						mainMenuView.getResumeButton().setEnabled(false);
+					}
 					if (optionsView.getSqrFour().isSelected()) {
 						board = optionsView.getSqrFour().getActionCommand();
 					} else if (optionsView.getSqrSix().isSelected()) {
