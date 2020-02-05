@@ -1,6 +1,7 @@
-mode:h
+mode:s
 boardsize:4
 player1:vahe
-player2:kevork
+player2:
 difficulty:null
+iconSet:animals
 playable:true

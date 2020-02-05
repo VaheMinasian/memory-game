@@ -1,6 +1,0 @@
-mode:s
-boardsize:4
-player1:vahe
-player2:
-difficulty:null
-playable:true

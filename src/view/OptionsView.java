@@ -22,6 +22,7 @@ import javax.swing.ButtonGroup;
 import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JList;
@@ -42,7 +43,7 @@ import javax.swing.event.ListSelectionListener;
 public class OptionsView extends JFrame implements ActionListener, ListSelectionListener {
 
 	public JFrame frame;
-	private JPanel emptyPanel, mainPanel, gameModePanel, boardSizePanel, tableButtonsPanel, executionPanel, levelPanel;
+	private JPanel emptyPanel, mainPanel, iconSetPanel, gameModePanel, boardSizePanel, tableButtonsPanel, executionPanel, levelPanel;
 	private JToggleButton soloButton, humanButton, computerButton, sqrFour, sqrSix, sqrEight, sqrTen;
 	private JRadioButton novice, easy, medium, hard; 
 	private ButtonGroup rButtonGroup, dimensions, gameMode;
@@ -51,7 +52,9 @@ public class OptionsView extends JFrame implements ActionListener, ListSelection
 	private JTextField playerNameTextField;
 	private JList<String> list;
 	private DefaultListModel<String> listModel;
-
+	String[] iconSet = { "emotics","animals"};
+	JComboBox<String> iconSetComboBox;
+   
 	public OptionsView() {}
 
 //	  this method creates the options view dialog for the class SetupView. 
@@ -62,13 +65,21 @@ public class OptionsView extends JFrame implements ActionListener, ListSelection
 
 		mainPanel = new JPanel(new GridBagLayout());
 		frame.getContentPane().add(mainPanel);
-		mainPanel.setPreferredSize(new Dimension(370, 420));
+		mainPanel.setPreferredSize(new Dimension(370, 480));
 		mainPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(),
 				" G A M E    S E T U P ", TitledBorder.CENTER, TitledBorder.TOP));
 		mainPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
 		emptyPanel = new JPanel();
 		emptyPanel.setPreferredSize(new Dimension(310, 10));
 
+		iconSetComboBox = new JComboBox<String>(iconSet);
+		iconSetComboBox.setPreferredSize(new Dimension(200,25));
+		iconSetPanel = new JPanel();
+		iconSetPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(),
+				" c h o o s e   i c o n   set ", TitledBorder.CENTER, TitledBorder.TOP));
+		iconSetPanel.add(iconSetComboBox);
+		
+		
 		soloButton = new JToggleButton();
 		soloButton.setPreferredSize(new Dimension(70, 50));
 		ImageIcon soloImageIcon = new ImageIcon(OptionsView.class.getResource("/solo.png"));
@@ -376,36 +387,41 @@ public class OptionsView extends JFrame implements ActionListener, ListSelection
 		gbc.gridx = 0;
 		gbc.gridy = 0;
 		gbc.fill = GridBagConstraints.HORIZONTAL;
-		mainPanel.add(emptyPanel, gbc);
+		mainPanel.add(iconSetPanel, gbc);
 
 		gbc.gridx = 0;
 		gbc.gridy = 1;
 		gbc.fill = GridBagConstraints.HORIZONTAL;
-		mainPanel.add(gameModePanel, gbc);
+		mainPanel.add(emptyPanel, gbc);
 
 		gbc.gridx = 0;
 		gbc.gridy = 2;
+		gbc.fill = GridBagConstraints.HORIZONTAL;
+		mainPanel.add(gameModePanel, gbc);
+
+		gbc.gridx = 0;
+		gbc.gridy = 3;
 		gbc.fill = GridBagConstraints.BOTH;
 		mainPanel.add(boardSizePanel, gbc);
 
 		gbc.gridx = 0;
-		gbc.gridy = 3;
+		gbc.gridy = 4;
 		gbc.fill = GridBagConstraints.BOTH;
 //		gbc.anchor = GridBagConstraints.SOUTH;
 		mainPanel.add(levelPanel, gbc);
 
 		gbc.gridx = 0;
-		gbc.gridy = 4;
+		gbc.gridy = 5;
 		gbc.fill = GridBagConstraints.BOTH;
 		mainPanel.add(tablePane, gbc);
 
 		gbc.gridx = 0;
-		gbc.gridy = 5;
+		gbc.gridy = 6;
 		gbc.fill = GridBagConstraints.HORIZONTAL;
 		mainPanel.add(tableButtonsPanel, gbc);
 
 		gbc.gridx = 0;
-		gbc.gridy = 6;
+		gbc.gridy = 7;
 		gbc.fill = GridBagConstraints.BOTH;
 		gbc.anchor = GridBagConstraints.SOUTH;
 		mainPanel.add(executionPanel, gbc);
@@ -545,5 +561,13 @@ public class OptionsView extends JFrame implements ActionListener, ListSelection
 
 	public void setPlayerName(JTextField playerName) {
 		this.playerNameTextField = playerName;
+	}
+	
+	public JComboBox<String> getIconSetComboBox() {
+		return iconSetComboBox;
+	}
+
+	public void setIconSetComboBox(JComboBox<String> iconSetComboBox) {
+		this.iconSetComboBox = iconSetComboBox;
 	}
 }

@@ -43,6 +43,7 @@ public class GameView extends JFrame implements ActionListener {
 	private JLabel timerLabel;
 	private int boardDimension;
 	private int boardSize;
+	private int lowIndex, highIndex, indexArea;
 	private JButton[][] emojiButtons;
 	JButton matchesButton;
 	Font boldFont, planeFont;
