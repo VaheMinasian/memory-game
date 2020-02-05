@@ -1,7 +1,7 @@
 mode:s
-boardsize:6
-player1:v
+boardsize:4
+player1:as
 player2:
 difficulty:null
-iconSet:emotics
+iconSet:animals
 playable:true

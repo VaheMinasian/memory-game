@@ -252,35 +252,45 @@ public class OptionsView extends JFrame implements ActionListener, ListSelection
 					playerNameTextField.requestFocusInWindow();
 					return;
 				}
-
-				name = playerNameTextField.getText();
-
 				// User didn't type in a unique name...
-				if (name.equals("") || listModel.contains(name)) {
+				if (listModel.contains(name)) {
 					Toolkit.getDefaultToolkit().beep();
 					JOptionPane.showMessageDialog(null, "The name already exists,  please choose another name",
 							"Memory", JOptionPane.INFORMATION_MESSAGE);
-
+					
 					playerNameTextField.requestFocusInWindow();
 					playerNameTextField.selectAll();
 					return;
 				}
 
-				int index = list.getSelectedIndex();
-				if (index == -1) {
-					index = 0;
-				} else {
-					index++;
+				if (!Character.isLetter(playerNameTextField.getText().charAt(0))) {
+					Toolkit.getDefaultToolkit().beep();
+					JOptionPane.showMessageDialog(null, "Please enter a valid name",
+							"Memory", JOptionPane.INFORMATION_MESSAGE);
+					playerNameTextField.requestFocusInWindow();
+					playerNameTextField.selectAll();
+
+				}else {
+					name = playerNameTextField.getText();
+					
+					int index = list.getSelectedIndex();
+					if (index == -1) {
+						index = 0;
+					} else {
+						index++;
+					}
+					
+					listModel.insertElementAt(playerNameTextField.getText(), index);
+					list.clearSelection();
+					
+					playerNameTextField.requestFocusInWindow();
+					playerNameTextField.setText("");
+					
+					list.setSelectedIndex(index);
+					list.ensureIndexIsVisible(index);
 				}
 
-				listModel.insertElementAt(playerNameTextField.getText(), index);
-				list.clearSelection();
-
-				playerNameTextField.requestFocusInWindow();
-				playerNameTextField.setText("");
-
-				list.setSelectedIndex(index);
-				list.ensureIndexIsVisible(index);
+				
 			}
 
 			// Required by DocumentListener.

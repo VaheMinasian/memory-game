@@ -1,0 +1,7 @@
+mode:s
+boardsize:4
+player1:as
+player2:
+difficulty:null
+iconSet:animals
+playable:true

@@ -58,7 +58,7 @@ public class MenuController {
 	public MenuController() {
 	}
 
-	void checkDataFile(){
+	void checkDataFile() {
 		try {
 			serializeFile.createNewFile(); // if file already exists will do nothing
 			br = new BufferedReader(new FileReader("resources/data.txt"));
@@ -76,7 +76,7 @@ public class MenuController {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public MenuController(MainMenuView mView, OptionsView oView, MemoryGame mGame, GameView gView) {
 		mainMenuView = mView;
 		optionsView = oView;
@@ -264,7 +264,6 @@ public class MenuController {
 
 				// marker to ensure loading the "profile" file version of profile is loaded into
 				// options menu UI
-				firstTimeProfileSave = true;
 
 				// override system.exit(0) on options menu to return to main menu
 				optionsView.frame.addWindowListener(new WindowAdapter() {
@@ -579,8 +578,6 @@ public class MenuController {
 							}
 						}
 					}
-			
-
 
 					if (optionsView.getSqrFour().isSelected()) {
 						board = optionsView.getSqrFour().getActionCommand();
@@ -594,16 +591,17 @@ public class MenuController {
 
 					iconSet = (String) optionsView.getIconSetComboBox().getSelectedItem();
 
-					if(profile.size()!=0) {
+					if (profile.size() != 0) {
 						System.out.println("profile is: " + profile);
 						if (selectedGameMode != profile.get(0) || board != profile.get(1) || player1 != profile.get(2)
-								|| player2 != profile.get(3) || difficulty != profile.get(4) || iconSet != profile.get(5)) {
+								|| player2 != profile.get(3) || difficulty != profile.get(4)
+								|| iconSet != profile.get(5)) {
 							removeSerialization();
 							mainMenuView.getResumeButton().setEnabled(false);
-							System.out.println("resume button set to false");						
+							System.out.println("resume button set to false");
+						}
 					}
-					}
-					
+
 					StringBuffer sbr = new StringBuffer();
 					sbr.append("mode:" + selectedGameMode + '\n');
 					sbr.append("boardsize:" + board + '\n');
@@ -625,9 +623,7 @@ public class MenuController {
 					}
 					// End of writing to a file
 					sbr.delete(0, sbr.length());
-					
-				
-					
+					firstTimeProfileSave = true;
 					optionsView.frame.setVisible(false);
 					mainMenuView.getPlayButton().setEnabled(true);
 					mainMenuView.frame.setVisible(true);
