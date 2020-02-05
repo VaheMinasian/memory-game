@@ -58,15 +58,7 @@ public class MenuController {
 	public MenuController() {
 	}
 
-	public MenuController(MainMenuView mView, OptionsView oView, MemoryGame mGame, GameView gView) {
-		mainMenuView = mView;
-		optionsView = oView;
-		gameModel = mGame;
-		gameView = gView;
-		isPlayable();
-
-		mainMenuView.addMainMenuViewListener(new MainMenuViewListener());
-
+	void checkDataFile(){
 		try {
 			serializeFile.createNewFile(); // if file already exists will do nothing
 			br = new BufferedReader(new FileReader("resources/data.txt"));
@@ -83,7 +75,17 @@ public class MenuController {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+	
+	public MenuController(MainMenuView mView, OptionsView oView, MemoryGame mGame, GameView gView) {
+		mainMenuView = mView;
+		optionsView = oView;
+		gameModel = mGame;
+		gameView = gView;
+		isPlayable();
 
+		mainMenuView.addMainMenuViewListener(new MainMenuViewListener());
+		checkDataFile();
 	}
 
 	void startTimer() {
@@ -578,14 +580,7 @@ public class MenuController {
 						}
 					}
 			
-//
-//						if (selectedGameMode != profile.get(0) || board != profile.get(1) || player1 != profile.get(2)
-//								|| player2 != profile.get(3) || difficulty != profile.get(4) || iconSet != profile.get(5)) {
-//							removeSerialization();
-//							mainMenuView.getResumeButton().setEnabled(false);
-//							System.out.println("resume button set to false");
-//						}
-				
+
 
 					if (optionsView.getSqrFour().isSelected()) {
 						board = optionsView.getSqrFour().getActionCommand();
@@ -599,6 +594,16 @@ public class MenuController {
 
 					iconSet = (String) optionsView.getIconSetComboBox().getSelectedItem();
 
+					if(profile.size()!=0) {
+						System.out.println("profile is: " + profile);
+						if (selectedGameMode != profile.get(0) || board != profile.get(1) || player1 != profile.get(2)
+								|| player2 != profile.get(3) || difficulty != profile.get(4) || iconSet != profile.get(5)) {
+							removeSerialization();
+							mainMenuView.getResumeButton().setEnabled(false);
+							System.out.println("resume button set to false");						
+					}
+					}
+					
 					StringBuffer sbr = new StringBuffer();
 					sbr.append("mode:" + selectedGameMode + '\n');
 					sbr.append("boardsize:" + board + '\n');
@@ -620,6 +625,9 @@ public class MenuController {
 					}
 					// End of writing to a file
 					sbr.delete(0, sbr.length());
+					
+				
+					
 					optionsView.frame.setVisible(false);
 					mainMenuView.getPlayButton().setEnabled(true);
 					mainMenuView.frame.setVisible(true);

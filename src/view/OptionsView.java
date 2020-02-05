@@ -336,7 +336,6 @@ public class OptionsView extends JFrame implements ActionListener, ListSelection
 				   }
 				});
 
-
 		
 		removeButton.addActionListener(new ActionListener() {
 
@@ -487,13 +486,6 @@ public class OptionsView extends JFrame implements ActionListener, ListSelection
 
 	// set action listener on all setup view buttons
 	public void addOptionsViewListener(ActionListener selected) {
-//		sqrFour.addActionListener(selected);
-//		sqrSix.addActionListener(selected);
-//		sqrEight.addActionListener(selected);
-//		sqrTen.addActionListener(selected);
-//		soloButton.addActionListener(selected);
-//		humanButton.addActionListener(selected);
-//		computerButton.addActionListener(selected);
 		saveButton.addActionListener(selected);
 	}
 
