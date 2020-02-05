@@ -43,7 +43,7 @@ public class GameView extends JFrame implements ActionListener {
 	private JLabel timerLabel;
 	private int boardDimension;
 	private int boardSize;
-	private int lowIndex, highIndex, indexArea;
+	private int lowIndex=1, highIndex=73, indexRange=73;
 	private JButton[][] emojiButtons;
 	JButton matchesButton;
 	Font boldFont, planeFont;
@@ -82,7 +82,22 @@ public class GameView extends JFrame implements ActionListener {
 
 	public void displayGameWindow(ArrayList<String> profile) {
 
-
+		switch (profile.get(5)) {
+		case "animals":
+			lowIndex=100;
+			highIndex=149;
+			indexRange=50;
+			break;
+		case "emotics":
+		default:
+			lowIndex=1;
+			highIndex=73;
+			indexRange=73;
+			break;
+		}
+		if(profile.get(5)=="animals") {
+			
+		} else 
 		
 		boardDimension = Integer.parseInt(profile.get(1));
 		boardSize = boardDimension * 75;
@@ -198,12 +213,12 @@ public class GameView extends JFrame implements ActionListener {
 		boardPanel.setBoardSize(boardSize);
 
 		iconIndexes = new ArrayList<>();
-		for (int i = 1; i < 73; i++) {
+		for (int i = lowIndex; i < highIndex; i++) {
 			iconIndexes.add(i);
 		}
 		Collections.shuffle(iconIndexes);
 
-		iconIndexes = new ArrayList<Integer>(iconIndexes.subList(0, 72 - (72 - (boardDimension * boardDimension / 2))));
+		iconIndexes = new ArrayList<Integer>(iconIndexes.subList(0, (indexRange-1) - ((indexRange-1) - (boardDimension * boardDimension / 2))));
 
 		for (int n = 0; n < iconIndexes.size(); n++) {
 			currentIcons.add(iconIndexes.get(n));

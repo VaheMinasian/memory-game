@@ -394,7 +394,7 @@ public class MemoryGame implements Game {
 		if (wincheck == 1) {
 			dialogBoxReturnValue = JOptionPane.showOptionDialog(null,
 					"Congratulations " + player1.getName() + ", you have won! \nYour socre is " + player1.getScore()
-							+ " out of " + player1.getTries() + " moves.",
+							+ " out of " + player1.getTries() + " tries.",
 					"Memory", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);
 
 		} else if (wincheck == 2) {
@@ -417,7 +417,7 @@ public class MemoryGame implements Game {
 				else {
 				dialogBoxReturnValue = JOptionPane.showOptionDialog(null,
 						"Congratulations " + getWinnersName(winnerScore) + ", you have won! \nYour socre is "
-								+ winnerScore + " out of " + triesOfWinner + " moves.",
+								+ winnerScore + " out of " + triesOfWinner + " tries.",
 						"Memory", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options,
 						options[0]);
 				}
