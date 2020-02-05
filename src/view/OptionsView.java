@@ -52,7 +52,7 @@ public class OptionsView extends JFrame implements ActionListener, ListSelection
 	private JTextField playerNameTextField;
 	private JList<String> list;
 	private DefaultListModel<String> listModel;
-	String[] iconSet = { "emotics","animals"};
+	String[] iconSet = { "emotics","animals", "musical", "food"};
 	JComboBox<String> iconSetComboBox;
    
 	public OptionsView() {}

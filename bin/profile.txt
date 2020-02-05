@@ -1,7 +1,7 @@
-mode:s
+mode:h
 boardsize:4
 player1:as
-player2:
+player2:fd
 difficulty:null
-iconSet:animals
+iconSet:musical
 playable:true

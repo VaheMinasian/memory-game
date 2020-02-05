@@ -88,6 +88,16 @@ public class GameView extends JFrame implements ActionListener {
 			highIndex=149;
 			indexRange=50;
 			break;
+		case "musical":
+			lowIndex=200;
+			highIndex=249;
+			indexRange=50;
+			break;
+		case "food":
+			lowIndex=300;
+			highIndex=381;
+			indexRange=81;
+			break;
 		case "emotics":
 		default:
 			lowIndex=1;

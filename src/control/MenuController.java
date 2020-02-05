@@ -215,6 +215,7 @@ public class MenuController {
 		}
 
 		optionsView.getIconSetComboBox().setSelectedItem(profile.get(5));
+		
 		System.out.println("Icon set combo box value is: " + optionsView.getIconSetComboBox().getSelectedItem());
 
 		// checking player name(s) in profile and loading to UI
