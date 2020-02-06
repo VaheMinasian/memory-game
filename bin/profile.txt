@@ -1,7 +1,7 @@
 mode:c
 boardsize:4
-player1:ASDF
+player1:we
 player2:Computer
-difficulty:3
-iconSet:animals
+difficulty:2
+iconSet:musical
 playable:true

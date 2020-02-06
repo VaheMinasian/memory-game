@@ -45,7 +45,7 @@ public class MenuController {
 	private final ClockListener clock = new ClockListener();
 	private int validClicksOnCards = 0;
 	private boolean firstTimeProfileSave = false;
-	boolean justDeserialized;
+	boolean willDeserialize;
 	String activePlayerLabel = null;
 	int firstNumber, secondNumber;
 	private int factor;
@@ -241,10 +241,16 @@ public class MenuController {
 				System.exit(0);
 			}
 
+			// if 'R E S U M E' button is clicked in main menu
 			if (e.getSource() == mainMenuView.getResumeButton()) {
-				justDeserialized=true;
-				mainMenuView.getPlayButton().doClick();
+				loadGame();
+				startTimer();
 				deserialize();
+				if (!profile.get(0).equals("s")) {
+					String p1Label = gameModel.getActivePlayer() == gameModel.getPlayer1() ? "player1" : "player2";
+					gameView.setActivePlayerLight(p1Label);
+					System.out.println("in resume button");
+				} 
 			}
 
 			// actions performed if 'O P T I O N S' button is clicked in main menu
@@ -277,79 +283,83 @@ public class MenuController {
 				});
 			}
 
-			// Initialize game when 'P L A Y' button is clicked in main menu
+			// Initialize game when 'N E W G A M E' button is clicked in main menu
 			if (e.getSource() == mainMenuView.getPlayButton()) {
-				loadProfile();
-				gameModel.initializeParameters(profile);
-				mainMenuView.frame.setVisible(false);
-				gameView.displayGameWindow(profile);
-//				gameView.getBoardPanel().setBoardSize(gameView.getBoardDimension());
-				gameView.addGameViewListener(new GameListener());
-				gameView.addBackgroundButtonListener(new BackgroundButtonListener());
-//				gameModel.setActivePlayer(gameModel.getPlayer1());
-//				if (profile.get(0).equals("c") && !profile.get(4).equals("4")) {
-//				gameModel.setMemorySize(profile.get(4));
+				loadGame();
+				System.out.println("in new game button");
 
-				gameView.addWindowListener(new WindowAdapter() {
-
-					public void windowClosing(WindowEvent e) {
-						System.out.println("window closing listener should work here");
-						if (!gameModel.getActivePlayer().getName().equals("Computer")) {
-							System.out.println("timer should stop here");
-							stopTimer();
-							System.out.println("stoptime before switching: " + stopTime);
-							switch (gameModel.getInterruptionMessage(profile.get(0), gameView)) {
-							case -1:
-							case 0:// resuming game
-								startTimer();
-								gameView.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-								break;
-							case 1:// go to main menu
-								serialize();
-								gameModel = new MemoryGame();
-								gameView.dispose();
-								gameView = new GameView();
-								gameView.setVisible(false);
-								mainMenuView.frame.setVisible(true);
-								mainMenuView.getResumeButton().setEnabled(true);
-
-								break;
-							case 2:// quit game
-								serialize();
-								System.exit(0);
-								break;
-							default:
-								gameView.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-							}
+				if (!profile.get(0).equals("s")) {
+					gameModel.randomFirstPlayer();
+				}
+				if (gameModel.getActivePlayer().getName().equals("Computer")) {
+					new java.util.Timer().schedule(new java.util.TimerTask() {
+						@Override
+						public void run() {
+							playTheComputer();
 						}
-					}
-				});
+					}, 1000);
+				}
+
+				String p1Label = gameModel.getActivePlayer() == gameModel.getPlayer1() ? "player1" : "player2";
+				gameView.setActivePlayerLight(p1Label);
+				
 				startTime = System.currentTimeMillis();
 				System.out.println("in listener " + startTime);
+
 				timer.start(); // gameView.getTimerLabel().setText(sdf.format(new java.util.Date()));
-				if(justDeserialized) {
-					String p1Label = "player1";
-				} else{
-					if (!profile.get(0).equals("s")) {
-						gameModel.randomFirstPlayer();
-					}
-					if (gameModel.getActivePlayer().getName().equals("Computer")) {
-						new java.util.Timer().schedule(new java.util.TimerTask() {
-							@Override
-							public void run() {
-								playTheComputer();
-							}
-						}, 1000);
-					}		
-				}
-				String p1Label = gameModel.getActivePlayer() == gameModel.getPlayer1() ? "player1" : "player2";
-				gameView.setActivePlayerLight(p1Label);			
 			}
 		}// End of Action performed
 
+		void loadGame() {
+			loadProfile();
+			gameModel.initializeParameters(profile);
+			mainMenuView.frame.setVisible(false);
+			gameView.displayGameWindow(profile);
+//			gameView.getBoardPanel().setBoardSize(gameView.getBoardDimension());
+			gameView.addGameViewListener(new GameListener());
+			gameView.addBackgroundButtonListener(new BackgroundButtonListener());
+//			gameModel.setActivePlayer(gameModel.getPlayer1());
+//			if (profile.get(0).equals("c") && !profile.get(4).equals("4")) {
+//			gameModel.setMemorySize(profile.get(4));
+
+			gameView.addWindowListener(new WindowAdapter() {
+
+				public void windowClosing(WindowEvent e) {
+					if (!gameModel.getActivePlayer().getName().equals("Computer")) {
+						System.out.println("timer should stop here");
+						stopTimer();
+						System.out.println("stoptime before switching: " + stopTime);
+						switch (gameModel.getInterruptionMessage(profile.get(0), gameView)) {
+						case -1:
+						case 0:// resuming game
+							startTimer();
+							gameView.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+							break;
+						case 1:// go to main menu
+							serialize();
+							gameModel = new MemoryGame();
+							gameView.dispose();
+							gameView = new GameView();
+							gameView.setVisible(false);
+							mainMenuView.frame.setVisible(true);
+							mainMenuView.getResumeButton().setEnabled(true);
+
+							break;
+						case 2:// quit game
+							serialize();
+							System.exit(0);
+							break;
+						default:
+							gameView.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+						}
+					}
+				}
+			});
+			
+		}
+		
 		@SuppressWarnings("null")
 		void serialize() {
-
 			try {
 				temp.clear();
 				// create a new file with an ObjectOutputStream
@@ -460,9 +470,9 @@ public class MenuController {
 						System.out.println("block 1 executed");
 					} else {
 						gameModel.setActivePlayer(gameModel.getPlayer2());
-						System.out.println("block 2 executed");						
+						System.out.println("block 2 executed");
 					}
-					
+
 					System.out.println("deserialized current player is: " + gameModel.getActivePlayer().getName());
 
 					// restoring currentIcons
@@ -573,10 +583,10 @@ public class MenuController {
 						}
 					} else if (optionsView.getHumanButton().isSelected()) {
 						if (optionsView.getListModel().getSize() != 2) {
-						Toolkit.getDefaultToolkit().beep();
-						JOptionPane.showMessageDialog(null, "Please register 2 players!", "Memory",
-								JOptionPane.INFORMATION_MESSAGE);
-						return;
+							Toolkit.getDefaultToolkit().beep();
+							JOptionPane.showMessageDialog(null, "Please register 2 players!", "Memory",
+									JOptionPane.INFORMATION_MESSAGE);
+							return;
 						}
 					}
 
@@ -625,7 +635,7 @@ public class MenuController {
 							mainMenuView.getResumeButton().setEnabled(false);
 							System.out.println("resume button set to false");
 						}
-					} 
+					}
 
 					StringBuffer sbr = new StringBuffer();
 					sbr.append("mode:" + selectedGameMode + '\n');
@@ -895,7 +905,7 @@ public class MenuController {
 
 	void resetGame() {
 		mainMenuView.getResumeButton().setEnabled(false);
-		justDeserialized=false;
+		willDeserialize = false;
 		stopTimer();
 		switch (gameModel.getMessage(profile.get(0))) {
 		case 0:
