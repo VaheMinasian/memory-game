@@ -876,6 +876,7 @@ public class MenuController {
 	}
 
 	void resetGame() {
+		mainMenuView.getResumeButton().setEnabled(false);
 		stopTimer();
 		switch (gameModel.getMessage(profile.get(0))) {
 		case 0:
@@ -898,6 +899,8 @@ public class MenuController {
 			gameView = new GameView();
 			gameView.setVisible(false);
 			mainMenuView.frame.setVisible(true);
+			mainMenuView.getResumeButton().setEnabled(false);
+			
 			break;
 		case 2:
 			System.out.println("inside case 2");
