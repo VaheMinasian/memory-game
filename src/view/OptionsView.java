@@ -227,31 +227,9 @@ public class OptionsView extends JFrame implements ActionListener, ListSelection
 
 			public void actionPerformed(ActionEvent e) {
 
-				//V A L I D A T I O N 
-				if (listModel.getSize() + 1 > 2) {
-					if ((humanButton.isSelected()) && (listModel.getSize() + 1 > 2)) {
-						Toolkit.getDefaultToolkit().beep();
-						JOptionPane.showMessageDialog(null, "You can have only 2 players in \"human\" mode!", "Memory",
-								JOptionPane.INFORMATION_MESSAGE);
-						playerNameTextField.setText("");
-						return;
-					} else if (((soloButton.isSelected()) || (computerButton.isSelected()))
-							&& (listModel.getSize() + 1 > 1)) {
-						Toolkit.getDefaultToolkit().beep();
-						JOptionPane.showMessageDialog(null,
-								"You can have only 1 player in \"solo\" or  \"computer\" mode!", "Memory",
-								JOptionPane.INFORMATION_MESSAGE);
-						playerNameTextField.setText("");
-						playerNameTextField.requestFocusInWindow();
-						return;
-					}
-					Toolkit.getDefaultToolkit().beep();
-					JOptionPane.showMessageDialog(null, "You can't register more than 2 players!", "Memory",
-							JOptionPane.INFORMATION_MESSAGE);
-					playerNameTextField.setText("");
-					playerNameTextField.requestFocusInWindow();
-					return;
-				}
+				//NAME VALIDATION 
+				
+				name = playerNameTextField.getText();
 				// User didn't type in a unique name...
 				if (listModel.contains(name)) {
 					Toolkit.getDefaultToolkit().beep();
@@ -289,8 +267,6 @@ public class OptionsView extends JFrame implements ActionListener, ListSelection
 					list.setSelectedIndex(index);
 					list.ensureIndexIsVisible(index);
 				}
-
-				
 			}
 
 			// Required by DocumentListener.

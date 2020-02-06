@@ -16,7 +16,6 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
-import java.util.logging.Handler;
 
 import javax.swing.AbstractButton;
 import javax.swing.JFrame;
@@ -46,6 +45,7 @@ public class MenuController {
 	private final ClockListener clock = new ClockListener();
 	private int validClicksOnCards = 0;
 	private boolean firstTimeProfileSave = false;
+	boolean justDeserialized;
 	String activePlayerLabel = null;
 	int firstNumber, secondNumber;
 	private int factor;
@@ -215,7 +215,7 @@ public class MenuController {
 		}
 
 		optionsView.getIconSetComboBox().setSelectedItem(profile.get(5));
-		
+
 		System.out.println("Icon set combo box value is: " + optionsView.getIconSetComboBox().getSelectedItem());
 
 		// checking player name(s) in profile and loading to UI
@@ -242,6 +242,7 @@ public class MenuController {
 			}
 
 			if (e.getSource() == mainMenuView.getResumeButton()) {
+				justDeserialized=true;
 				mainMenuView.getPlayButton().doClick();
 				deserialize();
 			}
@@ -326,19 +327,23 @@ public class MenuController {
 				startTime = System.currentTimeMillis();
 				System.out.println("in listener " + startTime);
 				timer.start(); // gameView.getTimerLabel().setText(sdf.format(new java.util.Date()));
-				if (!profile.get(0).equals("s")) {
-					gameModel.randomFirstPlayer();
-				}
-				if (gameModel.getActivePlayer().getName().equals("Computer")) {
-					new java.util.Timer().schedule(new java.util.TimerTask() {
-						@Override
-						public void run() {
-							playTheComputer();
-						}
-					}, 1000);
+				if(justDeserialized) {
+					String p1Label = "player1";
+				} else{
+					if (!profile.get(0).equals("s")) {
+						gameModel.randomFirstPlayer();
+					}
+					if (gameModel.getActivePlayer().getName().equals("Computer")) {
+						new java.util.Timer().schedule(new java.util.TimerTask() {
+							@Override
+							public void run() {
+								playTheComputer();
+							}
+						}, 1000);
+					}		
 				}
 				String p1Label = gameModel.getActivePlayer() == gameModel.getPlayer1() ? "player1" : "player2";
-				gameView.setActivePlayerLight(p1Label);
+				gameView.setActivePlayerLight(p1Label);			
 			}
 		}// End of Action performed
 
@@ -452,8 +457,12 @@ public class MenuController {
 					// restoring active player
 					if (gameModel.getPlayer1().getName().equals(ois.readObject().toString())) {
 						gameModel.setActivePlayer(gameModel.getPlayer1());
-					} else
+						System.out.println("block 1 executed");
+					} else {
 						gameModel.setActivePlayer(gameModel.getPlayer2());
+						System.out.println("block 2 executed");						
+					}
+					
 					System.out.println("deserialized current player is: " + gameModel.getActivePlayer().getName());
 
 					// restoring currentIcons
@@ -512,12 +521,31 @@ public class MenuController {
 		// Actions to perform when 'save' is clicked in options menu
 		public void actionPerformed(ActionEvent e) {
 
-			if (e.getSource() == optionsView.getSaveButton()) {
-				if (optionsView.getrButtonGroup().getSelection() == null) {
-					System.out.println("no radio button selected");
+			if (optionsView.getGameMode().getSelection() == null) {
+				System.out.println("no game mode");
+				Toolkit.getDefaultToolkit().beep();
+				JOptionPane.showMessageDialog(null, "Please choose game mode!", "Memory",
+						JOptionPane.INFORMATION_MESSAGE);
+				return;
+			}
 
-				} else {
-					System.out.println(optionsView.getrButtonGroup().getSelection());
+			if (optionsView.getDimensions().getSelection() == null) {
+				System.out.println("no board selection");
+				Toolkit.getDefaultToolkit().beep();
+				JOptionPane.showMessageDialog(null, "Please select board Size!", "Memory",
+						JOptionPane.INFORMATION_MESSAGE);
+				return;
+			}
+
+			if (e.getSource() == optionsView.getSaveButton()) {
+				if (optionsView.getComputerButton().isSelected()) {
+					if (optionsView.getrButtonGroup().getSelection() == null) {
+						System.out.println("no radio button selected");
+						Toolkit.getDefaultToolkit().beep();
+						JOptionPane.showMessageDialog(null, "Please select difficulty level!", "Memory",
+								JOptionPane.INFORMATION_MESSAGE);
+						return;
+					}
 				}
 				// V A L I D A T I O N
 				// narrowing down possible combinations of selections of game mode, board size
@@ -525,9 +553,9 @@ public class MenuController {
 				if ((optionsView.getGameMode().getSelection() != null)
 						&& (optionsView.getDimensions().getSelection() != null)) {
 					if (optionsView.getSoloButton().isSelected()) {
-						if (optionsView.getListModel().getSize() != 1) {
+						if (optionsView.getListModel().getSize() == 0) {
 							Toolkit.getDefaultToolkit().beep();
-							JOptionPane.showMessageDialog(null, "Please register a player!", "Memory",
+							JOptionPane.showMessageDialog(null, "Please add player(s)!", "Memory",
 									JOptionPane.INFORMATION_MESSAGE);
 							return;
 						}
@@ -535,36 +563,32 @@ public class MenuController {
 					}
 					// V A L I D A T I O N
 					// Play against computer
-					else if (optionsView.getComputerButton().isSelected()) {
+					if (optionsView.getComputerButton().isSelected() || optionsView.getSoloButton().isSelected()) {
 						if (optionsView.getListModel().getSize() != 1) {
 							Toolkit.getDefaultToolkit().beep();
-							JOptionPane.showMessageDialog(null, "Please register a player!", "Memory",
+							JOptionPane.showMessageDialog(null, "Please register one player!", "Memory",
 									JOptionPane.INFORMATION_MESSAGE);
-							return;
-						} else if (optionsView.getrButtonGroup().getSelection() == null) {
-							Toolkit.getDefaultToolkit().beep();
-							JOptionPane.showMessageDialog(null, "Please select difficulty level!", "Memory",
-									JOptionPane.INFORMATION_MESSAGE);
+
 							return;
 						}
+					} else if (optionsView.getHumanButton().isSelected()) {
+						if (optionsView.getListModel().getSize() != 2) {
+						Toolkit.getDefaultToolkit().beep();
+						JOptionPane.showMessageDialog(null, "Please register 2 players!", "Memory",
+								JOptionPane.INFORMATION_MESSAGE);
+						return;
+						}
+					}
 
+					if (optionsView.getComputerButton().isSelected()) {
 						player1 = optionsView.getListModel().getElementAt(0);
 						player2 = "Computer";
-
-					}
-					// V A L I D A T I O N
-					// Play between 2 human
-					else if (optionsView.getHumanButton().isSelected()) {
-						if (optionsView.getListModel().getSize() != 2) {
-							Toolkit.getDefaultToolkit().beep();
-							JOptionPane.showMessageDialog(null, "Please register 2 player names.", "Memory",
-									JOptionPane.INFORMATION_MESSAGE);
-							return;
-						}
+					} else if (optionsView.getHumanButton().isSelected()) {
 						player1 = optionsView.getListModel().getElementAt(0);
 						player2 = optionsView.getListModel().getElementAt(1);
-
-					} // END OF OPTIONS MENU VALIDATIONS
+					} else if (optionsView.getSoloButton().isSelected()) {
+						player1 = optionsView.getListModel().getElementAt(0);
+					}
 
 					// Writing to profile file.
 					if (optionsView.getSoloButton().isSelected()) {
@@ -601,7 +625,7 @@ public class MenuController {
 							mainMenuView.getResumeButton().setEnabled(false);
 							System.out.println("resume button set to false");
 						}
-					}
+					} 
 
 					StringBuffer sbr = new StringBuffer();
 					sbr.append("mode:" + selectedGameMode + '\n');
@@ -628,12 +652,6 @@ public class MenuController {
 					optionsView.frame.setVisible(false);
 					mainMenuView.getPlayButton().setEnabled(true);
 					mainMenuView.frame.setVisible(true);
-				} else {
-					Toolkit.getDefaultToolkit().beep();
-					JOptionPane.showMessageDialog(null, "Please Fill all the necessary fields before saving", "Memory",
-							JOptionPane.INFORMATION_MESSAGE);
-					return;
-
 				}
 			}
 		}
@@ -877,6 +895,7 @@ public class MenuController {
 
 	void resetGame() {
 		mainMenuView.getResumeButton().setEnabled(false);
+		justDeserialized=false;
 		stopTimer();
 		switch (gameModel.getMessage(profile.get(0))) {
 		case 0:
@@ -900,7 +919,7 @@ public class MenuController {
 			gameView.setVisible(false);
 			mainMenuView.frame.setVisible(true);
 			mainMenuView.getResumeButton().setEnabled(false);
-			
+
 			break;
 		case 2:
 			System.out.println("inside case 2");
