@@ -251,7 +251,6 @@ public class GameView extends JFrame implements ActionListener {
 		mainPanel.add(turnPanel);
 		mainPanel.add(namesPanel);
 		mainPanel.add(timePanel);
-//		this.add(timePanel);
 		this.add(mainPanel);
 		this.pack();
 		
@@ -260,7 +259,7 @@ public class GameView extends JFrame implements ActionListener {
 		this.setIconImage(titleIcon.getImage());
 		this.setLocationRelativeTo(null);
 		this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-//		this.setResizable(false);
+		this.setResizable(false);
 		this.setVisible(true);
 		
 	}

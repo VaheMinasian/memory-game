@@ -2,6 +2,6 @@ mode:c
 boardsize:4
 player1:we
 player2:Computer
-difficulty:2
-iconSet:musical
+difficulty:1
+iconSet:animals
 playable:true
