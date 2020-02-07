@@ -1,7 +1,7 @@
-mode:c
-boardsize:4
-player1:we
-player2:Computer
-difficulty:1
+mode:h
+boardsize:6
+player1:fdas
+player2:we
+difficulty:null
 iconSet:animals
 playable:true

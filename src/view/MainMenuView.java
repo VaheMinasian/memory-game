@@ -21,15 +21,13 @@ public class MainMenuView extends JFrame implements ActionListener {
 
 	public JFrame frame;
 	public JPanel panel;
+	private JButton resumeButton, playButton, optionsButton, exitButton;
 
-	private JButton playButton;
-	private JButton optionsButton;
-	private JButton exitButton;
-	private JButton resumeButton;
 
 //	  this is the constructor method for the class MainMenuView creates the main menu view object.
 	public MainMenuView() {
 
+		//set up main menu frame and main panel
 		frame = new JFrame("Memory");
 		ImageIcon frameIcon = new ImageIcon(OptionsView.class.getResource("/46.png"));
 		frame.setIconImage(frameIcon.getImage());
@@ -39,47 +37,44 @@ public class MainMenuView extends JFrame implements ActionListener {
 				TitledBorder.CENTER, TitledBorder.TOP));
 		frame.getContentPane().add(panel);
 
+		
+		//create JButtons
 		resumeButton = new JButton("resume game");
 		resumeButton.setFont((new Font("dialog", Font.BOLD, 13)));
 		resumeButton.setPreferredSize(new Dimension(140, 60));
-//		resumeButton.setActionCommand("start");
 		resumeButton.setEnabled(false);
-		
 		playButton = new JButton("new game");
 		playButton.setFont((new Font("dialog", Font.BOLD, 13)));
 		playButton.setPreferredSize(new Dimension(140, 60));
-//		playButton.setActionCommand("start");
 		playButton.setEnabled(false);
-
 		optionsButton = new JButton("setup");
 		optionsButton.setFont((new Font("dialog", Font.BOLD, 13)));
 		optionsButton.setPreferredSize(new Dimension(140, 60));
-//		optionsButton.setActionCommand("options");
-
 		exitButton = new JButton("Quit");
 		exitButton.setFont((new Font("dialog", Font.BOLD, 13)));
 		exitButton.setPreferredSize(new Dimension(140, 60));
-//		exitButton.setActionCommand("exit");
 
-		GridBagConstraints c = new GridBagConstraints();
-
-		c.insets = new Insets(12, 2, 12, 2);
-		c.gridx = 0;
-		c.gridy = 0;
-		panel.add(resumeButton, c);
 		
-		c.gridx = 0;
-		c.gridy = 1;
-		panel.add(playButton, c);
+		//add buttons to main panel using gridbaglayout
+		GridBagConstraints gbc = new GridBagConstraints();
+		gbc.insets = new Insets(12, 2, 12, 2);
+		gbc.gridx = 0;
+		gbc.gridy = 0;
+		panel.add(resumeButton, gbc);
+		
+		gbc.gridx = 0;
+		gbc.gridy = 1;
+		panel.add(playButton, gbc);
 
-		c.gridx = 0;
-		c.gridy = 2;
-		panel.add(optionsButton, c);
+		gbc.gridx = 0;
+		gbc.gridy = 2;
+		panel.add(optionsButton, gbc);
 
-		c.gridx = 0;
-		c.gridy = 3;
-		panel.add(exitButton, c);
+		gbc.gridx = 0;
+		gbc.gridy = 3;
+		panel.add(exitButton, gbc);
 
+		//finalize frame to display UI
 		frame.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 		frame.pack();
 		frame.setLocationRelativeTo(null);
@@ -99,10 +94,6 @@ public class MainMenuView extends JFrame implements ActionListener {
 
 	public JButton getResumeButton() {
 		return resumeButton;
-	}
-	
-	public void setResumeButton(JButton resumeButton) {
-		this.resumeButton = resumeButton;
 	}
 	
 	public JButton getOptionsButton() {
