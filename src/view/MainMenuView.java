@@ -43,16 +43,20 @@ public class MainMenuView extends JFrame implements ActionListener {
 		resumeButton.setFont((new Font("dialog", Font.BOLD, 13)));
 		resumeButton.setPreferredSize(new Dimension(140, 60));
 		resumeButton.setEnabled(false);
+		resumeButton.setToolTipText("resume last saved game");
 		playButton = new JButton("new game");
 		playButton.setFont((new Font("dialog", Font.BOLD, 13)));
 		playButton.setPreferredSize(new Dimension(140, 60));
 		playButton.setEnabled(false);
+		playButton.setToolTipText("start a new game with the last saved options");
 		optionsButton = new JButton("setup");
 		optionsButton.setFont((new Font("dialog", Font.BOLD, 13)));
 		optionsButton.setPreferredSize(new Dimension(140, 60));
+		optionsButton.setToolTipText("change profile options");
 		exitButton = new JButton("Quit");
 		exitButton.setFont((new Font("dialog", Font.BOLD, 13)));
 		exitButton.setPreferredSize(new Dimension(140, 60));
+		exitButton.setToolTipText("save and quit");
 
 		
 		//add buttons to main panel using gridbaglayout

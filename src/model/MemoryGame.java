@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Random;
 
 import javax.swing.JOptionPane;
+import javax.swing.UIManager;
 
 import control.ButtonNotAvailableException;
 import model.Card.CardState;
@@ -377,9 +378,10 @@ public class MemoryGame implements Game {
 
 	public int getInterruptionMessage(String s, GameView view) {
 		
-		String[] options = { "resume", "Main Menu", "Quit" };
+		String[] options = { "Resume", "Main Menu", "Save & Quit" };
 		int dialogReturnValue=-1;
 		dialogReturnValue = JOptionPane.showOptionDialog(null, "            GAME PAUSED", "Memory", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);
+		
 		return dialogReturnValue;
 	}
 	

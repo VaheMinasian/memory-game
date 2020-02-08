@@ -33,6 +33,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.JToggleButton;
 import javax.swing.ListSelectionModel;
+import javax.swing.ToolTipManager;
 import javax.swing.border.TitledBorder;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
@@ -97,6 +98,7 @@ public class OptionsView extends JFrame implements ActionListener, ListSelection
 		soloButton.setOpaque(false);
 		soloButton.setFocusable(false);
 		soloButton.setActionCommand("s");
+		soloButton.setToolTipText("play solo");
 		humanButton = new JToggleButton();
 		humanButton.setPreferredSize(new Dimension(70, 50));
 		ImageIcon humanImageIcon = new ImageIcon(OptionsView.class.getResource("/human.png"));
@@ -106,6 +108,7 @@ public class OptionsView extends JFrame implements ActionListener, ListSelection
 		humanButton.setOpaque(false);
 		humanButton.setFocusable(false);
 		humanButton.setActionCommand("h");
+		humanButton.setToolTipText("play with a friend");
 		computerButton = new JToggleButton();
 		computerButton.setPreferredSize(new Dimension(70, 50));
 		ImageIcon computerImageIcon = new ImageIcon(OptionsView.class.getResource("/computer.png"));
@@ -115,6 +118,7 @@ public class OptionsView extends JFrame implements ActionListener, ListSelection
 		computerButton.setOpaque(false);
 		computerButton.setFocusable(false);
 		computerButton.setActionCommand("c");
+		computerButton.setToolTipText("play against the computer");
 		gameModeGroup = new ButtonGroup();
 		gameModeGroup.add(soloButton);
 		gameModeGroup.add(humanButton);
@@ -177,6 +181,10 @@ public class OptionsView extends JFrame implements ActionListener, ListSelection
 		easy.setEnabled(false);
 		medium.setEnabled(false);
 		hard.setEnabled(false);
+		novice.setToolTipText("actual only when playing against computer");
+		easy.setToolTipText("actual only when playing against computer");
+		medium.setToolTipText("actual only when playing against computer");
+		hard.setToolTipText("actual only when playing against computer");
 		radioButtonGroup = new ButtonGroup();
 		radioButtonGroup.add(novice);
 		radioButtonGroup.add(easy);
@@ -191,6 +199,7 @@ public class OptionsView extends JFrame implements ActionListener, ListSelection
 		difficultyPanel.add(easy);
 		difficultyPanel.add(medium);
 		difficultyPanel.add(hard);
+		difficultyPanel.setToolTipText("actual only when playing against computer");
 
 		// setup names list panel
 		listModel = new DefaultListModel<String>();
@@ -301,11 +310,21 @@ public class OptionsView extends JFrame implements ActionListener, ListSelection
 		computerButton.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent ev) {
 				if (ev.getStateChange() == ItemEvent.SELECTED) {
+					difficultyPanel.setToolTipText(null);
+					novice.setToolTipText(null);
+					easy.setToolTipText(null);
+					medium.setToolTipText(null);
+					hard.setToolTipText(null);
 					novice.setEnabled(true);
 					easy.setEnabled(true);
 					medium.setEnabled(true);
 					hard.setEnabled(true);
 				} else if (ev.getStateChange() == ItemEvent.DESELECTED) {
+					difficultyPanel.setToolTipText("actual only when playing against computer");
+					novice.setToolTipText("actual only when playing against computer");
+					easy.setToolTipText("actual only when playing against computer");
+					medium.setToolTipText("actual only when playing against computer");
+					hard.setToolTipText("actual only when playing against computer");
 					radioButtonGroup.clearSelection();
 					novice.setEnabled(false);
 					easy.setEnabled(false);

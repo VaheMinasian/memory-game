@@ -401,13 +401,6 @@ public class MenuController {
 				oos.writeObject(startTime);
 				oos.writeObject(stopTime);
 				System.out.println("temp items are: " + temp);
-//				oos.writeObject(gameModel.getCardIndexX());
-//				oos.writeObject(gameModel.getCardIndexY());
-//				oos.writeObject(gameModel.getSavedIndexX());
-//				oos.writeObject(gameModel.getSavedIndexY());
-//				oos.writeObject(gameModel.getSavedIcon());
-//				oos.writeObject(gameModel.getTempIndexValue());
-//				oos.writeObject(gameModel.getSavedCardNumber());
 
 				oos.close();
 				fos.close();
@@ -625,7 +618,13 @@ public class MenuController {
 					}
 
 					iconSet = (String) optionsView.getIconSetComboBox().getSelectedItem();
-
+					
+//					int dialogButton = JOptionPane.YES_NO_OPTION;
+//					int dialogResult = JOptionPane.showConfirmDialog (null, "your game will be lost! \nconinue?","Warning",dialogButton);
+//					if(dialogResult == JOptionPane.NO_OPTION){
+//					  return;
+//					}
+					
 					if (profile.size() != 0) {
 						System.out.println("profile is: " + profile);
 						if (selectedGameMode != profile.get(0) || board != profile.get(1) || player1 != profile.get(2)

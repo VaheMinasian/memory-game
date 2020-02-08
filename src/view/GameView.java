@@ -19,12 +19,14 @@ import java.util.TimeZone;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
+import javax.swing.ButtonGroup;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JToggleButton;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
@@ -36,89 +38,67 @@ import model.Card;
 @SuppressWarnings("serial")
 public class GameView extends JFrame implements ActionListener {
 
-	private JPanel mainPanel, namesPanel, turnPanel, timePanel;
+	private JPanel mainPanel, turnPanel, namesPanel, timePanel;
 	private MyPanel boardPanel;
-	private JLabel player1Label, player2Label, score1Label, score2Label;
-	private JLabel p1LabelGreen, p2LabelGreen, matchesLabel;
-	private JLabel timerLabel;
-	private int boardDimension;
-	private int boardSize;
-	private int lowIndex=1, highIndex=73, indexRange=73;
+	private JLabel player1Label, player2Label, score1Label, score2Label, p1TurnLabel, p2TurnLabel, iconBackgroundTogglerLabel, timerLabel;
+	private int boardSize, boardDimension, lowIndex = 1, highIndex = 73, indexRange = 73;
 	private JButton[][] emojiButtons;
 	JButton matchesButton;
 	Font boldFont, planeFont;
-	private ArrayList<Integer> iconIndexes;
-	private ArrayList<Integer> currentIcons;
+	private ArrayList<Integer> allIconIndexes, currentIconIndexes;
 	private ImageIcon backgroundIcon;
-	private final ImageIcon titleIcon = new ImageIcon(GameView.class.getResource("/46.png"));
-	private final ImageIcon patternIcon = new ImageIcon(GameView.class.getResource("/pattern.png"));
-	private final ImageIcon greenOn = new ImageIcon(GameView.class.getResource("/green-on.png"));
-	private final ImageIcon greenOff = new ImageIcon(GameView.class.getResource("/green-off.png"));
-	private final ImageIcon unselectedImage = new ImageIcon(GameView.class.getResource("/image.png"));
-	private final ImageIcon selectedImage = new ImageIcon(GameView.class.getResource("/46-grey.png"));
-	private Icon image, image1, image2, ui, si;
-	private Image img;
+	private Image scaledImage;
+	private final ImageIcon titleIcon = new ImageIcon(GameView.class.getResource("/46.png")),
+			patternIcon = new ImageIcon(GameView.class.getResource("/pattern.png")),
+			greenOn = new ImageIcon(GameView.class.getResource("/green-on.png")),
+			greenOff = new ImageIcon(GameView.class.getResource("/green-off.png")),
+			unselectedImageIcon = new ImageIcon(GameView.class.getResource("/image.png")),
+			selectedImageIcon = new ImageIcon(GameView.class.getResource("/46-grey.png"));
+	private Icon scaledImageIcon, greenOnIcon, greenOffIcon, unselectedIcon, selectedIcon;
 	boolean buttonState;
-	
-
-	Border emptyBorder; 
+	Border emptyBorder;
 	private Date elapsed;
 	SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
 
-
-	
-
-	
-	ImageIcon getScaledImage(ImageIcon image, int height, int width) {
-
-		img = image.getImage();
-		img = img.getScaledInstance(width, height, java.awt.Image.SCALE_SMOOTH);
-		image.setImage(img);
-		return image;
-	}
-
-	public GameView() {
-	}
+	public GameView() {}
 
 	public void displayGameWindow(ArrayList<String> profile) {
-
 		switch (profile.get(5)) {
 		case "animals":
-			lowIndex=100;
-			highIndex=149;
-			indexRange=50;
+			lowIndex = 100;
+			highIndex = 149;
+			indexRange = 50;
 			break;
 		case "musical":
-			lowIndex=200;
-			highIndex=249;
-			indexRange=50;
+			lowIndex = 200;
+			highIndex = 249;
+			indexRange = 50;
 			break;
 		case "food":
-			lowIndex=300;
-			highIndex=381;
-			indexRange=81;
+			lowIndex = 300;
+			highIndex = 381;
+			indexRange = 81;
 			break;
 		case "emotics":
 		default:
-			lowIndex=1;
-			highIndex=73;
-			indexRange=73;
+			lowIndex = 1;
+			highIndex = 73;
+			indexRange = 73;
 			break;
 		}
-		if(profile.get(5)=="animals") {
-			
-		} else 
 		
 		boardDimension = Integer.parseInt(profile.get(1));
 		boardSize = boardDimension * 75;
-		timePanel=new JPanel();
+		timePanel = new JPanel();
 		timerLabel = new JLabel("00:00:00");
 		timerLabel.setAlignmentY(RIGHT_ALIGNMENT);
-		timerLabel.setFont(new Font("Tahoma", Font.PLAIN, 20 ));
+		timerLabel.setFont(new Font("Tahoma", Font.PLAIN, 20));
 //		timerLabel.setForeground(Color.ORANGE);
-		timerLabel.setBounds(96,221,200,220);
+		timerLabel.setBounds(96, 221, 200, 220);
+		timerLabel.setToolTipText("elapsed time");
+
 		timePanel.add(timerLabel);
-		
+
 		boldFont = new Font("Courier", Font.BOLD, boardSize / 20);
 		planeFont = new Font("Courier", Font.PLAIN, boardSize / 20);
 
@@ -127,7 +107,7 @@ public class GameView extends JFrame implements ActionListener {
 		namesPanel = new JPanel();
 
 		namesPanel.setAlignmentX(CENTER_ALIGNMENT);
-		namesPanel.setPreferredSize(new Dimension(boardSize, boardSize *2 / 7));
+		namesPanel.setPreferredSize(new Dimension(boardSize, boardSize * 2 / 7));
 		namesPanel.setLayout(new GridLayout(2, 2));
 		namesPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(),
 				" P L A Y E R S     &     S C O R E S ", TitledBorder.CENTER, TitledBorder.TOP));
@@ -135,37 +115,39 @@ public class GameView extends JFrame implements ActionListener {
 		turnPanel = new JPanel();
 		turnPanel.setAlignmentX(CENTER_ALIGNMENT);
 		turnPanel.setLayout(new GridBagLayout());
-		turnPanel.setPreferredSize(new Dimension(boardSize, boardSize *2 / 11));
-		turnPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(),
-				"", TitledBorder.CENTER, TitledBorder.TOP));
+		turnPanel.setPreferredSize(new Dimension(boardSize, boardSize * 2 / 11));
+		turnPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), "",
+				TitledBorder.CENTER, TitledBorder.TOP));
+
+		greenOnIcon = getScaledImage(greenOn, boardDimension * 8, boardDimension * 8);
+		greenOffIcon = getScaledImage(greenOff, boardDimension * 8, boardDimension * 8);
+		unselectedIcon = getScaledImage(unselectedImageIcon, boardDimension * 8, boardDimension * 8);
+		selectedIcon = getScaledImage(selectedImageIcon, boardDimension * 8, boardDimension * 8);
 		
-		image1 = getScaledImage(greenOn, boardDimension * 8, boardDimension * 8);
-		image2 = getScaledImage(greenOff, boardDimension * 8, boardDimension * 8);
-		ui = getScaledImage(unselectedImage, boardDimension * 8 , boardDimension * 8);
-		si = getScaledImage(selectedImage, boardDimension * 8, boardDimension * 8);
-		matchesLabel = new JLabel();
-		matchesLabel.setSize(new Dimension((int)Math.pow(boardDimension, 2),(int)Math.pow(boardDimension, 2)));
-		matchesLabel.setIcon(ui);
-		p1LabelGreen = new JLabel();
-		p2LabelGreen = new JLabel();
-		
-		emptyBorder= BorderFactory.createEmptyBorder();
+		iconBackgroundTogglerLabel = new JLabel();
+		iconBackgroundTogglerLabel.setSize(new Dimension((int) Math.pow(boardDimension, 2), (int) Math.pow(boardDimension, 2)));
+		iconBackgroundTogglerLabel.setIcon(unselectedIcon);
+		p1TurnLabel = new JLabel();
+		p2TurnLabel = new JLabel();
+
+		emptyBorder = BorderFactory.createEmptyBorder();
 		matchesButton = new JButton();
 		matchesButton.setBorder(emptyBorder);
-		matchesButton.setBackground(new java.awt.Color(238,238,238));
+		matchesButton.setBackground(new java.awt.Color(238, 238, 238));
 		matchesButton.setOpaque(true);
-		matchesButton.setMargin(new Insets(0,3,0,3));
-		matchesButton.setPreferredSize( new Dimension( (int)Math.pow(boardDimension, 3), (int)Math.pow(boardDimension, 3) ) );
-		matchesButton.add(matchesLabel);
+		matchesButton.setMargin(new Insets(0, 3, 0, 3));
+		matchesButton.setPreferredSize(new Dimension((int) Math.pow(boardDimension, 3), (int) Math.pow(boardDimension, 3)));
+		matchesButton.add(iconBackgroundTogglerLabel);
+		matchesButton.setToolTipText("showing image in background");
 
 		GridBagConstraints gbc = new GridBagConstraints();
 		gbc.fill = GridBagConstraints.CENTER;
-		
+
 		if (!profile.get(0).equals("s")) {
 			gbc.gridx = 0;
 			gbc.gridy = 0;
 			gbc.weightx = GridBagConstraints.CENTER;
-			turnPanel.add(p1LabelGreen, gbc);
+			turnPanel.add(p1TurnLabel, gbc);
 
 			gbc.gridx = 1;
 			gbc.gridy = 0;
@@ -174,14 +156,14 @@ public class GameView extends JFrame implements ActionListener {
 			gbc.gridx = 2;
 			gbc.gridy = 0;
 			gbc.weightx = GridBagConstraints.CENTER;
-			turnPanel.add(p2LabelGreen, gbc);
-			
+			turnPanel.add(p2TurnLabel, gbc);
+
 		} else {
 			gbc.gridx = 0;
 			gbc.gridy = 0;
 			turnPanel.add(matchesButton, gbc);
 		}
-			
+
 		player1Label = makeLabel("N");
 		player1Label.setText(profile.get(2));
 		player1Label.setVerticalAlignment(SwingConstants.BOTTOM);
@@ -190,6 +172,7 @@ public class GameView extends JFrame implements ActionListener {
 		score1Label.setFont(planeFont);
 		setScore1Label(0);
 		score1Label.setVerticalAlignment(SwingConstants.NORTH);
+		score1Label.setToolTipText("player 1 score");
 		namesPanel.add(player1Label);
 
 		player2Label = makeLabel("N");
@@ -198,6 +181,8 @@ public class GameView extends JFrame implements ActionListener {
 		score2Label = makeLabel("S");
 		score2Label.setFont(planeFont);
 		score2Label.setVerticalAlignment(SwingConstants.NORTH);
+		score2Label.setToolTipText("player 2 score");
+
 		if (!profile.get(0).equals("s")) {
 			namesPanel.add(player2Label);
 		}
@@ -219,22 +204,23 @@ public class GameView extends JFrame implements ActionListener {
 		boardPanel.setPreferredSize(new Dimension(boardSize, boardSize));
 		boardPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(),
 				" M E M O R Y      G A M E ", TitledBorder.CENTER, TitledBorder.TOP));
-		currentIcons = new ArrayList<>(boardDimension * boardDimension);
+		currentIconIndexes = new ArrayList<>(boardDimension * boardDimension);
 		boardPanel.setBoardSize(boardSize);
 
-		iconIndexes = new ArrayList<>();
+		allIconIndexes = new ArrayList<>();
 		for (int i = lowIndex; i < highIndex; i++) {
-			iconIndexes.add(i);
+			allIconIndexes.add(i);
 		}
-		Collections.shuffle(iconIndexes);
+		Collections.shuffle(allIconIndexes);
 
-		iconIndexes = new ArrayList<Integer>(iconIndexes.subList(0, (indexRange-1) - ((indexRange-1) - (boardDimension * boardDimension / 2))));
+		allIconIndexes = new ArrayList<Integer>(allIconIndexes.subList(0,
+				(indexRange - 1) - ((indexRange - 1) - (boardDimension * boardDimension / 2))));
 
-		for (int n = 0; n < iconIndexes.size(); n++) {
-			currentIcons.add(iconIndexes.get(n));
-			currentIcons.add(iconIndexes.get(n));
+		for (int n = 0; n < allIconIndexes.size(); n++) {
+			currentIconIndexes.add(allIconIndexes.get(n));
+			currentIconIndexes.add(allIconIndexes.get(n));
 		}
-		Collections.shuffle(currentIcons);
+		Collections.shuffle(currentIconIndexes);
 
 		emojiButtons = new JButton[boardDimension][boardDimension];
 		for (int i = 0; i < boardDimension; i++) {
@@ -253,7 +239,7 @@ public class GameView extends JFrame implements ActionListener {
 		mainPanel.add(timePanel);
 		this.add(mainPanel);
 		this.pack();
-		
+
 //		this.add(timerLabel);
 		this.setPreferredSize(new Dimension(boardSize, boardSize + 100));
 		this.setIconImage(titleIcon.getImage());
@@ -261,20 +247,28 @@ public class GameView extends JFrame implements ActionListener {
 		this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		this.setResizable(false);
 		this.setVisible(true);
-		
+
+	}
+
+	ImageIcon getScaledImage(ImageIcon image, int height, int width) {
+
+		scaledImage = image.getImage();
+		scaledImage = scaledImage.getScaledInstance(width, height, java.awt.Image.SCALE_SMOOTH);
+		image.setImage(scaledImage);
+		return image;
 	}
 
 	public void updateClock(long startTime) {
 		sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
-        elapsed = new Date(System.currentTimeMillis()-startTime);
-   
-        timerLabel.setText(sdf.format(elapsed));
-    }
-	
+		elapsed = new Date(System.currentTimeMillis() - startTime);
+
+		timerLabel.setText(sdf.format(elapsed));
+	}
+
 	public Date getElapsed() {
 		return elapsed;
 	}
-	
+
 	public JLabel getTimerLabel() {
 		return timerLabel;
 	}
@@ -311,7 +305,6 @@ public class GameView extends JFrame implements ActionListener {
 		return icon;
 	}
 
-	
 	public static ImageIcon resizeImage(ImageIcon defaultImage, int width, int height) {
 
 		Image img = defaultImage.getImage();
@@ -346,7 +339,7 @@ public class GameView extends JFrame implements ActionListener {
 		if (buttonState == false) {
 			emojiButtons[card.getCardIndex()[0]][card.getCardIndex()[1]].setEnabled(false);
 			emojiButtons[card.getCardIndex()[0]][card.getCardIndex()[1]].setVisible(false);
-		
+
 		} else if (buttonState == true) {
 			emojiButtons[card.getCardIndex()[0]][card.getCardIndex()[1]].setEnabled(false);
 		}
@@ -354,7 +347,7 @@ public class GameView extends JFrame implements ActionListener {
 		System.out.println("set visible false");
 		boardPanel.revalidate();
 	}
-	
+
 	public void updateCardBoard(int i, int j) {
 		Icon image;
 		int iconName;
@@ -369,13 +362,13 @@ public class GameView extends JFrame implements ActionListener {
 	public JButton getEmojiButton(int i, int j) {
 		return emojiButtons[i][j];
 	}
-	
+
 	public int getBoardDimension() {
 		return boardDimension;
 	}
 
 	public ArrayList<Integer> getCurrentIcons() {
-		return currentIcons;
+		return currentIconIndexes;
 	}
 
 	public JButton[][] getEmojiButtons() {
@@ -388,13 +381,18 @@ public class GameView extends JFrame implements ActionListener {
 
 	public void setActivePlayerLight(String string) {
 		if (string == "player1") {
-			p1LabelGreen.setIcon(image1);
-			p2LabelGreen.setIcon(image2);
+			p1TurnLabel.setIcon(greenOnIcon);
+			p1TurnLabel.setToolTipText("play!");
+			p2TurnLabel.setIcon(greenOffIcon);
+			p2TurnLabel.setToolTipText("wait!");
+
+		} else if (string == "player2") {
+			p1TurnLabel.setIcon(greenOffIcon);
+			p1TurnLabel.setToolTipText("wait!");
+			p2TurnLabel.setIcon(greenOnIcon);
+			p2TurnLabel.setToolTipText("play!");
 
 			
-		} else if (string == "player2") {
-			p1LabelGreen.setIcon(image2);
-			p2LabelGreen.setIcon(image1);
 		}
 	}
 
@@ -404,8 +402,8 @@ public class GameView extends JFrame implements ActionListener {
 
 	public void setButtonState(boolean buttonState) {
 		this.buttonState = buttonState;
-	}	
-	
+	}
+
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
 	}
@@ -419,14 +417,14 @@ public class GameView extends JFrame implements ActionListener {
 	}
 
 	public void restoreDefaultIcon(Card card) {
-		image = new ImageIcon(GameView.class.getResource("/pattern.png"));
-		emojiButtons[card.getCardIndex()[0]][card.getCardIndex()[1]].setIcon(image);
+		scaledImageIcon = new ImageIcon(GameView.class.getResource("/pattern.png"));
+		emojiButtons[card.getCardIndex()[0]][card.getCardIndex()[1]].setIcon(scaledImageIcon);
 
 	}
 
 	public void switchBackground() {
 		if (buttonState == false) {
-			matchesLabel.setIcon(si);
+			iconBackgroundTogglerLabel.setIcon(selectedIcon);
 			for (int i = 0; i < emojiButtons.length; i++) {
 				for (int j = 0; j < emojiButtons.length; j++) {
 					if (emojiButtons[i][j].isVisible() == false) {
@@ -434,9 +432,10 @@ public class GameView extends JFrame implements ActionListener {
 					}
 				}
 			}
+			matchesButton.setToolTipText("showing guessed cards in background");
 		}
 		if (buttonState == true) {
-			matchesLabel.setIcon(ui);
+			iconBackgroundTogglerLabel.setIcon(unselectedIcon);
 			for (int i = 0; i < emojiButtons.length; i++) {
 				for (int j = 0; j < emojiButtons.length; j++) {
 					if ((emojiButtons[i][j].isVisible() == true) && (emojiButtons[i][j].isEnabled() == false)) {
@@ -444,6 +443,7 @@ public class GameView extends JFrame implements ActionListener {
 					}
 				}
 			}
+			matchesButton.setToolTipText("showing image in background");
 		}
 		switchButtonState();
 	}
@@ -463,20 +463,25 @@ public class GameView extends JFrame implements ActionListener {
 	}
 
 	public void switchActivePlayerLight(String activePlayerLabel) {
-		
+
 		// TODO Auto-generated method stub
 		if (activePlayerLabel.equals("player1")) {
-			p1LabelGreen.setIcon(image1);
-			p2LabelGreen.setIcon(image2);
+			p1TurnLabel.setIcon(greenOnIcon);
+			p1TurnLabel.setToolTipText("play!");
+			p2TurnLabel.setIcon(greenOffIcon);
+			p2TurnLabel.setToolTipText("wait!");
+
 		} else if (activePlayerLabel.equals("player2")) {
-			p2LabelGreen.setIcon(image1);
-			p1LabelGreen.setIcon(image2);
+			p2TurnLabel.setIcon(greenOnIcon);
+			p2TurnLabel.setToolTipText("play!");
+			p1TurnLabel.setIcon(greenOffIcon);
+			p1TurnLabel.setToolTipText("wait!");
 		}
 	}
 
 	public void removeIcons(int firstNumber, int secondNumber) {
-		currentIcons.set(currentIcons.indexOf(firstNumber),0);
-		currentIcons.set(currentIcons.indexOf(secondNumber),0);
+		currentIconIndexes.set(currentIconIndexes.indexOf(firstNumber), 0);
+		currentIconIndexes.set(currentIconIndexes.indexOf(secondNumber), 0);
 	}
 
 }
