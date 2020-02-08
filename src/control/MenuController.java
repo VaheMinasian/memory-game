@@ -52,7 +52,7 @@ public class MenuController {
 	private long startTime, stopTime;
 	Timer timer = new Timer(53, clock);
 	ArrayList<Integer> temp = new ArrayList<>();
-	File serializeFile = new File("resources/data.txt");
+	File serializeFile = new File("data.txt");
 	BufferedReader br;
 
 	public MenuController() {
@@ -61,7 +61,7 @@ public class MenuController {
 	void checkDataFile() {
 		try {
 			serializeFile.createNewFile(); // if file already exists will do nothing
-			br = new BufferedReader(new FileReader("resources/data.txt"));
+			br = new BufferedReader(new FileReader("data.txt"));
 			if (br.readLine() != null) {
 				mainMenuView.getResumeButton().setEnabled(true);
 //				return;
@@ -104,7 +104,7 @@ public class MenuController {
 
 		String line = "";
 		try {
-			file = new FileReader("resources/profile.txt");
+			file = new FileReader("profile.txt");
 			reader = new BufferedReader(file);
 			line = reader.readLine();
 			profile.clear();
@@ -126,7 +126,7 @@ public class MenuController {
 
 	void removeSerialization() {
 		try {
-			FileOutputStream fos = new FileOutputStream("resources/data.txt");
+			FileOutputStream fos = new FileOutputStream("data.txt");
 			fos.write(("").getBytes());
 			fos.close();
 		} catch (FileNotFoundException e) {
@@ -143,7 +143,7 @@ public class MenuController {
 		profile.clear();
 
 		try {
-			file = new FileReader("resources/profile.txt");
+			file = new FileReader("profile.txt");
 			reader = new BufferedReader(file);
 			String line = reader.readLine();
 
@@ -414,7 +414,7 @@ public class MenuController {
 
 			if (mainMenuView.getResumeButton().isEnabled() == true) {
 				try {
-					FileInputStream fis = new FileInputStream("resources/data.txt");
+					FileInputStream fis = new FileInputStream("data.txt");
 					ObjectInputStream ois = new ObjectInputStream(fis);
 
 					System.out.println(ois.readObject()); // game mode
@@ -675,7 +675,7 @@ public class MenuController {
 
 					FileOutputStream fos = null;
 					try {
-						fos = new FileOutputStream("resources/profile.txt");
+						fos = new FileOutputStream("profile.txt");
 						fos.write(sbr.toString().getBytes());
 						fos.close();
 					} catch (FileNotFoundException e1) {
