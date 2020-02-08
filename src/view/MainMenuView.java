@@ -32,7 +32,7 @@ public class MainMenuView extends JFrame implements ActionListener {
 		ImageIcon frameIcon = new ImageIcon(OptionsView.class.getResource("/46.png"));
 		frame.setIconImage(frameIcon.getImage());
 		panel = new JPanel(new GridBagLayout());
-		panel.setPreferredSize(new Dimension(220, 350));
+		panel.setPreferredSize(new Dimension(220, 370));
 		panel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), " M A I N    M E N U ",
 				TitledBorder.CENTER, TitledBorder.TOP));
 		frame.getContentPane().add(panel);
