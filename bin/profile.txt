@@ -1,7 +1,7 @@
 mode:c
-boardsize:8
+boardsize:6
 player1:fdsa
 player2:Computer
-difficulty:4
+difficulty:2
 iconSet:emotics
 playable:true
