@@ -617,19 +617,47 @@ public class MenuController {
 						board = optionsView.getSqrTen().getActionCommand();
 					}
 
-					iconSet = (String) optionsView.getIconSetComboBox().getSelectedItem();
+					iconSet = (String) optionsView.getIconSetComboBox().getSelectedItem();		
 					
-//					int dialogButton = JOptionPane.YES_NO_OPTION;
-//					int dialogResult = JOptionPane.showConfirmDialog (null, "your game will be lost! \nconinue?","Warning",dialogButton);
-//					if(dialogResult == JOptionPane.NO_OPTION){
-//					  return;
-//					}
+					
+//						System.out.print("selectedGameMode != profile.get(0)=  ");
+//						System.out.println(selectedGameMode != profile.get(0));
+//						System.out.println("");
+//					
+//						System.out.print("board != profile.get(1)=  ");
+//						System.out.println(board != profile.get(1));
+//						System.out.println("");
+//
+//						System.out.print("player1 != profile.get(2)=  ");
+//						System.out.println(player1 != profile.get(2));
+//						System.out.println("");
+//				
+//						System.out.print("player2 != profile.get(3)=  ");
+//						System.out.println(player2 != profile.get(3));
+//						System.out.println("");
+//				
+//						System.out.print("difficulty != profile.get(4)=  ");
+//						System.out.println(difficulty != profile.get(4));
+//						System.out.println("");
+//					
+//						System.out.print("iconSet != profile.get(5)=  ");
+//						System.out.println(iconSet != profile.get(5));
+//						System.out.println("");
+					
+					
 					
 					if (profile.size() != 0) {
-						System.out.println("profile is: " + profile);
-						if (selectedGameMode != profile.get(0) || board != profile.get(1) || player1 != profile.get(2)
-								|| player2 != profile.get(3) || difficulty != profile.get(4)
-								|| iconSet != profile.get(5)) {
+						if (!selectedGameMode.equals(profile.get(0)) || !board.equals(profile.get(1)) || !player1.equals(profile.get(2))
+								|| !player2.equals(profile.get(3)) || !difficulty.equals(profile.get(4))
+								|| !iconSet.equals(profile.get(5))) {
+							if(mainMenuView.getResumeButton().isEnabled()) {
+								int dialogButton = JOptionPane.YES_NO_OPTION;
+								int dialogResult = JOptionPane.showConfirmDialog (null, "your current game will be lost! \n                 coninue?","Warning",dialogButton);
+								if(dialogResult == JOptionPane.NO_OPTION){
+								  return;
+								}
+							}
+							
 							removeSerialization();
 							mainMenuView.getResumeButton().setEnabled(false);
 							System.out.println("resume button set to false");

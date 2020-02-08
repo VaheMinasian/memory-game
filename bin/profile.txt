@@ -1,7 +1,7 @@
 mode:c
-boardsize:6
-player1:we
+boardsize:8
+player1:fdsa
 player2:Computer
-difficulty:2
-iconSet:animals
+difficulty:4
+iconSet:emotics
 playable:true
