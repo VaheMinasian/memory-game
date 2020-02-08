@@ -1,7 +1,5 @@
 package model;
 
-import java.io.Serializable;
-
 /*
  * class card which includes enums to check state of cards  
  * through enum state will be determined if card is allowed to be opened or not.

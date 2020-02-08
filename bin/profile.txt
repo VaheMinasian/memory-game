@@ -1,7 +1,7 @@
 mode:c
-boardsize:8
+boardsize:6
 player1:fdsa
 player2:Computer
-difficulty:4
-iconSet:emotics
+difficulty:2
+iconSet:food
 playable:true

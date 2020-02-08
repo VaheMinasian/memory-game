@@ -19,17 +19,13 @@ import java.util.TimeZone;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
-import javax.swing.ButtonGroup;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JToggleButton;
 import javax.swing.SwingConstants;
-import javax.swing.SwingUtilities;
-import javax.swing.UIManager;
 import javax.swing.border.Border;
 import javax.swing.border.TitledBorder;
 
@@ -230,8 +226,8 @@ public class GameView extends JFrame implements ActionListener {
 			}
 		}
 
-		UIManager.put("ToggleButton.select", Color.BLACK);
-		SwingUtilities.updateComponentTreeUI(this);
+//		UIManager.put("ToggleButton.select", Color.BLACK);
+//		SwingUtilities.updateComponentTreeUI(this);
 		mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
 		mainPanel.add(boardPanel);
 		mainPanel.add(turnPanel);
@@ -240,7 +236,6 @@ public class GameView extends JFrame implements ActionListener {
 		this.add(mainPanel);
 		this.pack();
 
-//		this.add(timerLabel);
 		this.setPreferredSize(new Dimension(boardSize, boardSize + 100));
 		this.setIconImage(titleIcon.getImage());
 		this.setLocationRelativeTo(null);
@@ -251,7 +246,6 @@ public class GameView extends JFrame implements ActionListener {
 	}
 
 	ImageIcon getScaledImage(ImageIcon image, int height, int width) {
-
 		scaledImage = image.getImage();
 		scaledImage = scaledImage.getScaledInstance(width, height, java.awt.Image.SCALE_SMOOTH);
 		image.setImage(scaledImage);
@@ -280,7 +274,6 @@ public class GameView extends JFrame implements ActionListener {
 	private JLabel makeLabel(String sort) {
 
 		JLabel temp = new JLabel();
-
 		temp.setHorizontalAlignment(JLabel.CENTER);
 		temp.setOpaque(true);
 		temp.setBackground(Color.black);
@@ -306,7 +299,6 @@ public class GameView extends JFrame implements ActionListener {
 	}
 
 	public static ImageIcon resizeImage(ImageIcon defaultImage, int width, int height) {
-
 		Image img = defaultImage.getImage();
 		img = img.getScaledInstance(width, height, Image.SCALE_SMOOTH);
 		defaultImage.setImage(img);
