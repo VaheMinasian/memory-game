@@ -34,7 +34,7 @@ public class MenuController {
 
 	private static MainMenuView mainMenuView;
 	private static OptionsView optionsView;
-	private static BufferedReader reader;
+	private static BufferedReader bfReader;
 	private static FileReader file;
 	private static ArrayList<String> profile = new ArrayList<>();
 
@@ -53,6 +53,7 @@ public class MenuController {
 	Timer timer = new Timer(53, clock);
 	ArrayList<Integer> temp = new ArrayList<>();
 	File serializeFile = new File("data.txt");
+	static File profileFile = new File("profile.txt");
 	BufferedReader br;
 
 	public MenuController() {
@@ -101,19 +102,22 @@ public class MenuController {
 
 	// Check if profile file is empty to enable play button (for first run)
 	private static void isPlayable() {
-
+//		serializeFile.createNewFile(); // if file already exists will do nothing
+//		br = new BufferedReader(new FileReader("data.txt"));
+		
 		String line = "";
 		try {
+			profileFile.createNewFile();
 			file = new FileReader("profile.txt");
-			reader = new BufferedReader(file);
-			line = reader.readLine();
+			bfReader = new BufferedReader(file);
+			line = bfReader.readLine();
 			profile.clear();
 			while (line != null) {
 
 				profile.add(line.substring(line.indexOf(':') + 1));
-				line = reader.readLine();
+				line = bfReader.readLine();
 			}
-			reader.close();
+			bfReader.close();
 		} catch (FileNotFoundException e1) {
 			e1.printStackTrace();
 		} catch (IOException e1) {
@@ -144,16 +148,16 @@ public class MenuController {
 
 		try {
 			file = new FileReader("profile.txt");
-			reader = new BufferedReader(file);
-			String line = reader.readLine();
+			bfReader = new BufferedReader(file);
+			String line = bfReader.readLine();
 
 			while (line != null) {
 
 				profile.add(line.substring(line.indexOf(':') + 1));
-				line = reader.readLine();
+				line = bfReader.readLine();
 
 			}
-			reader.close();
+			bfReader.close();
 		} catch (FileNotFoundException e1) {
 			e1.printStackTrace();
 		} catch (IOException e1) {
