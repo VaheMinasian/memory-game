@@ -3,5 +3,5 @@ boardsize:10
 player1:va
 player2:
 difficulty:null
-iconSet:musical
+iconSet:animals
 playable:true

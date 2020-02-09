@@ -62,24 +62,24 @@ public class GameView extends JFrame implements ActionListener {
 		switch (profile.get(5)) {
 		case "animals":
 			lowIndex = 100;
-			highIndex = 149;
+			highIndex = 150;
 			indexRange = 50;
 			break;
 		case "musical":
 			lowIndex = 200;
-			highIndex = 249;
+			highIndex = 250;
 			indexRange = 50;
 			break;
 		case "food":
 			lowIndex = 300;
-			highIndex = 381;
-			indexRange = 81;
+			highIndex = 382;
+			indexRange = 82;
 			break;
 		case "emotics":
 		default:
 			lowIndex = 1;
 			highIndex = 73;
-			indexRange = 73;
+			indexRange = 72;
 			break;
 		}
 		
@@ -221,7 +221,7 @@ public class GameView extends JFrame implements ActionListener {
 		System.out.println("highIndex is: " + highIndex);
 		Collections.shuffle(allIconIndexes);
 		allIconIndexes = new ArrayList<Integer>(allIconIndexes.subList(0,
-				(indexRange - 1) - ((indexRange - 1) - (boardDimension * boardDimension / 2))));
+				indexRange - (indexRange-(boardDimension * boardDimension / 2))));
 
 		for (int n = 0; n < allIconIndexes.size(); n++) {
 			currentIconIndexes.add(allIconIndexes.get(n));
