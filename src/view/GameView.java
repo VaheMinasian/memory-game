@@ -26,8 +26,6 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
-import javax.swing.SwingUtilities;
-import javax.swing.UIManager;
 import javax.swing.border.Border;
 import javax.swing.border.TitledBorder;
 
@@ -228,8 +226,8 @@ public class GameView extends JFrame implements ActionListener {
 			}
 		}
 
-		UIManager.put("ToggleButton.select", Color.BLACK);
-		SwingUtilities.updateComponentTreeUI(this);
+//		UIManager.put("ToggleButton.select", Color.BLACK);
+//		SwingUtilities.updateComponentTreeUI(this);
 		mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
 		mainPanel.add(boardPanel);
 		mainPanel.add(turnPanel);

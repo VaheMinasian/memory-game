@@ -1,7 +1,7 @@
-mode:c
+mode:s
 boardsize:4
-player1:vahe
-player2:Computer
-difficulty:1
+player1:va
+player2:
+difficulty:null
 iconSet:animals
 playable:true
