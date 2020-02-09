@@ -25,6 +25,7 @@ public class Card {
 		this.cardIndex[0]=i;
 		this.cardIndex[1]=j;
 	}
+
 	
 	public void setIsClicked() {
 		this.isClicked = true;
@@ -34,6 +35,7 @@ public class Card {
 		this.cardIndex[0]=x;
 		this.cardIndex[1]=y;
 	}
+	
 	
 	public int[] getCardIndex() {
 		return cardIndex;

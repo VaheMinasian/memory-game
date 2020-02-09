@@ -717,10 +717,10 @@ public class MenuController {
 							if ((secondNumber == 0) && (gameModel.move(i, j))) {
 								if (validClicksOnCards == 1) {
 									firstNumber = gameView.getCurrentIcons().get(i * gameView.getBoardDimension() + j);
-									gameModel.getFirstCard().setIsClicked();
+									//gameModel.getFirstCard().setIsClicked();
 								} else if (validClicksOnCards == 2) {
 									secondNumber = gameView.getCurrentIcons().get(i * gameView.getBoardDimension() + j);
-									gameModel.getSecondCard().setIsClicked();
+									//gameModel.getSecondCard().setIsClicked();
 
 								}
 								// if(singletonModel.move(i, j));
@@ -833,13 +833,13 @@ public class MenuController {
 				if (validClicksOnCards == 1) {
 					firstNumber = gameView.getCurrentIcons()
 							.get(xIndexComp * gameView.getBoardDimension() + yIndexComp);
-					gameModel.getFirstCard().setIsClicked();
+			//		gameModel.getFirstCard().setIsClicked();
 					System.out.println("FirstNumber is: " + firstNumber);
 
 				} else if (validClicksOnCards == 2) {
 					secondNumber = gameView.getCurrentIcons()
 							.get(xIndexComp * gameView.getBoardDimension() + yIndexComp);
-					gameModel.getSecondCard().setIsClicked();
+				//	gameModel.getSecondCard().setIsClicked();
 
 					System.out.println("SecondNumber is: " + secondNumber);
 				}
