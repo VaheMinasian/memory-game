@@ -5,33 +5,35 @@ package model;
  * through enum state will be determined if card is allowed to be opened or not.
  */
 public class Card {
-	int[] cardIndex = new int[2];
-	private CardState state;
-	
+		private CardState state;
+		private int index;
+		
 	public enum CardState {
 		OPEN, CLOSED, NONE
 	}
 		
-	public Card(int i, int j){
+	public Card(){
 		this.updateCard(CardState.CLOSED);
-		this.cardIndex[0]=i;
-		this.cardIndex[1]=j;
 	}
 	
-	public void setCardIndex(int x, int y) {
-		this.cardIndex[0]=x;
-		this.cardIndex[1]=y;
-	}
+//	public void setCardIndex(int x, int y) {
+//		this.cardIndex[0]=x;
+//		this.cardIndex[1]=y;
+//	}
 	
-	public int[] getCardIndex() {
-		return cardIndex;
-	}
-
 	public void updateCard(CardState state){
 		this.state = state;
 	}
 
 	public CardState getState(){
 		return this.state;
+	}
+
+	public int getIndex() {
+		return this.index;
+	}
+
+	public void setIndex(int index) {
+		this.index = index;
 	}
 }

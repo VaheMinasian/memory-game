@@ -38,7 +38,7 @@ public class GameView extends JFrame implements ActionListener {
 	private MyPanel boardPanel;
 	private JLabel player1Label, player2Label, score1Label, score2Label, p1TurnLabel, p2TurnLabel, iconBackgroundTogglerLabel, timerLabel;
 	private int boardSize, boardDimension, lowIndex = 1, highIndex = 73, indexRange = 73;
-	private JButton[][] emojiButtons;
+	private ArrayList<JButton> emojiButtons=new ArrayList<>();
 	JButton matchesButton;
 	Font boldFont, planeFont;
 	private ArrayList<Integer> allIconIndexes, currentIconIndexes;
@@ -229,12 +229,10 @@ public class GameView extends JFrame implements ActionListener {
 		}
 		Collections.shuffle(currentIconIndexes);
 
-		emojiButtons = new JButton[boardDimension][boardDimension];
-		for (int i = 0; i < boardDimension; i++) {
-			for (int j = 0; j < boardDimension; j++) {
-				emojiButtons[i][j] = new JButton(patternIcon);
-				boardPanel.add(emojiButtons[i][j]);
-			}
+		
+		for (int i = 0; i < boardDimension*boardDimension; i++) {
+				emojiButtons.add(new JButton(patternIcon));
+				boardPanel.add(emojiButtons.get(i));
 		}
 
 //		UIManager.put("ToggleButton.select", Color.BLACK);
@@ -322,10 +320,8 @@ public class GameView extends JFrame implements ActionListener {
 	}
 
 	public void addGameViewListener(ActionListener BottonListener) {
-		for (int i = 0; i < boardDimension; i++) {
-			for (int j = 0; j < boardDimension; j++) {
-				emojiButtons[i][j].addActionListener(BottonListener);
-			}
+		for (int i = 0; i < boardDimension*boardDimension; i++) {
+				emojiButtons.get(i).addActionListener(BottonListener);
 		}
 	}
 
@@ -344,30 +340,28 @@ public class GameView extends JFrame implements ActionListener {
 	public void removeCard(Card card) {
 
 		if (buttonState == false) {
-			emojiButtons[card.getCardIndex()[0]][card.getCardIndex()[1]].setEnabled(false);
-			emojiButtons[card.getCardIndex()[0]][card.getCardIndex()[1]].setVisible(false);
-
+			emojiButtons.get(card.getIndex()).setEnabled(false);
+			emojiButtons.get(card.getIndex()).setVisible(false);
 		} else if (buttonState == true) {
-			emojiButtons[card.getCardIndex()[0]][card.getCardIndex()[1]].setEnabled(false);
+			emojiButtons.get(card.getIndex()).setEnabled(false);
 		}
 
 		System.out.println("set visible false");
 		boardPanel.revalidate();
 	}
 
-	public void updateCardBoard(int i, int j) {
+	public void updateCardBoard(int index) {
 		Icon image;
 		int iconName;
-		System.out.println("i is: " + i);
-		System.out.println("j is: " + j);
-		iconName = getCurrentIcons().get(i * boardDimension + j);
+		System.out.println("card index is: " + index);
+		iconName = getCurrentIcons().get(index);
 		image = new ImageIcon(GameView.class.getResource("/" + iconName + ".png"));
-		getEmojiButton(i, j).setIcon(image);
-		System.out.println("CardBoard updated got emojiButton:(" + i + "," + j + ")");
+		emojiButtons.get(index).setIcon(image);
+		System.out.println("CardBoard updated got emojiButton of index:(" + index + ")");
 	}
 
-	public JButton getEmojiButton(int i, int j) {
-		return emojiButtons[i][j];
+	public JButton getEmojiButton(int index) {
+		return emojiButtons.get(index);
 	}
 
 	public int getBoardDimension() {
@@ -378,7 +372,7 @@ public class GameView extends JFrame implements ActionListener {
 		return currentIconIndexes;
 	}
 
-	public JButton[][] getEmojiButtons() {
+	public ArrayList<JButton> getEmojiButtons() {
 		return emojiButtons;
 	}
 
@@ -423,29 +417,25 @@ public class GameView extends JFrame implements ActionListener {
 
 	public void restoreDefaultIcon(Card card) {
 		scaledImageIcon = new ImageIcon(GameView.class.getResource("/pattern.png"));
-		emojiButtons[card.getCardIndex()[0]][card.getCardIndex()[1]].setIcon(scaledImageIcon);
+		emojiButtons.get(card.getIndex()).setIcon(scaledImageIcon);
 
 	}
 
 	public void switchBackground() {
 		if (buttonState == false) {
 			iconBackgroundTogglerLabel.setIcon(selectedIcon);
-			for (int i = 0; i < emojiButtons.length; i++) {
-				for (int j = 0; j < emojiButtons.length; j++) {
-					if (emojiButtons[i][j].isVisible() == false) {
-						emojiButtons[i][j].setVisible(true);
-					}
+			for (int i = 0; i < emojiButtons.size(); i++) {
+					if (emojiButtons.get(i).isVisible() == false) {
+						emojiButtons.get(i).setVisible(true);	
 				}
 			}
 			matchesButton.setToolTipText("showing guessed cards in background");
 		}
 		if (buttonState == true) {
 			iconBackgroundTogglerLabel.setIcon(unselectedIcon);
-			for (int i = 0; i < emojiButtons.length; i++) {
-				for (int j = 0; j < emojiButtons.length; j++) {
-					if ((emojiButtons[i][j].isVisible() == true) && (emojiButtons[i][j].isEnabled() == false)) {
-						emojiButtons[i][j].setVisible(false);
-					}
+			for (int i = 0; i < emojiButtons.size(); i++) {
+					if ((emojiButtons.get(i).isVisible() == true) && (emojiButtons.get(i).isEnabled() == false)) {
+						emojiButtons.get(i).setVisible(false);
 				}
 			}
 			matchesButton.setToolTipText("showing image in background");

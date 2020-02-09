@@ -14,7 +14,7 @@ public class MemoryGame implements Game {
 
 //	private static MemoryGame Single_Instance = null;
 
-	private Card[][] cards;
+	private ArrayList<Card> cards = new ArrayList<>();
 	private Card selectedCard;
 	private int boardDimension;
 	private static Player player1;
@@ -51,7 +51,7 @@ public class MemoryGame implements Game {
 //		setGameMode(profile.get(0));
 		boardDimension = Integer.parseInt(profile.get(1));
 		this.activePlayer = player1;
-		createCards(boardDimension);
+		createCards(boardDimension*boardDimension);
 	}
 
 	// randomly selects the player who will begin the game
@@ -67,12 +67,9 @@ public class MemoryGame implements Game {
 	}
 
 	private void createCards(int dimension) {
-		cards = new Card[dimension][dimension];
+		
 		for (int i = 0; i < dimension; i++) {
-			for (int j = 0; j < dimension; j++) {
-
-				cards[i][j] = new Card(i, j);
-			}
+				cards.add(new Card());
 		}
 	}
 
@@ -105,7 +102,7 @@ public class MemoryGame implements Game {
 			
 		}
 
-		int x1, x2, y1, y2, z1, z2, q1, q2;
+		int z1, z2, q1, q2;
 
 		if (missedButtons.size() == excludeLimit) {
 			for (int n = 0; n < 8; n++) {
@@ -113,27 +110,22 @@ public class MemoryGame implements Game {
 			}
 			System.out.println("limit excluded removed 8 items from missedButtons.");
 		}
-		// end determining
 
-		x1 = firstCard.getCardIndex()[0];
-		y1 = firstCard.getCardIndex()[1];
-		z1 = x1 * boardDimension + y1;
+		z1 = cards.indexOf(firstCard);
 		q1 = view.getCurrentIcons().get(z1);
 
 		missedButtons.add(z1);
 		missedButtons.add(q1);
-		missedButtons.add(x1);
-		missedButtons.add(y1);
+//		missedButtons.add(x1);
+//		missedButtons.add(y1);
 
-		x2 = secondCard.getCardIndex()[0];
-		y2 = secondCard.getCardIndex()[1];
-		z2 = x2 * boardDimension + y2;
+		z2 = cards.indexOf(secondCard);
 		q2 = view.getCurrentIcons().get(z2);
 
 		missedButtons.add(z2);
 		missedButtons.add(q2);
-		missedButtons.add(x2);
-		missedButtons.add(y2);
+//		missedButtons.add(x2);
+//		missedButtons.add(y2);
 
 		if (firstNumber == secondNumber) {
 			for (int i = 0; i < missedButtons.size(); i += 4) {
@@ -170,11 +162,9 @@ public class MemoryGame implements Game {
 	// board cells
 	float getRemainingCardsNo() {
 		float k = 0.f;
-		for (int i = 0; i < getCards().length; i++) {
-			for (int j = 0; j < getCards().length; j++) {
-				if (getCards()[i][j].getState() == CardState.CLOSED)
+		for (int i = 0; i < cards.size(); i++) {
+				if (cards.get(i).getState() == CardState.CLOSED)
 					k = k + 1.0f;
-			}
 		}
 		float count = 100.0f * (k / (float) (boardDimension * boardDimension));
 		System.out.println("k = " + k);
@@ -249,7 +239,7 @@ public class MemoryGame implements Game {
 							savedIndexY = cardIndexY;
 							temp++;
 							System.out.println("cardIndexX is: " +cardIndexX + "cardIndexY is: " + cardIndexY);
-							return getCards()[cardIndexX][cardIndexY];
+							return cards.get(missedButtons.get(missedButtons.size()-1));
 						}
 					
 					} else if ( (missedButtons.get(missedButtons.size() - 7) !=  -1) && (missedButtons.get(i + 1) == missedButtons.get(missedButtons.size() - 7)) ) 
@@ -262,7 +252,7 @@ public class MemoryGame implements Game {
 							savedIndexY = cardIndexY;
 							temp++;
 							System.out.println("cardIndexX is: " +cardIndexX + "cardIndexY is: " + cardIndexY);
-							return getCards()[cardIndexX][cardIndexY];							
+							return cards.get(missedButtons.get(missedButtons.size()-3));							
 						}
 					}
 				}
@@ -272,7 +262,7 @@ public class MemoryGame implements Game {
 			do {
 				cardIndexX = randomNo.nextInt(boardDimension);
 				cardIndexY = randomNo.nextInt(boardDimension);
-			} while (getCards()[cardIndexX][cardIndexY].getState() != CardState.CLOSED);
+			} while (cards.get(cardIndexX*boardDimension + cardIndexY).getState() != CardState.CLOSED);
 			//end level 1 intelligence
 			savedCardNumber = cardIndexX * boardDimension + cardIndexY;
 			savedIndexX = cardIndexX;
@@ -303,7 +293,7 @@ public class MemoryGame implements Game {
 						cardIndexX = missedButtons.get(i + 2);
 						cardIndexY = missedButtons.get(i + 3);
 						temp--;
-						return getCards()[cardIndexX][cardIndexY];
+						return cards.get(cardIndexX*boardDimension+cardIndexY);
 					}
 				}
 			}
@@ -331,13 +321,13 @@ public class MemoryGame implements Game {
 					}
 				} // end check
 			
-				System.out.println(getCards()[cardIndexX][cardIndexY].getState() + " " + valid);
-			} while ((getCards()[cardIndexX][cardIndexY].getState() != CardState.CLOSED) || (!valid));
+				System.out.println(cards.get(cardIndexX*boardDimension+cardIndexY).getState() + " " + valid);
+			} while ((cards.get(cardIndexX*boardDimension+cardIndexY).getState() != CardState.CLOSED) || (!valid));
 			temp--;
 			System.out.println("exiting temp==1 with temp value of " + temp);
 		}
 		
-		return getCards()[cardIndexX][cardIndexY];
+		return cards.get(cardIndexX*boardDimension+cardIndexY);
 	}
 
 	public void buttonIsOpen() throws ButtonNotAvailableException {
@@ -348,16 +338,16 @@ public class MemoryGame implements Game {
 	}
 
 	@Override
-	public boolean move(int i, int j) {
+	public boolean move(int index) {
 		if (counter == 0) {
-			firstCard = cards[i][j];
+			firstCard = cards.get(index);
 			firstCard.updateCard(CardState.OPEN);
 			counter++;
 			return true;
 		}
 
 		else if ((counter == 1) && (!firstCard.equals(selectedCard))) {
-			secondCard = cards[i][j];
+			secondCard = cards.get(index);
 			secondCard.updateCard(CardState.OPEN);
 			counter--;
 			return true;
@@ -473,13 +463,13 @@ public class MemoryGame implements Game {
 
 	public boolean gameOver() {
 
-		for (int i = 0; i < cards.length; i++) {
-			for (int j = 0; j < cards[i].length; j++) {
-				if (cards[i][j].getState() != CardState.NONE) {
+		for (int i = 0; i < cards.size(); i++) {
+			
+				if (cards.get(i).getState() != CardState.NONE) {
 					System.out.println("will return false from gameOver");
 					return false;
 				}
-			}
+		
 		}
 		System.out.println("will return true from gameOver");
 		return true;
@@ -530,7 +520,7 @@ public class MemoryGame implements Game {
 		return secondCard;
 	}
 
-	public Card[][] getCards() {
+	public ArrayList<Card> getCards() {
 		return this.cards;
 	}
 

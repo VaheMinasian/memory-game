@@ -2,7 +2,7 @@ package model;
 
 public interface Game {
 
-	public boolean move(int i, int j);
+	public boolean move(int index);
 
 	public Boolean getStatus(int x, int y);
 

@@ -393,13 +393,10 @@ public class MenuController {
 				oos.writeObject(gameView.getCurrentIcons());
 
 				// save removed guessed cards
-				for (int i = 0; i < Integer.parseInt(profile.get(1)); i++) {
-					for (int j = 0; j < Integer.parseInt(profile.get(1)); j++) {
-						if (gameModel.getCards()[i][j].getState() == CardState.NONE) {
+				for (int i = 0; i < Integer.parseInt(profile.get(1)) * Integer.parseInt(profile.get(1)); i++) {
+						if (gameModel.getCards().get(i).getState() == CardState.NONE) {
 							temp.add(i);
-							temp.add(j);
 						}
-					}
 				}
 				oos.writeObject(temp);
 				oos.writeObject(startTime);
@@ -487,10 +484,10 @@ public class MenuController {
 					// restore removed guessed cards
 					temp = (ArrayList) ois.readObject();
 					System.out.println(temp);
-					for (int i = 0; i < temp.size(); i += 2) {
-						gameView.updateCardBoard(temp.get(i), temp.get(i + 1));
-						gameView.removeCard(gameModel.getCards()[temp.get(i)][temp.get(i + 1)]);
-						gameModel.getCards()[temp.get(i)][temp.get(i + 1)].updateCard(CardState.NONE);
+					for (int i = 0; i < temp.size(); i++) {
+						gameView.updateCardBoard(temp.get(i));
+						gameView.removeCard(gameModel.getCards().get(temp.get(i)));
+						gameModel.getCards().get(temp.get(i)).updateCard(CardState.NONE);
 
 //					oos.writeObject(stopTime);
 					}
@@ -693,14 +690,14 @@ public class MenuController {
 			// Double loop to find the clicked button
 			if (gameModel.getActivePlayer().getClass() != null) {
 				System.out.println("human playing");
-				for (int i = 0; i < gameView.getEmojiButtons().length; i++) {
-					for (int j = 0; j < gameView.getEmojiButtons()[i].length; j++) {
+				for (int i = 0; i < gameView.getEmojiButtons().size(); i++) {
+					
 						// selecting the card/button clicked
-						if ((e.getSource() == gameView.getEmojiButtons()[i][j]) && (validClicksOnCards < 2)
+						if ( (e.getSource() == gameView.getEmojiButtons().get(i)) && (validClicksOnCards < 2)
 								&& (!gameModel.getActivePlayer().getName().equals("Computer"))) {
 
 							validClicksOnCards++;
-							gameModel.setSelectedCard(gameModel.getCards()[i][j]);
+							gameModel.setSelectedCard(gameModel.getCards().get(i));
 //				
 							try {
 								gameModel.buttonIsOpen();
@@ -714,17 +711,17 @@ public class MenuController {
 							System.out.println("Player1 name is: " + gameModel.getPlayer1().getName());
 //								System.out.println("Player2 name is: " + gameModel.getPlayer2().getName());
 
-							if ((secondNumber == 0) && (gameModel.move(i, j))) {
+							if ((secondNumber == 0) && (gameModel.move(i))) {
 								if (validClicksOnCards == 1) {
-									firstNumber = gameView.getCurrentIcons().get(i * gameView.getBoardDimension() + j);
+									firstNumber = gameView.getCurrentIcons().get(i);
 									//gameModel.getFirstCard().setIsClicked();
 								} else if (validClicksOnCards == 2) {
-									secondNumber = gameView.getCurrentIcons().get(i * gameView.getBoardDimension() + j);
+									secondNumber = gameView.getCurrentIcons().get(i);
 									//gameModel.getSecondCard().setIsClicked();
 
 								}
 								// if(singletonModel.move(i, j));
-								gameView.updateCardBoard(i, j);
+								gameView.updateCardBoard(i);
 							}
 							if (secondNumber != 0) {
 
@@ -781,7 +778,7 @@ public class MenuController {
 								}
 							}
 						}
-					}
+					
 				}
 			}
 		}
@@ -808,17 +805,15 @@ public class MenuController {
 
 	public void playTheComputer() {
 		Card card;
-		int xIndexComp;
-		int yIndexComp;
+		
 
 		gameView.setCursor(waitingCursor);
 		System.out.println("Beginning of StartGame...active player is: " + gameModel.getActivePlayer().getName());
 
 		do {
 			card = gameModel.getRandomCardIndex(profile.get(4), gameView);
-			xIndexComp = card.getCardIndex()[0];
-			yIndexComp = card.getCardIndex()[1];
-			System.out.println("after assigning x and y are: " + xIndexComp + ", " + yIndexComp);
+			
+		//	System.out.println("after assigning x and y are: " + xIndexComp + ", " + yIndexComp);
 
 			try {
 				Thread.sleep(generateDifficultyFactor());
@@ -828,22 +823,22 @@ public class MenuController {
 			gameModel.setSelectedCard(card);
 			validClicksOnCards++;
 
-			if ((secondNumber == 0) && (gameModel.move(xIndexComp, yIndexComp))) {
+			if ((secondNumber == 0) && (gameModel.move(card.getIndex()))) {
 
 				if (validClicksOnCards == 1) {
 					firstNumber = gameView.getCurrentIcons()
-							.get(xIndexComp * gameView.getBoardDimension() + yIndexComp);
+							.get(card.getIndex());
 			//		gameModel.getFirstCard().setIsClicked();
 					System.out.println("FirstNumber is: " + firstNumber);
 
 				} else if (validClicksOnCards == 2) {
 					secondNumber = gameView.getCurrentIcons()
-							.get(xIndexComp * gameView.getBoardDimension() + yIndexComp);
+							.get(card.getIndex());
 				//	gameModel.getSecondCard().setIsClicked();
 
 					System.out.println("SecondNumber is: " + secondNumber);
 				}
-				gameView.updateCardBoard(xIndexComp, yIndexComp);
+				gameView.updateCardBoard(card.getIndex());
 			}
 
 			if (secondNumber != 0) {
