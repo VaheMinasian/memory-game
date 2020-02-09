@@ -38,7 +38,7 @@ public class GameView extends JFrame implements ActionListener {
 	private MyPanel boardPanel;
 	private JLabel player1Label, player2Label, score1Label, score2Label, p1TurnLabel, p2TurnLabel, iconBackgroundTogglerLabel, timerLabel;
 	private int boardSize, boardDimension, lowIndex = 1, highIndex = 73, indexRange = 73;
-	private ArrayList<JButton> emojiButtons=new ArrayList<>();
+	private ArrayList<JButton> emojiButtons;
 	JButton matchesButton;
 	Font boldFont, planeFont;
 	private ArrayList<Integer> allIconIndexes, currentIconIndexes;
@@ -202,17 +202,7 @@ public class GameView extends JFrame implements ActionListener {
 				" M E M O R Y      G A M E ", TitledBorder.CENTER, TitledBorder.TOP));
 		currentIconIndexes = new ArrayList<>(boardDimension * boardDimension);
 		boardPanel.setBoardSize(boardSize);
-
-//		for(int i=1; i<73; i++){
-//			iconsNames.add(i);
-//			System.out.println("IconNames before Shuffle"+i);
-//		}
-//		Collections.shuffle(iconsNames);
-//		iconsNames = new ArrayList<Integer>(iconsNames.subList(0, 72-(72-(cellDimension*cellDimension/2))));
-//		for(Integer number: iconsNames){
-//			System.out.println("SubArray iconNames" + number);
-//		}
-		
+	
 		allIconIndexes = new ArrayList<>();
 		for (int i = lowIndex; i < highIndex; i++) {
 			allIconIndexes.add(i);
@@ -229,7 +219,7 @@ public class GameView extends JFrame implements ActionListener {
 		}
 		Collections.shuffle(currentIconIndexes);
 
-		
+		emojiButtons = new ArrayList<>();
 		for (int i = 0; i < boardDimension*boardDimension; i++) {
 				emojiButtons.add(new JButton(patternIcon));
 				boardPanel.add(emojiButtons.get(i));

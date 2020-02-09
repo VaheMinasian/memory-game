@@ -23,7 +23,7 @@ public class MemoryGame implements Game {
 	private Card firstCard = null, secondCard = null;
 	private List<Integer> missedButtons = new ArrayList<>(); // checked
 	private int savedCardNumber, tempIndexValue;
-	private int cardIndexX = 0, cardIndexY = 0, savedIndexX, savedIndexY;
+	private int cardIndex = 0, cardIndexY = 0, savedIndexX, savedIndexY;
 	
 	
 	boolean valid;
@@ -66,10 +66,11 @@ public class MemoryGame implements Game {
 			setActivePlayer(player2);
 	}
 
-	private void createCards(int dimension) {
+	private void createCards(int size) {
 		
-		for (int i = 0; i < dimension; i++) {
+		for (int i = 0; i < size; i++) {
 				cards.add(new Card());
+				cards.get(i).setIndex(i);
 		}
 	}
 
@@ -105,7 +106,7 @@ public class MemoryGame implements Game {
 		int z1, z2, q1, q2;
 
 		if (missedButtons.size() == excludeLimit) {
-			for (int n = 0; n < 8; n++) {
+			for (int n = 0; n < 4; n++) {
 				missedButtons.remove(0);
 			}
 			System.out.println("limit excluded removed 8 items from missedButtons.");
@@ -128,33 +129,23 @@ public class MemoryGame implements Game {
 //		missedButtons.add(y2);
 
 		if (firstNumber == secondNumber) {
-			for (int i = 0; i < missedButtons.size(); i += 4) {
+			for (int i = 0; i < missedButtons.size(); i += 2) {
 				if (z1 == missedButtons.get(i)) {
 					missedButtons.set(i, -1);
 					missedButtons.set(i + 1, -1);
-					missedButtons.set(i + 2, -1);
-					missedButtons.set(i + 3, -1);
-
 				}
 				if (z2 == missedButtons.get(i)) {
-
 					missedButtons.set(i, -1);
 					missedButtons.set(i + 1, -1);
-					missedButtons.set(i + 2, -1);
-					missedButtons.set(i + 3, -1);
 				}
 			}
 		}
 
-		for (int n = 0; n < missedButtons.size(); n += 8) {
+		for (int n = 0; n < missedButtons.size(); n += 4) {
 			System.out.println("MissedButtons " + n + " " + missedButtons.get(n));
 			System.out.println("MissedButtons " + (n + 1) + " " + missedButtons.get(n + 1));
 			System.out.println("MissedButtons " + (n + 2) + " " + missedButtons.get(n + 2));
 			System.out.println("MissedButtons " + (n + 3) + " " + missedButtons.get(n + 3));
-			System.out.println("MissedButtons " + (n + 4) + " " + missedButtons.get(n + 4));
-			System.out.println("MissedButtons " + (n + 5) + " " + missedButtons.get(n + 5));
-			System.out.println("MissedButtons " + (n + 6) + " " + missedButtons.get(n + 6));
-			System.out.println("MissedButtons " + (n + 7) + " " + missedButtons.get(n + 7));
 		}
 	}
 
@@ -228,31 +219,31 @@ public class MemoryGame implements Game {
 			// 4th level ... check if there is 2 matching buttons in missedButtons
 			if(Integer.parseInt(difficulty)<=2) {
 				
-				for (int i = 0; i < missedButtons.size() - 8; i += 4) {
-					if ( (missedButtons.get(missedButtons.size() - 3) !=  -1) && (missedButtons.get(i + 1) == missedButtons.get(missedButtons.size() - 3)) ) 
+				for (int i = 0; i < missedButtons.size() - 4; i += 2) {
+					if ( (missedButtons.get(missedButtons.size() - 1) !=  -1) && (missedButtons.get(i + 1) == missedButtons.get(missedButtons.size() - 1)) ) 
 					{
 						if (getRandomProbability(Integer.parseInt(difficulty), getRemainingCardsNo(),0)) {
-							cardIndexX = missedButtons.get(missedButtons.size() - 2);
-							cardIndexY = missedButtons.get(missedButtons.size() - 1);
-							savedCardNumber = cardIndexX * boardDimension + cardIndexY;
-							savedIndexX = cardIndexX;
-							savedIndexY = cardIndexY;
+//							cardIndexX = missedButtons.get(missedButtons.size() - 2);
+//							cardIndexY = missedButtons.get(missedButtons.size() - 1);
+							savedCardNumber = missedButtons.get(missedButtons.size() - 2);
+//							savedIndexX = cardIndexX;
+//							savedIndexY = cardIndexY;
 							temp++;
-							System.out.println("cardIndexX is: " +cardIndexX + "cardIndexY is: " + cardIndexY);
-							return cards.get(missedButtons.get(missedButtons.size()-1));
+							System.out.println("cardIndex is: " + savedCardNumber);
+							return cards.get(missedButtons.get(savedCardNumber));
 						}
 					
-					} else if ( (missedButtons.get(missedButtons.size() - 7) !=  -1) && (missedButtons.get(i + 1) == missedButtons.get(missedButtons.size() - 7)) ) 
+					} else if ( (missedButtons.get(missedButtons.size() - 3) !=  -1) && (missedButtons.get(i + 1) == missedButtons.get(missedButtons.size() - 3)) ) 
 					{
 						if (getRandomProbability(Integer.parseInt(difficulty), getRemainingCardsNo(),0)) {
-							cardIndexX = missedButtons.get(missedButtons.size() - 6);
-							cardIndexY = missedButtons.get(missedButtons.size() - 5);
-							savedCardNumber = cardIndexX * boardDimension + cardIndexY;
-							savedIndexX = cardIndexX;
-							savedIndexY = cardIndexY;
+//							cardIndexX = missedButtons.get(missedButtons.size() - 2);
+//							cardIndexY = missedButtons.get(missedButtons.size() - 1);
+							savedCardNumber = missedButtons.get(missedButtons.size() - 2);
+//							savedIndexX = cardIndexX;
+//							savedIndexY = cardIndexY;
 							temp++;
-							System.out.println("cardIndexX is: " +cardIndexX + "cardIndexY is: " + cardIndexY);
-							return cards.get(missedButtons.get(missedButtons.size()-3));							
+							System.out.println("cardIndexX is: " +savedCardNumber);
+							return cards.get(missedButtons.get(savedCardNumber));							
 						}
 					}
 				}
@@ -260,17 +251,15 @@ public class MemoryGame implements Game {
 
 			//level 1 intelligence
 			do {
-				cardIndexX = randomNo.nextInt(boardDimension);
-				cardIndexY = randomNo.nextInt(boardDimension);
-			} while (cards.get(cardIndexX*boardDimension + cardIndexY).getState() != CardState.CLOSED);
+				cardIndex = randomNo.nextInt(boardDimension*boardDimension);
+				
+			} while (cards.get(cardIndex).getState() != CardState.CLOSED);
 			//end level 1 intelligence
-			savedCardNumber = cardIndexX * boardDimension + cardIndexY;
-			savedIndexX = cardIndexX;
-			savedIndexY = cardIndexY;
+			savedCardNumber = cardIndex;
+//			savedIndexX = cardIndex;
+//			savedIndexY = cardIndexY;
 
-			System.out.println(
-					"returning true from gameModel.setRandomIndex. savedCardNumber & cardIndexX & cardIndexY = ("
-							+ savedCardNumber + " - " + cardIndexX + "," + cardIndexY + ")");
+			System.out.println("returning true from gameModel.setRandomIndex. savedCardNumber = " + savedCardNumber );
 			temp++;
 			System.out.println("exiting temp==0 with temp value of " + temp);
 			
@@ -282,18 +271,18 @@ public class MemoryGame implements Game {
 
 			// 3rd level ... Check if first opened card has it's pair in memory
 			// (missedButtons arraylist)
-			for (int i = 0; i < missedButtons.size(); i += 4) {
+			for (int i = 0; i < missedButtons.size(); i += 2) {
 				System.out.println("I is equal to: " + i);
 				System.out.println(missedButtons.get(i));
 				if ((savedIcon == missedButtons.get(i + 1)) && (savedCardNumber != missedButtons.get(i))) {
 					System.out.println("saved Icon is equal to " + missedButtons.get(i));
-					System.out.println("index = " + (missedButtons.size()-4-i));
-					if (getRandomProbability(Integer.parseInt(difficulty), getRemainingCardsNo(), missedButtons.size()-4-i)) {
+					System.out.println("index = " + (missedButtons.size()-2-i));
+					if (getRandomProbability(Integer.parseInt(difficulty), getRemainingCardsNo(), missedButtons.size()-2-i)) {
 						
-						cardIndexX = missedButtons.get(i + 2);
-						cardIndexY = missedButtons.get(i + 3);
+//						cardIndex = missedButtons.get(i + 2);
+//						cardIndexY = missedButtons.get(i + 3);
 						temp--;
-						return cards.get(cardIndexX*boardDimension+cardIndexY);
+						return cards.get(i);
 					}
 				}
 			}
@@ -302,32 +291,29 @@ public class MemoryGame implements Game {
 				valid = true;
 
 				// 1st level ... assign random card
-				cardIndexX = randomNo.nextInt(boardDimension);
-				cardIndexY = randomNo.nextInt(boardDimension);
-				tempIndexValue = cardIndexX * boardDimension + cardIndexY;
+				cardIndex = randomNo.nextInt(boardDimension*boardDimension);
+				tempIndexValue = cardIndex;
 
-				System.out.println("\"tempIndexValue and it\'s X, Y values are: " + tempIndexValue + ", "
-						+ cardIndexX + ", " + cardIndexY);
-				System.out.println("\"savedCardNumber and it\'s X, Y values are: " + savedCardNumber + ", "
-						+ savedIndexX + ", " + savedIndexY);
+				System.out.println("\"tempIndexValue is: " + tempIndexValue);
+				System.out.println("\"savedCardNumber is: " + savedCardNumber);
 
 				// 2nd level intelligence ... prevent previously missed pair in  missedButtons from being selected
-				for (int i = (missedButtons.size()/2)+8; i < missedButtons.size() - 4; i += 4) {
+				for (int i = (missedButtons.size()/2)+4; i < missedButtons.size() - 2; i += 2) {
 					if (savedCardNumber == missedButtons.get(i)) {
-						if ((i % 2 == 4 || i % 4 == 0) && (tempIndexValue == missedButtons.get(i + 4))
-								|| (i % 4 == 2) && (tempIndexValue == missedButtons.get(i - 4))) {
+						if ((i % 2 == 4 || i % 4 == 0) && (tempIndexValue == missedButtons.get(i + 2))
+								|| (i % 4 == 2) && (tempIndexValue == missedButtons.get(i - 2))) {
 							valid = false;
 						}
 					}
 				} // end check
 			
-				System.out.println(cards.get(cardIndexX*boardDimension+cardIndexY).getState() + " " + valid);
-			} while ((cards.get(cardIndexX*boardDimension+cardIndexY).getState() != CardState.CLOSED) || (!valid));
+				System.out.println(cards.get(cardIndex*boardDimension+cardIndexY).getState() + " " + valid);
+			} while ((cards.get(cardIndex*boardDimension+cardIndexY).getState() != CardState.CLOSED) || (!valid));
 			temp--;
 			System.out.println("exiting temp==1 with temp value of " + temp);
 		}
 		
-		return cards.get(cardIndexX*boardDimension+cardIndexY);
+		return cards.get(cardIndex*boardDimension+cardIndexY);
 	}
 
 	public void buttonIsOpen() throws ButtonNotAvailableException {
@@ -356,9 +342,9 @@ public class MemoryGame implements Game {
 	}
 
 	@Override
-	public Boolean getStatus(int x, int y) {
+	public Boolean getStatus(int firstNumber, int secondNumber) {
 
-		if (x == y) {
+		if (firstNumber == secondNumber) {
 			return true;
 		} else {
 			return false;
@@ -541,11 +527,11 @@ public class MemoryGame implements Game {
 	}
 
 	public int getCardIndexX() {
-		return cardIndexX;
+		return cardIndex;
 	}
 
 	public void setCardIndexX(int cardIndexX) {
-		this.cardIndexX = cardIndexX;
+		this.cardIndex = cardIndexX;
 	}
 
 	public int getCardIndexY() {

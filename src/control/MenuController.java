@@ -319,12 +319,8 @@ public class MenuController {
 			gameModel.initializeParameters(profile);
 			mainMenuView.frame.setVisible(false);
 			gameView.displayGameWindow(profile);
-//			gameView.getBoardPanel().setBoardSize(gameView.getBoardDimension());
 			gameView.addGameViewListener(new GameListener());
 			gameView.addBackgroundButtonListener(new BackgroundButtonListener());
-//			gameModel.setActivePlayer(gameModel.getPlayer1());
-//			if (profile.get(0).equals("c") && !profile.get(4).equals("4")) {
-//			gameModel.setMemorySize(profile.get(4));
 
 			gameView.addWindowListener(new WindowAdapter() {
 
@@ -705,9 +701,7 @@ public class MenuController {
 								System.err.println("IndexOutOfBoundsException: " + e1.getMessage());
 								validClicksOnCards--;
 							}
-							// controls if card will be opened, and if yes opens it and does necesary
-							// asignments
-							// for Card and it's icon.
+							// controls and if card is free opens it and does necessary assignments for Card and it's icon.
 							System.out.println("Player1 name is: " + gameModel.getPlayer1().getName());
 //								System.out.println("Player2 name is: " + gameModel.getPlayer2().getName());
 
