@@ -624,35 +624,9 @@ public class MenuController {
 					iconSet = (String) optionsView.getIconSetComboBox().getSelectedItem();		
 					
 					
-//						System.out.print("selectedGameMode != profile.get(0)=  ");
-//						System.out.println(selectedGameMode != profile.get(0));
-//						System.out.println("");
-//					
-//						System.out.print("board != profile.get(1)=  ");
-//						System.out.println(board != profile.get(1));
-//						System.out.println("");
-//
-//						System.out.print("player1 != profile.get(2)=  ");
-//						System.out.println(player1 != profile.get(2));
-//						System.out.println("");
-//				
-//						System.out.print("player2 != profile.get(3)=  ");
-//						System.out.println(player2 != profile.get(3));
-//						System.out.println("");
-//				
-//						System.out.print("difficulty != profile.get(4)=  ");
-//						System.out.println(difficulty != profile.get(4));
-//						System.out.println("");
-//					
-//						System.out.print("iconSet != profile.get(5)=  ");
-//						System.out.println(iconSet != profile.get(5));
-//						System.out.println("");
-					
-					
-					
 					if (profile.size() != 0) {
 						if (!selectedGameMode.equals(profile.get(0)) || !board.equals(profile.get(1)) || !player1.equals(profile.get(2))
-								|| !player2.equals(profile.get(3)) || !difficulty.equals(profile.get(4))
+								|| (!profile.get(0).equals("s") && !player2.equals(profile.get(3))) || (optionsView.getComputerButton().isSelected() && !difficulty.equals(profile.get(4)))
 								|| !iconSet.equals(profile.get(5))) {
 							if(mainMenuView.getResumeButton().isEnabled()) {
 								int dialogButton = JOptionPane.YES_NO_OPTION;

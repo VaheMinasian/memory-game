@@ -1,7 +1,7 @@
 mode:c
 boardsize:4
-player1:fdsa
+player1:vahe
 player2:Computer
-difficulty:2
-iconSet:emotics
+difficulty:1
+iconSet:animals
 playable:true
