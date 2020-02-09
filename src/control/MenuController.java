@@ -104,7 +104,7 @@ public class MenuController {
 	private static void isPlayable() {
 //		serializeFile.createNewFile(); // if file already exists will do nothing
 //		br = new BufferedReader(new FileReader("data.txt"));
-		
+
 		String line = "";
 		try {
 			profileFile.createNewFile();
@@ -254,7 +254,7 @@ public class MenuController {
 					String p1Label = gameModel.getActivePlayer() == gameModel.getPlayer1() ? "player1" : "player2";
 					gameView.setActivePlayerLight(p1Label);
 					System.out.println("in resume button");
-				} 
+				}
 			}
 
 			// actions performed if 'O P T I O N S' button is clicked in main menu
@@ -306,7 +306,7 @@ public class MenuController {
 
 				String p1Label = gameModel.getActivePlayer() == gameModel.getPlayer1() ? "player1" : "player2";
 				gameView.setActivePlayerLight(p1Label);
-				
+
 				startTime = System.currentTimeMillis();
 				System.out.println("in listener " + startTime);
 
@@ -359,9 +359,9 @@ public class MenuController {
 					}
 				}
 			});
-			
+
 		}
-		
+
 		@SuppressWarnings("null")
 		void serialize() {
 			try {
@@ -621,21 +621,24 @@ public class MenuController {
 						board = optionsView.getSqrTen().getActionCommand();
 					}
 
-					iconSet = (String) optionsView.getIconSetComboBox().getSelectedItem();		
-					
-					
+					iconSet = (String) optionsView.getIconSetComboBox().getSelectedItem();
+
 					if (profile.size() != 0) {
-						if (!selectedGameMode.equals(profile.get(0)) || !board.equals(profile.get(1)) || !player1.equals(profile.get(2))
-								|| (!profile.get(0).equals("s") && !player2.equals(profile.get(3))) || (optionsView.getComputerButton().isSelected() && !difficulty.equals(profile.get(4)))
+						if (!selectedGameMode.equals(profile.get(0)) || !board.equals(profile.get(1))
+								|| !player1.equals(profile.get(2))
+								|| (!profile.get(0).equals("s") && !player2.equals(profile.get(3)))
+								|| (optionsView.getComputerButton().isSelected() && !difficulty.equals(profile.get(4)))
 								|| !iconSet.equals(profile.get(5))) {
-							if(mainMenuView.getResumeButton().isEnabled()) {
+							if (mainMenuView.getResumeButton().isEnabled()) {
 								int dialogButton = JOptionPane.YES_NO_OPTION;
-								int dialogResult = JOptionPane.showConfirmDialog (null, "your current game will be lost! \n                 coninue?","Warning",dialogButton);
-								if(dialogResult == JOptionPane.NO_OPTION){
-								  return;
+								int dialogResult = JOptionPane.showConfirmDialog(null,
+										"your current game will be lost! \n                 coninue?", "Warning",
+										dialogButton);
+								if (dialogResult == JOptionPane.NO_OPTION) {
+									return;
 								}
 							}
-							
+
 							removeSerialization();
 							mainMenuView.getResumeButton().setEnabled(false);
 							System.out.println("resume button set to false");

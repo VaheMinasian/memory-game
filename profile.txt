@@ -1,7 +1,7 @@
 mode:s
-boardsize:4
+boardsize:10
 player1:va
 player2:
 difficulty:null
-iconSet:animals
+iconSet:musical
 playable:true

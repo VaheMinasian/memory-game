@@ -203,12 +203,23 @@ public class GameView extends JFrame implements ActionListener {
 		currentIconIndexes = new ArrayList<>(boardDimension * boardDimension);
 		boardPanel.setBoardSize(boardSize);
 
+//		for(int i=1; i<73; i++){
+//			iconsNames.add(i);
+//			System.out.println("IconNames before Shuffle"+i);
+//		}
+//		Collections.shuffle(iconsNames);
+//		iconsNames = new ArrayList<Integer>(iconsNames.subList(0, 72-(72-(cellDimension*cellDimension/2))));
+//		for(Integer number: iconsNames){
+//			System.out.println("SubArray iconNames" + number);
+//		}
+		
 		allIconIndexes = new ArrayList<>();
 		for (int i = lowIndex; i < highIndex; i++) {
 			allIconIndexes.add(i);
 		}
+		System.out.println("lowIndex is: " + lowIndex);
+		System.out.println("highIndex is: " + highIndex);
 		Collections.shuffle(allIconIndexes);
-
 		allIconIndexes = new ArrayList<Integer>(allIconIndexes.subList(0,
 				(indexRange - 1) - ((indexRange - 1) - (boardDimension * boardDimension / 2))));
 
@@ -387,8 +398,6 @@ public class GameView extends JFrame implements ActionListener {
 			p1TurnLabel.setToolTipText("wait!");
 			p2TurnLabel.setIcon(greenOnIcon);
 			p2TurnLabel.setToolTipText("play!");
-
-			
 		}
 	}
 
