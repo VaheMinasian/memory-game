@@ -88,16 +88,16 @@ public class MemoryGame implements Game {
 			firstRun=false;
 			switch (difficulty) {
 			case "4":
-				excludeLimit = 16;
+				excludeLimit = 8;
 				break;
 			case "3":
-				excludeLimit = 32;
+				excludeLimit = 16;
 				break;
 			case "2":
-				excludeLimit = 48;
+				excludeLimit = 24;
 				break;
 			default:
-				excludeLimit = 80;
+				excludeLimit = 40;
 				break;
 			}
 			
@@ -278,11 +278,11 @@ public class MemoryGame implements Game {
 					System.out.println("saved Icon is equal to " + missedButtons.get(i));
 					System.out.println("index = " + (missedButtons.size()-2-i));
 					if (getRandomProbability(Integer.parseInt(difficulty), getRemainingCardsNo(), missedButtons.size()-2-i)) {
-						
-//						cardIndex = missedButtons.get(i + 2);
+						int tempNumber = missedButtons.get(i);
+//						cardIndexX = missedButtons.get(i + 2);
 //						cardIndexY = missedButtons.get(i + 3);
 						temp--;
-						return cards.get(i);
+						return cards.get(tempNumber);
 					}
 				}
 			}
@@ -300,20 +300,20 @@ public class MemoryGame implements Game {
 				// 2nd level intelligence ... prevent previously missed pair in  missedButtons from being selected
 				for (int i = (missedButtons.size()/2)+4; i < missedButtons.size() - 2; i += 2) {
 					if (savedCardNumber == missedButtons.get(i)) {
-						if ((i % 2 == 4 || i % 4 == 0) && (tempIndexValue == missedButtons.get(i + 2))
-								|| (i % 4 == 2) && (tempIndexValue == missedButtons.get(i - 2))) {
+						if ((i%2==2)||(i % 4 == 0) && (tempIndexValue == missedButtons.get(i + 2))
+								|| ((i+2) % 4 == 0) && (tempIndexValue == missedButtons.get(i - 2))) {
 							valid = false;
 						}
 					}
 				} // end check
 			
-				System.out.println(cards.get(cardIndex*boardDimension+cardIndexY).getState() + " " + valid);
-			} while ((cards.get(cardIndex*boardDimension+cardIndexY).getState() != CardState.CLOSED) || (!valid));
+				System.out.println(cards.get(tempIndexValue).getState() + " " + valid);
+			} while ((cards.get(tempIndexValue).getState() != CardState.CLOSED) || (!valid));
 			temp--;
 			System.out.println("exiting temp==1 with temp value of " + temp);
 		}
 		
-		return cards.get(cardIndex*boardDimension+cardIndexY);
+		return cards.get(tempIndexValue);
 	}
 
 	public void buttonIsOpen() throws ButtonNotAvailableException {
