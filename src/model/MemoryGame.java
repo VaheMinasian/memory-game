@@ -229,8 +229,8 @@ public class MemoryGame implements Game {
 //							savedIndexX = cardIndexX;
 //							savedIndexY = cardIndexY;
 							temp++;
-							System.out.println("cardIndex is: " + savedCardNumber);
-							return cards.get(missedButtons.get(savedCardNumber));
+							System.out.println("cardIndexX&Y => savedCardNumber is: " + savedCardNumber);
+							return cards.get(savedCardNumber);
 						}
 					
 					} else if ( (missedButtons.get(missedButtons.size() - 3) !=  -1) && (missedButtons.get(i + 1) == missedButtons.get(missedButtons.size() - 3)) ) 
@@ -238,12 +238,12 @@ public class MemoryGame implements Game {
 						if (getRandomProbability(Integer.parseInt(difficulty), getRemainingCardsNo(),0)) {
 //							cardIndexX = missedButtons.get(missedButtons.size() - 2);
 //							cardIndexY = missedButtons.get(missedButtons.size() - 1);
-							savedCardNumber = missedButtons.get(missedButtons.size() - 2);
+							savedCardNumber = missedButtons.get(missedButtons.size() - 3);
 //							savedIndexX = cardIndexX;
 //							savedIndexY = cardIndexY;
 							temp++;
-							System.out.println("cardIndexX is: " +savedCardNumber);
-							return cards.get(missedButtons.get(savedCardNumber));							
+							System.out.println("cardIndexX&Y => savedCardNumber is: " + savedCardNumber);
+							return cards.get(savedCardNumber);							
 						}
 					}
 				}
