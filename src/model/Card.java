@@ -6,7 +6,7 @@ package model;
  */
 public class Card {
 		private CardState state;
-		private int index;
+//		private int index;
 		
 	public enum CardState {
 		OPEN, CLOSED, NONE
@@ -29,11 +29,11 @@ public class Card {
 		return this.state;
 	}
 
-	public int getIndex() {
-		return this.index;
-	}
+//	public int getIndex() {
+//		return this.index;
+//	}
 
-	public void setIndex(int index) {
-		this.index = index;
-	}
+//	public void setIndex(int index) {
+//		this.index = index;
+//	}
 }

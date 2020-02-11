@@ -36,7 +36,7 @@ public class MemoryGame implements Game {
 	int savedIcon;
 	int excludeLimit = 36;
 	int result;
-
+	boolean firstRun=true;
 	public MemoryGame() {
 
 	}
@@ -70,7 +70,7 @@ public class MemoryGame implements Game {
 		
 		for (int i = 0; i < size; i++) {
 				cards.add(new Card());
-				cards.get(i).setIndex(i);
+//				cards.get(i).setIndex(i);
 		}
 	}
 
@@ -82,7 +82,7 @@ public class MemoryGame implements Game {
 	
 	// determining size of memory according to selected difficulty level.
 	public void addToMemory(int firstNumber, int secondNumber, GameView view, String difficulty) {// checked
-		boolean firstRun=true;
+		
 		if(firstRun) {
 			System.out.println("firstrun is: " + firstRun);
 			firstRun=false;
@@ -109,7 +109,7 @@ public class MemoryGame implements Game {
 			for (int n = 0; n < 4; n++) {
 				missedButtons.remove(0);
 			}
-			System.out.println("limit excluded removed 8 items from missedButtons.");
+			System.out.println("limit excluded removed 4 indexes from missedButtons.");
 		}
 
 		z1 = cards.indexOf(firstCard);
@@ -190,9 +190,7 @@ public class MemoryGame implements Game {
 
 			break;
 		}
-		
-		
-
+	
 		randomNo = new Random();
 		result = randomNo.nextInt(high - 1) + 1;
 
@@ -214,7 +212,7 @@ public class MemoryGame implements Game {
 
 		if(temp==0) {
 			
-			System.out.println("entering (temp == 0) : temp value is: " + temp);
+			System.out.println("Computer's first move, : temp value is: " + temp);
 
 			// 4th level ... check if there is 2 matching buttons in missedButtons
 			if(Integer.parseInt(difficulty)<=2) {
@@ -238,7 +236,7 @@ public class MemoryGame implements Game {
 						if (getRandomProbability(Integer.parseInt(difficulty), getRemainingCardsNo(),0)) {
 //							cardIndexX = missedButtons.get(missedButtons.size() - 2);
 //							cardIndexY = missedButtons.get(missedButtons.size() - 1);
-							savedCardNumber = missedButtons.get(missedButtons.size() - 3);
+							savedCardNumber = missedButtons.get(missedButtons.size() - 4);
 //							savedIndexX = cardIndexX;
 //							savedIndexY = cardIndexY;
 							temp++;
@@ -258,7 +256,7 @@ public class MemoryGame implements Game {
 			savedCardNumber = cardIndex;
 //			savedIndexX = cardIndex;
 //			savedIndexY = cardIndexY;
-
+			
 			System.out.println("returning true from gameModel.setRandomIndex. savedCardNumber = " + savedCardNumber );
 			temp++;
 			System.out.println("exiting temp==0 with temp value of " + temp);
@@ -273,7 +271,7 @@ public class MemoryGame implements Game {
 			// (missedButtons arraylist)
 			for (int i = 0; i < missedButtons.size(); i += 2) {
 				System.out.println("I is equal to: " + i);
-				System.out.println(missedButtons.get(i));
+				System.out.println("missedButtons.get(i) is: " + missedButtons.get(i));
 				if ((savedIcon == missedButtons.get(i + 1)) && (savedCardNumber != missedButtons.get(i))) {
 					System.out.println("saved Icon is equal to " + missedButtons.get(i));
 					System.out.println("index = " + (missedButtons.size()-2-i));
@@ -309,11 +307,12 @@ public class MemoryGame implements Game {
 			
 				System.out.println(cards.get(tempIndexValue).getState() + " " + valid);
 			} while ((cards.get(tempIndexValue).getState() != CardState.CLOSED) || (!valid));
+			savedCardNumber=tempIndexValue;
 			temp--;
-			System.out.println("exiting temp==1 with temp value of " + temp);
+			System.out.println("exiting computer's second move with temp value of " + temp);
 		}
 		
-		return cards.get(tempIndexValue);
+		return cards.get(savedCardNumber);
 	}
 
 	public void buttonIsOpen() throws ButtonNotAvailableException {

@@ -327,13 +327,15 @@ public class GameView extends JFrame implements ActionListener {
 		this.matchesButton = matchesButton;
 	}
 
-	public void removeCard(Card card) {
+	public void removeCard(int index) {
 
 		if (buttonState == false) {
-			emojiButtons.get(card.getIndex()).setEnabled(false);
-			emojiButtons.get(card.getIndex()).setVisible(false);
+			emojiButtons.get(index).setEnabled(false);
+			emojiButtons.get(index).setVisible(false);
+			System.out.println("buttonState is false, setEnabled(false); is set");
 		} else if (buttonState == true) {
-			emojiButtons.get(card.getIndex()).setEnabled(false);
+			emojiButtons.get(index).setEnabled(false);
+			System.out.println("buttonState is true, setEnabled(false); is set");
 		}
 
 		System.out.println("set visible false");
@@ -343,7 +345,6 @@ public class GameView extends JFrame implements ActionListener {
 	public void updateCardBoard(int index) {
 		Icon image;
 		int iconName;
-		System.out.println("card index is: " + index);
 		iconName = getCurrentIcons().get(index);
 		image = new ImageIcon(GameView.class.getResource("/" + iconName + ".png"));
 		emojiButtons.get(index).setIcon(image);
@@ -405,9 +406,9 @@ public class GameView extends JFrame implements ActionListener {
 		this.score2Label.setText("" + newScore);
 	}
 
-	public void restoreDefaultIcon(Card card) {
+	public void restoreDefaultIcon(int index) {
 		scaledImageIcon = new ImageIcon(GameView.class.getResource("/pattern.png"));
-		emojiButtons.get(card.getIndex()).setIcon(scaledImageIcon);
+		emojiButtons.get(index).setIcon(scaledImageIcon);
 
 	}
 

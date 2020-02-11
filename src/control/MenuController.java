@@ -482,7 +482,7 @@ public class MenuController {
 					System.out.println(temp);
 					for (int i = 0; i < temp.size(); i++) {
 						gameView.updateCardBoard(temp.get(i));
-						gameView.removeCard(gameModel.getCards().get(temp.get(i)));
+						gameView.removeCard(temp.get(i));
 						gameModel.getCards().get(temp.get(i)).updateCard(CardState.NONE);
 
 //					oos.writeObject(stopTime);
@@ -727,8 +727,10 @@ public class MenuController {
 ////												gameModel.setMissedButtons(firstNumber, secondNumber);
 //											}
 											gameModel.addToMemory(firstNumber, secondNumber, gameView, profile.get(4));
-											gameView.restoreDefaultIcon(gameModel.getFirstCard());
-											gameView.restoreDefaultIcon(gameModel.getSecondCard());
+//											gameView.restoreDefaultIcon(gameModel.getCards().indexOf(gameModel.getFirstCard()));
+//											gameView.restoreDefaultIcon(gameModel.getCards().indexOf(gameModel.getSecondCard()));
+											gameView.restoreDefaultIcon(gameModel.getCards().indexOf(gameModel.getFirstCard()));
+											gameView.restoreDefaultIcon(gameModel.getCards().indexOf(gameModel.getSecondCard()));
 											firstNumber = 0;
 											secondNumber = 0;
 											gameModel.revoke();
@@ -737,8 +739,6 @@ public class MenuController {
 											if (!profile.get(0).equals("s")) {
 												activePlayerLabel = gameModel.switchActivePlayer();
 												gameView.switchActivePlayerLight(activePlayerLabel);
-												System.out.println("active player now is the player named: "
-														+ gameModel.getActivePlayer().getClass().getSimpleName());
 												if (gameModel.getActivePlayer().getClass().getSimpleName()
 														.equals("ComputerPlayer"))
 													playTheComputer();
@@ -752,8 +752,10 @@ public class MenuController {
 										public void run() {
 
 											gameModel.addToMemory(firstNumber, secondNumber, gameView, profile.get(4));
-											gameView.removeCard(gameModel.getFirstCard());
-											gameView.removeCard(gameModel.getSecondCard());
+											gameView.removeCard(gameModel.getCards().indexOf(gameModel.getFirstCard()));
+											gameView.removeCard(gameModel.getCards().indexOf(gameModel.getSecondCard()));
+//											gameView.removeCard(gameModel.getFirstCard());
+//											gameView.removeCard(gameModel.getSecondCard());
 //											gameView.removeIcons(firstNumber, secondNumber);
 
 //											gameModel.nullifyButtonsIndex();
@@ -817,22 +819,22 @@ public class MenuController {
 			gameModel.setSelectedCard(card);
 			validClicksOnCards++;
 
-			if ((secondNumber == 0) && (gameModel.move(card.getIndex()))) {
+			if ((secondNumber == 0) && (gameModel.move(gameModel.getCards().indexOf(card)))) {
 
 				if (validClicksOnCards == 1) {
 					firstNumber = gameView.getCurrentIcons()
-							.get(card.getIndex());
+							.get(gameModel.getCards().indexOf(card));
 			//		gameModel.getFirstCard().setIsClicked();
 					System.out.println("FirstNumber is: " + firstNumber);
 
 				} else if (validClicksOnCards == 2) {
 					secondNumber = gameView.getCurrentIcons()
-							.get(card.getIndex());
+							.get(gameModel.getCards().indexOf(card));
 				//	gameModel.getSecondCard().setIsClicked();
 
 					System.out.println("SecondNumber is: " + secondNumber);
 				}
-				gameView.updateCardBoard(card.getIndex());
+				gameView.updateCardBoard(gameModel.getCards().indexOf(card));
 			}
 
 			if (secondNumber != 0) {
@@ -848,8 +850,8 @@ public class MenuController {
 						interrupt.printStackTrace();
 					}
 					gameModel.addToMemory(firstNumber, secondNumber, gameView, profile.get(4));
-					gameView.restoreDefaultIcon(gameModel.getFirstCard());
-					gameView.restoreDefaultIcon(gameModel.getSecondCard());
+					gameView.restoreDefaultIcon(gameModel.getCards().indexOf(gameModel.getFirstCard()));
+					gameView.restoreDefaultIcon(gameModel.getCards().indexOf(gameModel.getSecondCard()));
 					validClicksOnCards = 0;
 					firstNumber = 0;
 					secondNumber = 0;
@@ -869,8 +871,9 @@ public class MenuController {
 					}
 
 					gameModel.addToMemory(firstNumber, secondNumber, gameView, profile.get(4));
-					gameView.removeCard(gameModel.getFirstCard());
-					gameView.removeCard(gameModel.getSecondCard());
+					gameView.removeCard(gameModel.getCards().indexOf(gameModel.getFirstCard()));
+					gameView.removeCard(gameModel.getCards().indexOf(gameModel.getSecondCard()));
+//					gameView.removeCard(gameModel.getSecondCard());
 //					gameView.removeIcons(firstNumber, secondNumber);
 					validClicksOnCards = 0;
 					firstNumber = 0;
