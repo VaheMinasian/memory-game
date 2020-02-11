@@ -908,14 +908,14 @@ public class MenuController {
 		willDeserialize = false;
 		stopTimer();
 		switch (gameModel.getMessage(profile.get(0))) {
-		case 0:
+		case 0://play
 			System.out.println("inside case 0");
 			gameModel = new MemoryGame();
 			gameView.dispose();
 			gameView = new GameView();
 			mainMenuView.getPlayButton().doClick();
 			break;
-		case 1:
+		case 1://main menu
 			System.out.println("inside case 1");
 //			gameModel = null;
 			gameModel = new MemoryGame();
@@ -931,7 +931,7 @@ public class MenuController {
 			mainMenuView.getResumeButton().setEnabled(false);
 
 			break;
-		case 2:
+		case 2://quit
 			System.out.println("inside case 2");
 			System.exit(0);
 			break;

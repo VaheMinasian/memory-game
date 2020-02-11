@@ -29,8 +29,6 @@ import javax.swing.SwingConstants;
 import javax.swing.border.Border;
 import javax.swing.border.TitledBorder;
 
-import model.Card;
-
 @SuppressWarnings("serial")
 public class GameView extends JFrame implements ActionListener {
 

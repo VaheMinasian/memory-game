@@ -2,6 +2,6 @@ mode:c
 boardsize:4
 player1:va
 player2:Computer
-difficulty:1
-iconSet:animals
+difficulty:3
+iconSet:emotics
 playable:true
