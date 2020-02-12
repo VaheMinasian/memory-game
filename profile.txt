@@ -1,7 +1,7 @@
 mode:c
-boardsize:4
+boardsize:6
 player1:va
 player2:Computer
-difficulty:3
+difficulty:2
 iconSet:emotics
 playable:true

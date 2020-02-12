@@ -14,20 +14,19 @@ public class MemoryGame implements Game {
 
 //	private static MemoryGame Single_Instance = null;
 
-	private ArrayList<Card> cards = new ArrayList<>();
-	private Card selectedCard;
 	private int boardDimension;
 	private static Player player1;
 	private static Player player2;
 	private Player activePlayer;
+	private Card selectedCard;
 	private Card firstCard = null, secondCard = null;
+	private ArrayList<Card> cards = new ArrayList<>();
 	private List<Integer> missedButtons = new ArrayList<>(); // checked
 	private int savedCardNumber, tempIndexValue;
-	private int cardIndex = 0, cardIndexY = 0, savedIndexX, savedIndexY;
+	private int cardIndex = 0;
 
 	boolean valid;
-
-	int temp = 0;
+	int cardsClicked = 0;
 	private int counter = 0;
 	private int wincheck = 0;
 	Random randomNo;
@@ -174,7 +173,7 @@ public class MemoryGame implements Game {
 		valid = false;
 		randomNo = new Random();
 
-		if (temp == 0) {
+		if (cardsClicked == 0) {
 
 			// 4th level ... check if there is 2 matching buttons in missedButtons
 			if (Integer.parseInt(difficulty) <= 2) {
@@ -184,7 +183,7 @@ public class MemoryGame implements Game {
 							&& (missedButtons.get(i + 1) == missedButtons.get(missedButtons.size() - 1))) {
 						if (getRandomProbability(Integer.parseInt(difficulty), getRemainingCardsNo(), 0)) {
 							savedCardNumber = missedButtons.get(missedButtons.size() - 2);
-							temp++;
+							cardsClicked++;
 							return cards.get(savedCardNumber);
 						}
 
@@ -192,7 +191,7 @@ public class MemoryGame implements Game {
 							&& (missedButtons.get(i + 1) == missedButtons.get(missedButtons.size() - 3))) {
 						if (getRandomProbability(Integer.parseInt(difficulty), getRemainingCardsNo(), 0)) {
 							savedCardNumber = missedButtons.get(missedButtons.size() - 4);
-							temp++;
+							cardsClicked++;
 							return cards.get(savedCardNumber);
 						}
 					}
@@ -206,9 +205,9 @@ public class MemoryGame implements Game {
 			} while (cards.get(cardIndex).getState() != CardState.CLOSED);
 			// end level 1 intelligence
 			savedCardNumber = cardIndex;
-			temp++;
+			cardsClicked++;
 
-		} else if (temp == 1) {
+		} else if (cardsClicked == 1) {
 
 			savedIcon = view.getCurrentIcons().get(savedCardNumber);
 
@@ -219,7 +218,7 @@ public class MemoryGame implements Game {
 					if (getRandomProbability(Integer.parseInt(difficulty), getRemainingCardsNo(),
 							missedButtons.size() - 2 - i)) {
 						int tempNumber = missedButtons.get(i);
-						temp--;
+						cardsClicked--;
 						return cards.get(tempNumber);
 					}
 				}
@@ -245,7 +244,7 @@ public class MemoryGame implements Game {
 
 			} while ((cards.get(tempIndexValue).getState() != CardState.CLOSED) || (!valid));
 			savedCardNumber = tempIndexValue;
-			temp--;
+			cardsClicked--;
 		}
 
 		return cards.get(savedCardNumber);
@@ -456,30 +455,6 @@ public class MemoryGame implements Game {
 
 	public void setCardIndexX(int cardIndexX) {
 		this.cardIndex = cardIndexX;
-	}
-
-	public int getCardIndexY() {
-		return cardIndexY;
-	}
-
-	public void setCardIndexY(int cardIndexY) {
-		this.cardIndexY = cardIndexY;
-	}
-
-	public int getSavedIndexX() {
-		return savedIndexX;
-	}
-
-	public void setSavedIndexX(int savedIndexX) {
-		this.savedIndexX = savedIndexX;
-	}
-
-	public int getSavedIndexY() {
-		return savedIndexY;
-	}
-
-	public void setSavedIndexY(int savedIndexY) {
-		this.savedIndexY = savedIndexY;
 	}
 
 	public int getTempIndexValue() {

@@ -45,8 +45,6 @@ public class MenuController {
 	private final ClockListener clock = new ClockListener();
 	private int validClicksOnCards = 0;
 	private boolean firstTimeProfileSave = false;
-	boolean willDeserialize;
-	String activePlayerLabel = null;
 	int firstNumber, secondNumber;
 	private int factor;
 	private long startTime, stopTime;
@@ -633,10 +631,10 @@ public class MenuController {
 		public void actionPerformed(ActionEvent e) {
 			// Double loop to find the clicked button
 			if (gameModel.getActivePlayer().getClass() != null) {
-				for (int i = 0; i < gameView.getEmojiButtons().size(); i++) {
+				for (int i = 0; i < gameView.getIconButtons().size(); i++) {
 
 					// selecting the card/button clicked
-					if ((e.getSource() == gameView.getEmojiButtons().get(i)) && (validClicksOnCards < 2)
+					if ((e.getSource() == gameView.getIconButtons().get(i)) && (validClicksOnCards < 2)
 							&& (!gameModel.getActivePlayer().getName().equals("Computer"))) {
 
 						validClicksOnCards++;
@@ -677,8 +675,7 @@ public class MenuController {
 										updateScoreBoard();
 										validClicksOnCards = 0;
 										if (!profile.get(0).equals("s")) {
-											activePlayerLabel = gameModel.switchActivePlayer();
-											gameView.switchActivePlayerLight(activePlayerLabel);
+											gameView.switchActivePlayerLight(gameModel.switchActivePlayer());
 											if (gameModel.getActivePlayer().getClass().getSimpleName()
 													.equals("ComputerPlayer"))
 												playTheComputer();
@@ -780,8 +777,7 @@ public class MenuController {
 					secondNumber = 0;
 					gameModel.revoke();
 					updateScoreBoard();
-					activePlayerLabel = gameModel.switchActivePlayer();
-					gameView.switchActivePlayerLight(activePlayerLabel);
+					gameView.switchActivePlayerLight(gameModel.switchActivePlayer());
 					gameView.setCursor(normalCursor);
 
 //					I F    M A T C H E D
@@ -821,7 +817,6 @@ public class MenuController {
 
 	void resetGame() {
 		mainMenuView.getResumeButton().setEnabled(false);
-		willDeserialize = false;
 		stopTimer();
 		switch (gameModel.getMessage(profile.get(0))) {
 		case 0:// play
