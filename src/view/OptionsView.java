@@ -357,8 +357,8 @@ public class OptionsView extends JFrame implements ActionListener, ListSelection
 		namesPanel.add(addButton);
 		namesPanel.add(playerNameTextField);
 		namesPanel.add(removeButton);
-		
-		//setup submit panel UI
+
+		// setup submit panel UI
 		saveButton = new JButton("save");
 		saveButton.setFont((new Font("dialog", Font.BOLD, 13)));
 		saveButton.setPreferredSize(new Dimension(90, 28));
@@ -366,7 +366,7 @@ public class OptionsView extends JFrame implements ActionListener, ListSelection
 		submitPanel = new JPanel();
 		submitPanel.add(saveButton);
 
-		//add all panels to mainPanel using gridbaglayout
+		// add all panels to mainPanel using gridbaglayout
 		GridBagConstraints gbc = new GridBagConstraints();
 		gbc.insets = new Insets(2, 3, 2, 2);
 		gbc.anchor = GridBagConstraints.NORTHWEST;
@@ -434,12 +434,12 @@ public class OptionsView extends JFrame implements ActionListener, ListSelection
 			}
 		}
 	}
-	
+
 	// set action listener on all setup view buttons
-		public void addOptionsViewListener(ActionListener selected) {
-			saveButton.addActionListener(selected);
-		}
-	
+	public void addOptionsViewListener(ActionListener selected) {
+		saveButton.addActionListener(selected);
+	}
+
 	public List<AbstractButton> getListRadioButton() {
 		return listRadioButton;
 	}

@@ -3,22 +3,21 @@ package model;
 public abstract class Player {
 
 	private String name;
-	private int score=0;
-	private int tries=0;
+	private int score = 0;
+	private int tries = 0;
 	private boolean active = false;
-		
-//	public abstract boolean setRandomIndex(MemoryGame model, int i);
 
-	public Player() {}
-	
+	public Player() {
+	}
+
 	public String getName() {
 		return name;
 	}
 
 	public Player(String name) {
-		this.name = name;		
+		this.name = name;
 	}
-	
+
 	public int getScore() {
 		return score;
 	}
@@ -35,14 +34,14 @@ public abstract class Player {
 		this.tries = tries;
 	}
 
-	void incrementScore(){
+	void incrementScore() {
 		++score;
 	}
-	
-	void incrementTries(){
+
+	void incrementTries() {
 		++tries;
 	}
-	
+
 	public boolean isActive() {
 		return active;
 	}
@@ -50,12 +49,12 @@ public abstract class Player {
 	public void setActive(boolean active) {
 		this.active = active;
 	}
-	
+
 	public int getCardIndexX() {
 		return 0;
 	}
 
 	public int getCardIndexY() {
 		return 0;
-	}	
+	}
 }

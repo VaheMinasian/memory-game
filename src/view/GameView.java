@@ -34,7 +34,8 @@ public class GameView extends JFrame implements ActionListener {
 
 	private JPanel mainPanel, turnPanel, namesPanel, timePanel;
 	private MyPanel boardPanel;
-	private JLabel player1Label, player2Label, score1Label, score2Label, p1TurnLabel, p2TurnLabel, iconBackgroundTogglerLabel, timerLabel;
+	private JLabel player1Label, player2Label, score1Label, score2Label, p1TurnLabel, p2TurnLabel,
+			iconBackgroundTogglerLabel, timerLabel;
 	private int boardSize, boardDimension, lowIndex = 1, highIndex = 73, indexRange = 73;
 	private ArrayList<JButton> emojiButtons;
 	JButton matchesButton;
@@ -54,7 +55,8 @@ public class GameView extends JFrame implements ActionListener {
 	private Date elapsed;
 	SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
 
-	public GameView() {}
+	public GameView() {
+	}
 
 	public void displayGameWindow(ArrayList<String> profile) {
 		switch (profile.get(5)) {
@@ -80,7 +82,7 @@ public class GameView extends JFrame implements ActionListener {
 			indexRange = 72;
 			break;
 		}
-		
+
 		boardDimension = Integer.parseInt(profile.get(1));
 		boardSize = boardDimension * 75;
 		timePanel = new JPanel();
@@ -117,9 +119,10 @@ public class GameView extends JFrame implements ActionListener {
 		greenOffIcon = getScaledImage(greenOff, boardDimension * 8, boardDimension * 8);
 		unselectedIcon = getScaledImage(unselectedImageIcon, boardDimension * 8, boardDimension * 8);
 		selectedIcon = getScaledImage(selectedImageIcon, boardDimension * 8, boardDimension * 8);
-		
+
 		iconBackgroundTogglerLabel = new JLabel();
-		iconBackgroundTogglerLabel.setSize(new Dimension((int) Math.pow(boardDimension, 2), (int) Math.pow(boardDimension, 2)));
+		iconBackgroundTogglerLabel
+				.setSize(new Dimension((int) Math.pow(boardDimension, 2), (int) Math.pow(boardDimension, 2)));
 		iconBackgroundTogglerLabel.setIcon(unselectedIcon);
 		p1TurnLabel = new JLabel();
 		p2TurnLabel = new JLabel();
@@ -130,7 +133,8 @@ public class GameView extends JFrame implements ActionListener {
 		matchesButton.setBackground(new java.awt.Color(238, 238, 238));
 		matchesButton.setOpaque(true);
 		matchesButton.setMargin(new Insets(0, 3, 0, 3));
-		matchesButton.setPreferredSize(new Dimension((int) Math.pow(boardDimension, 3), (int) Math.pow(boardDimension, 3)));
+		matchesButton
+				.setPreferredSize(new Dimension((int) Math.pow(boardDimension, 3), (int) Math.pow(boardDimension, 3)));
 		matchesButton.add(iconBackgroundTogglerLabel);
 		matchesButton.setToolTipText("showing image in background");
 
@@ -200,16 +204,14 @@ public class GameView extends JFrame implements ActionListener {
 				" M E M O R Y      G A M E ", TitledBorder.CENTER, TitledBorder.TOP));
 		currentIconIndexes = new ArrayList<>(boardDimension * boardDimension);
 		boardPanel.setBoardSize(boardSize);
-	
+
 		allIconIndexes = new ArrayList<>();
 		for (int i = lowIndex; i < highIndex; i++) {
 			allIconIndexes.add(i);
 		}
-		System.out.println("lowIndex is: " + lowIndex);
-		System.out.println("highIndex is: " + highIndex);
 		Collections.shuffle(allIconIndexes);
-		allIconIndexes = new ArrayList<Integer>(allIconIndexes.subList(0,
-				indexRange - (indexRange-(boardDimension * boardDimension / 2))));
+		allIconIndexes = new ArrayList<Integer>(
+				allIconIndexes.subList(0, indexRange - (indexRange - (boardDimension * boardDimension / 2))));
 
 		for (int n = 0; n < allIconIndexes.size(); n++) {
 			currentIconIndexes.add(allIconIndexes.get(n));
@@ -218,9 +220,9 @@ public class GameView extends JFrame implements ActionListener {
 		Collections.shuffle(currentIconIndexes);
 
 		emojiButtons = new ArrayList<>();
-		for (int i = 0; i < boardDimension*boardDimension; i++) {
-				emojiButtons.add(new JButton(patternIcon));
-				boardPanel.add(emojiButtons.get(i));
+		for (int i = 0; i < boardDimension * boardDimension; i++) {
+			emojiButtons.add(new JButton(patternIcon));
+			boardPanel.add(emojiButtons.get(i));
 		}
 
 //		UIManager.put("ToggleButton.select", Color.BLACK);
@@ -279,8 +281,7 @@ public class GameView extends JFrame implements ActionListener {
 			temp.setForeground(Color.ORANGE);
 		else if (sort == "N")
 			temp.setForeground(Color.GRAY);
-		else
-			System.out.println("shouldn't apear");
+
 		return temp;
 	}
 
@@ -302,8 +303,8 @@ public class GameView extends JFrame implements ActionListener {
 	}
 
 	public void addGameViewListener(ActionListener BottonListener) {
-		for (int i = 0; i < boardDimension*boardDimension; i++) {
-				emojiButtons.get(i).addActionListener(BottonListener);
+		for (int i = 0; i < boardDimension * boardDimension; i++) {
+			emojiButtons.get(i).addActionListener(BottonListener);
 		}
 	}
 
@@ -323,13 +324,10 @@ public class GameView extends JFrame implements ActionListener {
 		if (buttonState == false) {
 			emojiButtons.get(index).setEnabled(false);
 			emojiButtons.get(index).setVisible(false);
-			System.out.println("buttonState is false, setEnabled(false); is set");
 		} else if (buttonState == true) {
 			emojiButtons.get(index).setEnabled(false);
-			System.out.println("buttonState is true, setEnabled(false); is set");
 		}
 
-		System.out.println("set visible false");
 		boardPanel.revalidate();
 	}
 
@@ -339,7 +337,6 @@ public class GameView extends JFrame implements ActionListener {
 		iconName = getCurrentIcons().get(index);
 		image = new ImageIcon(GameView.class.getResource("/" + iconName + ".png"));
 		emojiButtons.get(index).setIcon(image);
-		System.out.println("CardBoard updated got emojiButton of index:(" + index + ")");
 	}
 
 	public JButton getEmojiButton(int index) {
@@ -407,8 +404,8 @@ public class GameView extends JFrame implements ActionListener {
 		if (buttonState == false) {
 			iconBackgroundTogglerLabel.setIcon(selectedIcon);
 			for (int i = 0; i < emojiButtons.size(); i++) {
-					if (emojiButtons.get(i).isVisible() == false) {
-						emojiButtons.get(i).setVisible(true);	
+				if (emojiButtons.get(i).isVisible() == false) {
+					emojiButtons.get(i).setVisible(true);
 				}
 			}
 			matchesButton.setToolTipText("showing guessed cards in background");
@@ -416,8 +413,8 @@ public class GameView extends JFrame implements ActionListener {
 		if (buttonState == true) {
 			iconBackgroundTogglerLabel.setIcon(unselectedIcon);
 			for (int i = 0; i < emojiButtons.size(); i++) {
-					if ((emojiButtons.get(i).isVisible() == true) && (emojiButtons.get(i).isEnabled() == false)) {
-						emojiButtons.get(i).setVisible(false);
+				if ((emojiButtons.get(i).isVisible() == true) && (emojiButtons.get(i).isEnabled() == false)) {
+					emojiButtons.get(i).setVisible(false);
 				}
 			}
 			matchesButton.setToolTipText("showing image in background");
@@ -428,10 +425,8 @@ public class GameView extends JFrame implements ActionListener {
 	void switchButtonState() {
 		if (buttonState == false) {
 			buttonState = true;
-			System.out.println(buttonState);
 		} else if (buttonState == true) {
 			buttonState = false;
-			System.out.println(buttonState);
 		}
 	}
 

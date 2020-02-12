@@ -12,11 +12,5 @@ public class Memory {
 		MemoryGame mGame = new MemoryGame();
 		GameView gView = new GameView();
 		new MenuController(mMenu, oView, mGame, gView);
-		
-		
-		/*
-		 * List <Integer> missed= new ArrayList<>(); for (int i=0; i<16; i++) {
-		 * missed.add(0); System.out.println(missed.get(i)); }
-		 */
 	}
 }

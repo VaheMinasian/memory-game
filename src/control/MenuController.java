@@ -209,8 +209,6 @@ public class MenuController {
 
 		optionsView.getIconSetComboBox().setSelectedItem(profile.get(5));
 
-		System.out.println("Icon set combo box value is: " + optionsView.getIconSetComboBox().getSelectedItem());
-
 		// checking player name(s) in profile and loading to UI
 		if (!profile.get(2).equals("")) {
 			optionsView.getListModel().insertElementAt(profile.get(2), 0);
@@ -242,7 +240,6 @@ public class MenuController {
 				if (!profile.get(0).equals("s")) {
 					String p1Label = gameModel.getActivePlayer() == gameModel.getPlayer1() ? "player1" : "player2";
 					gameView.setActivePlayerLight(p1Label);
-					System.out.println("in resume button");
 				}
 			}
 
@@ -279,7 +276,6 @@ public class MenuController {
 			// Initialize game when 'N E W G A M E' button is clicked in main menu
 			if (e.getSource() == mainMenuView.getPlayButton()) {
 				loadGame();
-				System.out.println("in new game button");
 
 				if (!profile.get(0).equals("s")) {
 					gameModel.randomFirstPlayer();
@@ -296,7 +292,6 @@ public class MenuController {
 				String p1Label = gameModel.getActivePlayer() == gameModel.getPlayer1() ? "player1" : "player2";
 				gameView.setActivePlayerLight(p1Label);
 				startTime = System.currentTimeMillis();
-				System.out.println("in listener " + startTime);
 
 				timer.start();
 			}
@@ -314,9 +309,7 @@ public class MenuController {
 
 				public void windowClosing(WindowEvent e) {
 					if (!gameModel.getActivePlayer().getName().equals("Computer")) {
-						System.out.println("timer should stop here");
 						stopTimer();
-						System.out.println("stoptime before switching: " + stopTime);
 						switch (gameModel.getInterruptionMessage(profile.get(0), gameView)) {
 						case -1:
 						case 0:// resuming game
@@ -385,7 +378,6 @@ public class MenuController {
 				oos.writeObject(temp);
 				oos.writeObject(startTime);
 				oos.writeObject(stopTime);
-				System.out.println("temp items are: " + temp);
 
 				oos.close();
 				fos.close();
@@ -407,24 +399,19 @@ public class MenuController {
 					System.out.println(ois.readObject()); // player 1
 					// set player 1 score
 					gameModel.getPlayer1().setScore(Integer.parseInt(ois.readObject().toString()));
-					System.out.println("player 1 score is: " + gameModel.getPlayer1().getScore());// check that player 1
-																									// score is restored
 					gameView.setScore1Label(gameModel.getPlayer1().getScore());
 
 					// set player 1 tries
 					gameModel.getPlayer1().setTries(Integer.parseInt(ois.readObject().toString()));
-					System.out.println("player 1 tries is: " + gameModel.getPlayer1().getTries());
 					if (!profile.get(0).equals("s")) {
 
 						System.out.println(ois.readObject()); // player 2
 						// set player 2 score
 						gameModel.getPlayer2().setScore(Integer.parseInt(ois.readObject().toString()));
-						System.out.println("player 2 score is: " + gameModel.getPlayer2().getScore());
 						gameView.setScore2Label(gameModel.getPlayer2().getScore());
 
 						// set player 2 tries
 						gameModel.getPlayer2().setTries(Integer.parseInt(ois.readObject().toString()));
-						System.out.println("player 2 tries is: " + gameModel.getPlayer2().getTries());
 					}
 					System.out.println(ois.readObject()); // difficulty
 
@@ -432,18 +419,13 @@ public class MenuController {
 					if ((boolean) ois.readObject()) {
 						gameView.getMatchesButton().doClick();
 					}
-					System.out.println("Button state is: " + gameView.getButtonState());// check if button is pressed
 
 					// restoring active player
 					if (gameModel.getPlayer1().getName().equals(ois.readObject().toString())) {
 						gameModel.setActivePlayer(gameModel.getPlayer1());
-						System.out.println("block 1 executed");
 					} else {
 						gameModel.setActivePlayer(gameModel.getPlayer2());
-						System.out.println("block 2 executed");
 					}
-
-					System.out.println("deserialized current player is: " + gameModel.getActivePlayer().getName());
 
 					// restoring currentIcons
 					temp.clear();
@@ -452,14 +434,12 @@ public class MenuController {
 					// Verify list data
 					for (int i = 0; i < temp.size(); i++) {
 						gameView.getCurrentIcons().set(i, temp.get(i));
-						System.out.println(gameView.getCurrentIcons().get(i));
 					}
 					temp.clear();
 					temp.trimToSize();
 
 					// restore removed guessed cards
 					temp = (ArrayList) ois.readObject();
-					System.out.println(temp);
 					for (int i = 0; i < temp.size(); i++) {
 						gameView.updateCardBoard(temp.get(i));
 						gameView.removeCard(temp.get(i));
@@ -468,8 +448,6 @@ public class MenuController {
 
 					startTime = Long.parseLong(ois.readObject().toString());
 					stopTime = Long.parseLong(ois.readObject().toString());
-					System.out.println("startTime is " + startTime);
-					System.out.println("stopTime is " + stopTime);
 					startTime = System.currentTimeMillis() - stopTime + startTime;
 
 					ois.close();
@@ -498,7 +476,6 @@ public class MenuController {
 		public void actionPerformed(ActionEvent e) {
 
 			if (optionsView.getGameMode().getSelection() == null) {
-				System.out.println("no game mode");
 				Toolkit.getDefaultToolkit().beep();
 				JOptionPane.showMessageDialog(null, "Please choose game mode!", "Memory",
 						JOptionPane.INFORMATION_MESSAGE);
@@ -506,7 +483,6 @@ public class MenuController {
 			}
 
 			if (optionsView.getDimensions().getSelection() == null) {
-				System.out.println("no board selection");
 				Toolkit.getDefaultToolkit().beep();
 				JOptionPane.showMessageDialog(null, "Please select board Size!", "Memory",
 						JOptionPane.INFORMATION_MESSAGE);
@@ -516,7 +492,6 @@ public class MenuController {
 			if (e.getSource() == optionsView.getSaveButton()) {
 				if (optionsView.getComputerButton().isSelected()) {
 					if (optionsView.getrButtonGroup().getSelection() == null) {
-						System.out.println("no radio button selected");
 						Toolkit.getDefaultToolkit().beep();
 						JOptionPane.showMessageDialog(null, "Please select difficulty level!", "Memory",
 								JOptionPane.INFORMATION_MESSAGE);
@@ -610,7 +585,6 @@ public class MenuController {
 
 							removeSerialization();
 							mainMenuView.getResumeButton().setEnabled(false);
-							System.out.println("resume button set to false");
 						}
 					}
 
@@ -659,7 +633,6 @@ public class MenuController {
 		public void actionPerformed(ActionEvent e) {
 			// Double loop to find the clicked button
 			if (gameModel.getActivePlayer().getClass() != null) {
-				System.out.println("human playing");
 				for (int i = 0; i < gameView.getEmojiButtons().size(); i++) {
 
 					// selecting the card/button clicked
@@ -667,7 +640,7 @@ public class MenuController {
 							&& (!gameModel.getActivePlayer().getName().equals("Computer"))) {
 
 						validClicksOnCards++;
-						gameModel.setSelectedCard(gameModel.getCards().get(i));			
+						gameModel.setSelectedCard(gameModel.getCards().get(i));
 						try {
 							gameModel.buttonIsOpen();
 						} catch (ButtonNotAvailableException e1) {
@@ -676,15 +649,13 @@ public class MenuController {
 						}
 						// controls and if card is free opens it and does necessary assignments for Card
 						// and it's icon.
-						System.out.println("Player1 name is: " + gameModel.getPlayer1().getName());
-
 
 						if ((secondNumber == 0) && (gameModel.move(i))) {
 							if (validClicksOnCards == 1) {
 								firstNumber = gameView.getCurrentIcons().get(i);
 							} else if (validClicksOnCards == 2) {
 								secondNumber = gameView.getCurrentIcons().get(i);
-							
+
 							}
 							gameView.updateCardBoard(i);
 						}
@@ -768,7 +739,6 @@ public class MenuController {
 		Card card;
 
 		gameView.setCursor(waitingCursor);
-		System.out.println("Beginning of StartGame...active player is: " + gameModel.getActivePlayer().getName());
 
 		do {
 			card = gameModel.getRandomCardIndex(profile.get(4), gameView);
@@ -785,21 +755,17 @@ public class MenuController {
 
 				if (validClicksOnCards == 1) {
 					firstNumber = gameView.getCurrentIcons().get(gameModel.getCards().indexOf(card));
-					System.out.println("FirstNumber is: " + firstNumber);
 
 				} else if (validClicksOnCards == 2) {
 					secondNumber = gameView.getCurrentIcons().get(gameModel.getCards().indexOf(card));
-					System.out.println("SecondNumber is: " + secondNumber);
 				}
 				gameView.updateCardBoard(gameModel.getCards().indexOf(card));
 			}
 
 			if (secondNumber != 0) {
-				System.out.println("inside second number !=0");
 
 //				I F   N O T   M A T C H E D
 				if (!gameModel.getStatus(firstNumber, secondNumber)) {
-					System.out.println("inside !gameModel.getStatus()");
 
 					try {
 						Thread.sleep(generateDifficultyFactor());
@@ -820,7 +786,6 @@ public class MenuController {
 
 //					I F    M A T C H E D
 				} else if (gameModel.getStatus(firstNumber, secondNumber)) {
-					System.out.println("inside (gameModel.getStatus())");
 					try {
 						Thread.sleep(generateDifficultyFactor());
 					} catch (InterruptedException interrupt) {
@@ -837,7 +802,6 @@ public class MenuController {
 					updateScoreBoard();
 					if (gameModel.gameOver()) {
 						gameView.setCursor(normalCursor);
-						System.out.println("going to game over");
 						removeSerialization();
 						resetGame();
 						return;
@@ -849,11 +813,8 @@ public class MenuController {
 
 	void updateScoreBoard() {
 		if (gameModel.getActivePlayer().equals(gameModel.getPlayer1())) {
-			System.out.println("player1 update inside updateScoreBoard");
 			gameView.setScore1Label(gameModel.getActivePlayer().getScore());
 		} else {
-			System.out.println(
-					"player2 update inside updateScoreBoard... player2 is: " + gameModel.getActivePlayer().getName());
 			gameView.setScore2Label(gameModel.getActivePlayer().getScore());
 		}
 	}
@@ -864,14 +825,12 @@ public class MenuController {
 		stopTimer();
 		switch (gameModel.getMessage(profile.get(0))) {
 		case 0:// play
-			System.out.println("inside case 0");
 			gameModel = new MemoryGame();
 			gameView.dispose();
 			gameView = new GameView();
 			mainMenuView.getPlayButton().doClick();
 			break;
 		case 1:// main menu
-			System.out.println("inside case 1");
 			gameModel = new MemoryGame();
 			gameView.dispose();
 			gameView = new GameView();
@@ -881,7 +840,6 @@ public class MenuController {
 
 			break;
 		case 2:// quit
-			System.out.println("inside case 2");
 			System.exit(0);
 			break;
 		default:
