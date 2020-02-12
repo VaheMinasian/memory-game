@@ -25,7 +25,6 @@ public class MemoryGame implements Game {
 	private int savedCardNumber, tempIndexValue;
 	private int cardIndex = 0, cardIndexY = 0, savedIndexX, savedIndexY;
 	
-	
 	boolean valid;
 
 	int temp = 0;
@@ -37,9 +36,6 @@ public class MemoryGame implements Game {
 	int excludeLimit = 36;
 	int result;
 	boolean firstRun=true;
-	public MemoryGame() {
-
-	}
 
 	public void initializeParameters(ArrayList<String> profile) {
 		player1 = new HumanPlayer(profile.get(2));
@@ -70,15 +66,12 @@ public class MemoryGame implements Game {
 		
 		for (int i = 0; i < size; i++) {
 				cards.add(new Card());
-//				cards.get(i).setIndex(i);
 		}
 	}
 
 	public List<Integer> getMissedButtons() {
 		return missedButtons;
 	}
-
-	
 	
 	// determining size of memory according to selected difficulty level.
 	public void addToMemory(int firstNumber, int secondNumber, GameView view, String difficulty) {// checked
@@ -117,16 +110,12 @@ public class MemoryGame implements Game {
 
 		missedButtons.add(z1);
 		missedButtons.add(q1);
-//		missedButtons.add(x1);
-//		missedButtons.add(y1);
 
 		z2 = cards.indexOf(secondCard);
 		q2 = view.getCurrentIcons().get(z2);
 
 		missedButtons.add(z2);
 		missedButtons.add(q2);
-//		missedButtons.add(x2);
-//		missedButtons.add(y2);
 
 		if (firstNumber == secondNumber) {
 			for (int i = 0; i < missedButtons.size(); i += 2) {
@@ -211,7 +200,6 @@ public class MemoryGame implements Game {
 		randomNo = new Random();
 
 		if(temp==0) {
-			
 			System.out.println("Computer's first move, : temp value is: " + temp);
 
 			// 4th level ... check if there is 2 matching buttons in missedButtons
@@ -221,11 +209,7 @@ public class MemoryGame implements Game {
 					if ( (missedButtons.get(missedButtons.size() - 1) !=  -1) && (missedButtons.get(i + 1) == missedButtons.get(missedButtons.size() - 1)) ) 
 					{
 						if (getRandomProbability(Integer.parseInt(difficulty), getRemainingCardsNo(),0)) {
-//							cardIndexX = missedButtons.get(missedButtons.size() - 2);
-//							cardIndexY = missedButtons.get(missedButtons.size() - 1);
 							savedCardNumber = missedButtons.get(missedButtons.size() - 2);
-//							savedIndexX = cardIndexX;
-//							savedIndexY = cardIndexY;
 							temp++;
 							System.out.println("cardIndexX&Y => savedCardNumber is: " + savedCardNumber);
 							return cards.get(savedCardNumber);
@@ -234,11 +218,7 @@ public class MemoryGame implements Game {
 					} else if ( (missedButtons.get(missedButtons.size() - 3) !=  -1) && (missedButtons.get(i + 1) == missedButtons.get(missedButtons.size() - 3)) ) 
 					{
 						if (getRandomProbability(Integer.parseInt(difficulty), getRemainingCardsNo(),0)) {
-//							cardIndexX = missedButtons.get(missedButtons.size() - 2);
-//							cardIndexY = missedButtons.get(missedButtons.size() - 1);
 							savedCardNumber = missedButtons.get(missedButtons.size() - 4);
-//							savedIndexX = cardIndexX;
-//							savedIndexY = cardIndexY;
 							temp++;
 							System.out.println("cardIndexX&Y => savedCardNumber is: " + savedCardNumber);
 							return cards.get(savedCardNumber);							
@@ -254,9 +234,6 @@ public class MemoryGame implements Game {
 			} while (cards.get(cardIndex).getState() != CardState.CLOSED);
 			//end level 1 intelligence
 			savedCardNumber = cardIndex;
-//			savedIndexX = cardIndex;
-//			savedIndexY = cardIndexY;
-			
 			System.out.println("returning true from gameModel.setRandomIndex. savedCardNumber = " + savedCardNumber );
 			temp++;
 			System.out.println("exiting temp==0 with temp value of " + temp);
@@ -277,8 +254,6 @@ public class MemoryGame implements Game {
 					System.out.println("index = " + (missedButtons.size()-2-i));
 					if (getRandomProbability(Integer.parseInt(difficulty), getRemainingCardsNo(), missedButtons.size()-2-i)) {
 						int tempNumber = missedButtons.get(i);
-//						cardIndexX = missedButtons.get(i + 2);
-//						cardIndexY = missedButtons.get(i + 3);
 						temp--;
 						return cards.get(tempNumber);
 					}
@@ -355,7 +330,6 @@ public class MemoryGame implements Game {
 		String[] options = { "Resume", "Main Menu", "Save & Quit" };
 		int dialogReturnValue=-1;
 		dialogReturnValue = JOptionPane.showOptionDialog(null, "            GAME PAUSED", "Memory", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);
-		
 		return dialogReturnValue;
 	}
 	
@@ -449,12 +423,10 @@ public class MemoryGame implements Game {
 	public boolean gameOver() {
 
 		for (int i = 0; i < cards.size(); i++) {
-			
 				if (cards.get(i).getState() != CardState.NONE) {
 					System.out.println("will return false from gameOver");
 					return false;
 				}
-		
 		}
 		System.out.println("will return true from gameOver");
 		return true;

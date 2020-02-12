@@ -91,7 +91,6 @@ public class OptionsView extends JFrame implements ActionListener, ListSelection
 		soloButton.setPreferredSize(new Dimension(70, 50));
 		ImageIcon soloImageIcon = new ImageIcon(OptionsView.class.getResource("/solo.png"));
 		soloButton.setIcon(soloImageIcon);
-//		soloButton.setForeground(Color.BLACK);
 		soloButton.setBorder(BorderFactory.createEmptyBorder());
 		soloButton.setOpaque(false);
 		soloButton.setFocusable(false);
@@ -101,7 +100,6 @@ public class OptionsView extends JFrame implements ActionListener, ListSelection
 		humanButton.setPreferredSize(new Dimension(70, 50));
 		ImageIcon humanImageIcon = new ImageIcon(OptionsView.class.getResource("/human.png"));
 		humanButton.setIcon(humanImageIcon);
-//		humanButton.setForeground(Color.BLACK);
 		humanButton.setBorder(BorderFactory.createEmptyBorder());
 		humanButton.setOpaque(false);
 		humanButton.setFocusable(false);
@@ -111,7 +109,6 @@ public class OptionsView extends JFrame implements ActionListener, ListSelection
 		computerButton.setPreferredSize(new Dimension(70, 50));
 		ImageIcon computerImageIcon = new ImageIcon(OptionsView.class.getResource("/computer.png"));
 		computerButton.setIcon(computerImageIcon);
-//		computerButton.setForeground(Color.BLACK);
 		computerButton.setBorder(BorderFactory.createEmptyBorder());
 		computerButton.setOpaque(false);
 		computerButton.setFocusable(false);

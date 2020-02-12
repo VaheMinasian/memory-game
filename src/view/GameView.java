@@ -240,7 +240,6 @@ public class GameView extends JFrame implements ActionListener {
 		this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		this.setResizable(false);
 		this.setVisible(true);
-
 	}
 
 	ImageIcon getScaledImage(ImageIcon image, int height, int width) {
@@ -254,7 +253,6 @@ public class GameView extends JFrame implements ActionListener {
 	public void updateClock(long startTime) {
 		sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
 		elapsed = new Date(System.currentTimeMillis() - startTime);
-
 		timerLabel.setText(sdf.format(elapsed));
 	}
 
@@ -271,7 +269,6 @@ public class GameView extends JFrame implements ActionListener {
 	}
 
 	private JLabel makeLabel(String sort) {
-
 		JLabel temp = new JLabel();
 
 		temp.setHorizontalAlignment(JLabel.CENTER);
@@ -291,10 +288,8 @@ public class GameView extends JFrame implements ActionListener {
 		int big = 75, small = 73, random;
 		Random rand = new Random();
 		ImageIcon icon;
-
 		random = (rand.nextInt(big + 1 - small) + small);
 		icon = new ImageIcon(GameView.class.getResource("/" + random + ".jpg"));
-
 		return icon;
 	}
 
@@ -303,7 +298,6 @@ public class GameView extends JFrame implements ActionListener {
 		Image img = defaultImage.getImage();
 		img = img.getScaledInstance(width, height, Image.SCALE_SMOOTH);
 		defaultImage.setImage(img);
-
 		return defaultImage;
 	}
 
@@ -326,7 +320,6 @@ public class GameView extends JFrame implements ActionListener {
 	}
 
 	public void removeCard(int index) {
-
 		if (buttonState == false) {
 			emojiButtons.get(index).setEnabled(false);
 			emojiButtons.get(index).setVisible(false);

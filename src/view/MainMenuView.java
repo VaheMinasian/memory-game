@@ -36,7 +36,6 @@ public class MainMenuView extends JFrame implements ActionListener {
 		panel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), " M A I N    M E N U ",
 				TitledBorder.CENTER, TitledBorder.TOP));
 		frame.getContentPane().add(panel);
-
 		
 		//create JButtons
 		resumeButton = new JButton("resume game");
@@ -57,7 +56,6 @@ public class MainMenuView extends JFrame implements ActionListener {
 		exitButton.setFont((new Font("dialog", Font.BOLD, 13)));
 		exitButton.setPreferredSize(new Dimension(140, 60));
 		exitButton.setToolTipText("save and quit");
-
 		
 		//add buttons to main panel using gridbaglayout
 		GridBagConstraints gbc = new GridBagConstraints();
@@ -86,14 +84,12 @@ public class MainMenuView extends JFrame implements ActionListener {
 		frame.setVisible(true);
 	}
 
-
 	// Methods adds action listener to Main menu buttons
 	public void addMainMenuViewListener(ActionListener selected) {
 		resumeButton.addActionListener(selected);
 		playButton.addActionListener(selected);
 		optionsButton.addActionListener(selected);
 		exitButton.addActionListener(selected);
-
 	}
 
 	public JButton getResumeButton() {
