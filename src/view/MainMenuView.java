@@ -21,7 +21,7 @@ public class MainMenuView extends JFrame implements ActionListener {
 
 	public JFrame frame;
 	public JPanel panel;
-	private JButton resumeButton, playButton, optionsButton, exitButton;
+	private JButton resumeButton, playButton, optionsButton, scoresButton, exitButton;
 
 //	  this is the constructor method for the class MainMenuView creates the main menu view object.
 	public MainMenuView() {
@@ -31,7 +31,7 @@ public class MainMenuView extends JFrame implements ActionListener {
 		ImageIcon frameIcon = new ImageIcon(OptionsView.class.getResource("/46.png"));
 		frame.setIconImage(frameIcon.getImage());
 		panel = new JPanel(new GridBagLayout());
-		panel.setPreferredSize(new Dimension(220, 370));
+		panel.setPreferredSize(new Dimension(220, 400));
 		panel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), " M A I N    M E N U ",
 				TitledBorder.CENTER, TitledBorder.TOP));
 		frame.getContentPane().add(panel);
@@ -39,21 +39,25 @@ public class MainMenuView extends JFrame implements ActionListener {
 		// create JButtons
 		resumeButton = new JButton("resume game");
 		resumeButton.setFont((new Font("dialog", Font.BOLD, 13)));
-		resumeButton.setPreferredSize(new Dimension(140, 60));
+		resumeButton.setPreferredSize(new Dimension(140, 50));
 		resumeButton.setEnabled(false);
 		resumeButton.setToolTipText("resume last saved game");
 		playButton = new JButton("new game");
 		playButton.setFont((new Font("dialog", Font.BOLD, 13)));
-		playButton.setPreferredSize(new Dimension(140, 60));
+		playButton.setPreferredSize(new Dimension(140, 50));
 		playButton.setEnabled(false);
 		playButton.setToolTipText("start a new game with the last saved options");
 		optionsButton = new JButton("setup");
 		optionsButton.setFont((new Font("dialog", Font.BOLD, 13)));
-		optionsButton.setPreferredSize(new Dimension(140, 60));
+		optionsButton.setPreferredSize(new Dimension(140, 50));
 		optionsButton.setToolTipText("change profile options");
+		scoresButton = new JButton("score");
+		scoresButton.setFont((new Font("dialog", Font.BOLD, 13)));
+		scoresButton.setPreferredSize(new Dimension(140, 50));
+		scoresButton.setToolTipText("high scores (solo mode)");
 		exitButton = new JButton("Quit");
 		exitButton.setFont((new Font("dialog", Font.BOLD, 13)));
-		exitButton.setPreferredSize(new Dimension(140, 60));
+		exitButton.setPreferredSize(new Dimension(140, 50));
 		exitButton.setToolTipText("save and quit");
 
 		// add buttons to main panel using gridbaglayout
@@ -73,6 +77,10 @@ public class MainMenuView extends JFrame implements ActionListener {
 
 		gbc.gridx = 0;
 		gbc.gridy = 3;
+		panel.add(scoresButton, gbc);
+		
+		gbc.gridx = 0;
+		gbc.gridy = 4;
 		panel.add(exitButton, gbc);
 
 		// finalize frame to display UI
@@ -88,6 +96,7 @@ public class MainMenuView extends JFrame implements ActionListener {
 		resumeButton.addActionListener(selected);
 		playButton.addActionListener(selected);
 		optionsButton.addActionListener(selected);
+		scoresButton.addActionListener(selected);
 		exitButton.addActionListener(selected);
 	}
 
@@ -109,5 +118,10 @@ public class MainMenuView extends JFrame implements ActionListener {
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
+	}
+
+	public JButton getScoresButton() {
+		// TODO Auto-generated method stub
+		return scoresButton;
 	}
 }

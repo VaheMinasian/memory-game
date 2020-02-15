@@ -1,7 +1,7 @@
-mode:c
-boardsize:6
-player1:va
-player2:Computer
-difficulty:2
+mode:s
+boardsize:4
+player1:vahe
+player2:
+difficulty:null
 iconSet:emotics
 playable:true
