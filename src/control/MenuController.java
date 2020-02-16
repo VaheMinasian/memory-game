@@ -15,6 +15,8 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 import javax.swing.AbstractButton;
@@ -25,10 +27,11 @@ import javax.swing.Timer;
 import model.Card;
 import model.Card.CardState;
 import model.MemoryGame;
+import model.ScoreModel;
 import view.GameView;
 import view.MainMenuView;
 import view.OptionsView;
-import view.Scores;
+import view.ScoresView;
 
 //Controller class for Main menu and options menu using singleton controller object
 public class MenuController {
@@ -48,11 +51,14 @@ public class MenuController {
 	private boolean firstTimeProfileSave = false;
 	int firstNumber, secondNumber;
 	private int factor;
-	private long startTime, stopTime;
+	private long startTime, stopTime, timeScore;
+	Duration duration;
 	Timer timer = new Timer(53, clock);
 	ArrayList<Integer> temp = new ArrayList<>();
-	File serializeFile = new File("data.txt"), serializeScore = new File("scores.txt");
+	File serializeFile = new File("data.txt"), serializeScore = new File("scores.dat");
 	static File profileFile = new File("profile.txt");
+	private ArrayList<ScoreModel> scoresList = new ArrayList<>();
+	private ScoreModel score = new ScoreModel();
 	BufferedReader br;
 
 	public MenuController() {
@@ -136,7 +142,6 @@ public class MenuController {
 		} catch (IOException e1) {
 			e1.printStackTrace();
 		}
-
 	}
 
 	// Loading profile components to Options Menu UI
@@ -218,9 +223,21 @@ public class MenuController {
 
 			// display high scores if 'high scores' button is clicked in main menu
 			if (e.getSource() == mainMenuView.getScoresButton()) {
-				System.out.println("button clicked");
+				try {
+					FileInputStream fis = new FileInputStream("scores.dat");
+					ObjectInputStream ois = new ObjectInputStream(fis);
+					score=(ScoreModel) ois.readObject();
+					ois.close();
+					fis.close();
+				} catch (Exception ex) {
+					ex.printStackTrace();
+				}
+				
+				ScoresView scoresV = new ScoresView();
+				scoresV.setScores(score);
+				scoresV.displayScores();
 			}
-			
+
 			// if 'R E S U M E' button is clicked in main menu
 			if (e.getSource() == mainMenuView.getResumeButton()) {
 				loadGame();
@@ -327,7 +344,7 @@ public class MenuController {
 			});
 
 		}
-		
+
 		@SuppressWarnings("null")
 		void serialize() {
 			try {
@@ -624,7 +641,7 @@ public class MenuController {
 			if (gameModel.getActivePlayer().getClass() != null) {
 				for (int i = 0; i < gameView.getIconButtons().size(); i++) {
 
-					// selecting the card/button clicked
+					// selecting the clicked card/button
 					if ((e.getSource() == gameView.getIconButtons().get(i)) && (validClicksOnCards < 2)
 							&& (!gameModel.getActivePlayer().getName().equals("Computer"))) {
 
@@ -809,11 +826,11 @@ public class MenuController {
 	void resetGame() {
 		mainMenuView.getResumeButton().setEnabled(false);
 		mainMenuView.getScoresButton().setEnabled(true);
-		if(profile.get(0).equals("s")){
+		if (profile.get(0).equals("s")) {
 			serializeScore();
-			new Scores();
+
 		}
-		
+
 		stopTimer();
 		switch (gameModel.getMessage(profile.get(0))) {
 		case 0:// play
@@ -838,7 +855,7 @@ public class MenuController {
 			System.exit(0);
 		}
 	}
-	
+
 	void checkDataFile() {
 		try {
 			serializeFile.createNewFile(); // if file already exists will do nothing
@@ -854,15 +871,15 @@ public class MenuController {
 			e.printStackTrace();
 		}
 	}
-	
+
 	void checkScoreFile() {
 		try {
 			serializeScore.createNewFile(); // if file already exists will do nothing
-			br = new BufferedReader(new FileReader("scores.txt"));
+			br = new BufferedReader(new FileReader("scores.dat"));
 			if (br.readLine() == null) {
 				System.out.println("disable button");
 				mainMenuView.getScoresButton().setEnabled(false);
-			} 
+			}
 			br.close();
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
@@ -870,8 +887,8 @@ public class MenuController {
 			e.printStackTrace();
 		}
 	}
-	
-	void serializeScore(){
+
+	void serializeScore() {
 		try {
 			serializeScore.createNewFile(); // if file already exists will do nothing
 			br = new BufferedReader(new FileReader("data.txt"));
@@ -881,15 +898,25 @@ public class MenuController {
 				br.close();
 				oosScore.close();
 			} else {
-				oosScore.writeObject(profile.get(2));// player 1
-				oosScore.writeObject(profile.get(1));// board size
-				oosScore.writeObject(gameModel.getPlayer1().getScore());
-				oosScore.writeObject(gameModel.getPlayer1().getTries());
-				oosScore.writeObject(System.currentTimeMillis() - stopTime + startTime);
+				score.setPlayerName(profile.get(2));
+				score.setGuessRatio( (100 * (  (Integer.parseInt(profile.get(1)) * Integer.parseInt(profile.get(1)) ) / 2 ) 
+						/ gameModel.getPlayer1().getTries())
+						 );
+				System.out.println("gameModel.getPlayer1().getTries()= " + gameModel.getPlayer1().getTries());
+				score.setBoardSize(profile.get(1));
+				score.setDuration(System.currentTimeMillis() - stopTime + startTime);
+				score.setDate(LocalDateTime.now());
+				oosScore.writeObject(score);
+//				LocalTime.MIDNIGHT.plus(duration).format(DateTimeFormatter.ofPattern("HH:mm:ss"))
+//				oosScore.writeObject(profile.get(2));// player 1
+//				oosScore.writeObject(profile.get(1));// board size
+//				oosScore.writeObject(gameModel.getPlayer1().getScore());
+//				oosScore.writeObject(gameModel.getPlayer1().getTries());
+//				oosScore.writeObject(System.currentTimeMillis() - stopTime + startTime);
 				br.close();
 				oosScore.close();
-			}			
-		}catch (Exception ex) {
+			}
+		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
 	}
