@@ -26,6 +26,7 @@ import javax.swing.Timer;
 
 import model.Card;
 import model.Card.CardState;
+import model.Counter;
 import model.MemoryGame;
 import model.ScoreModel;
 import view.GameView;
@@ -60,6 +61,7 @@ public class MenuController {
 	private ArrayList<ScoreModel> scoresList = new ArrayList<>();
 	private ScoreModel score = new ScoreModel();
 	BufferedReader br;
+	private Counter counter;
 
 	public MenuController() {
 	}
@@ -223,27 +225,29 @@ public class MenuController {
 
 			// display high scores if 'high scores' button is clicked in main menu
 			if (e.getSource() == mainMenuView.getScoresButton()) {
-				try {
-					FileInputStream fis = new FileInputStream("scores.ser");
-					ObjectInputStream ois = new ObjectInputStream(fis);
-					serializedIndex=ois.read();
-					if(serializedIndex!=0) {
-						for(int i=0; i<serializedIndex; i++) {
-							score=(ScoreModel) ois.readObject();
-							scoresList.add(score);							
+				scoresList.clear();
+				scoresList.trimToSize();
+				try (FileInputStream fis = new FileInputStream("scores.ser");
+						ObjectInputStream ois = new ObjectInputStream(fis)) {
+
+					counter = (Counter) ois.readObject();
+					serializedIndex = counter.getCounter();
+					System.out.println(serializedIndex + "is the serializedIndex");
+					
+						for (int i = 0; i < serializedIndex; i++) {
+							score = (ScoreModel) ois.readObject();
+							System.out.println("score is: " + score);
+							scoresList.add(score);
 						}
-					}
-				
-					ois.close();
-					fis.close();
+
 				} catch (Exception ex) {
 					ex.printStackTrace();
 				}
-				
+
 				ScoresView scoresV = new ScoresView();
-				for(int i=0; i<scoresList.size(); i++) {
+				for (int i = 0; i < scoresList.size(); i++) {
 					scoresV.setScores(scoresList.get(i));
-					scoresV.displayScores(i);					
+					scoresV.displayScores(i);
 				}
 			}
 
@@ -882,108 +886,120 @@ public class MenuController {
 	}
 
 	void checkScoreFile() {
-		try {
-			
-			serializeScore.createNewFile(); // if file already exists will do nothing
-			
-			br = new BufferedReader(new FileReader("scores.ser"));
-			if (br.readLine() == null) {
-				System.out.println("disable button");
+		serializedIndex = 0;
+		
+
+			if (!serializeScore.exists()) {
+				try (FileOutputStream fosScore = new FileOutputStream(serializeScore);
+						ObjectOutputStream oosScore = new ObjectOutputStream(fosScore)) {
+				counter = new Counter();
+				counter.setCounter(0);
+				serializeScore.createNewFile(); // if file already exists will do nothing
 				mainMenuView.getScoresButton().setEnabled(false);
-			}
-			br.close();
-		} catch (FileNotFoundException e) {
+				oosScore.writeObject(counter);
+				System.out.println("doesn't exist");
+			} 
+		 catch (FileNotFoundException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
 			e.printStackTrace();
-		}
+		} catch (Exception exp) {
+			exp.printStackTrace();
+		}}
 	}
 
 	void serializeScore() {
-		
 		scoresList.clear();
-			if(!mainMenuView.getScoresButton().isEnabled()) {
-				serializedIndex=0;
-				try {
-					
-					FileOutputStream fosScore = new FileOutputStream(serializeScore);
-					ObjectOutputStream oosScore = new ObjectOutputStream(fosScore);
-						oosScore.write(serializedIndex);				
-					oosScore.close();
-					fosScore.close();
-				} catch (Exception ex) {
-					ex.printStackTrace();
-				}	
-			} else if(mainMenuView.getScoresButton().isEnabled()) {
-				try {
-//					
-					FileInputStream fis = new FileInputStream("scores.ser");
-					ObjectInputStream ois = new ObjectInputStream(fis);
-					serializedIndex = ois.read();
-					if(serializedIndex==0) {
-						
-					} else if(serializedIndex>0) {
-						for(int i=0; i<serializedIndex; i++) {
-							score=(ScoreModel) ois.readObject();
-							scoresList.add(score);		
-						}
-					}									
-					ois.close();
-					fis.close();	
-				}
-				catch (Exception ex) {
-					ex.printStackTrace();
-				}
+		scoresList.trimToSize();
+//			if(!mainMenuView.getScoresButton().isEnabled()) {
+//				serializedIndex=0;
+//				try {
+//					FileOutputStream fosScore = new FileOutputStream(serializeScore);
+//					ObjectOutputStream oosScore = new ObjectOutputStream(fosScore);
+//						oosScore.write(serializedIndex);				
+//					oosScore.close();
+//					fosScore.close();
+//				} catch (Exception ex) {
+//					ex.printStackTrace();
+//				}	
+//			} else if(mainMenuView.getScoresButton().isEnabled()) {
+		try (FileInputStream fis = new FileInputStream("scores.ser");
+				ObjectInputStream ois = new ObjectInputStream(fis)) {
+			counter = (Counter) ois.readObject();
+			serializedIndex = counter.getCounter();
+			System.out.println("serializedIndex after first reading from file with serializeScore() is: " + serializedIndex);
+			for (int i = 0; i < serializedIndex; i++) {
+				score = (ScoreModel) ois.readObject();
+				scoresList.add(score);
 			}
+			System.out.println("scoresList size before serializing= " + scoresList.size());
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException ex) {
+			ex.printStackTrace();
+		} catch (Exception exp) {
+			exp.printStackTrace();
+		}
+
 		score = new ScoreModel();
-		
 		score.setPlayerName(profile.get(2));
-		score.setGuessRatio( (100 * (  (Integer.parseInt(profile.get(1)) * Integer.parseInt(profile.get(1)) ) / 2 ) 
-				/ gameModel.getPlayer1().getTries())
-				);
-		
+		score.setGuessRatio((100 * ((Integer.parseInt(profile.get(1)) * Integer.parseInt(profile.get(1))) / 2)
+				/ gameModel.getPlayer1().getTries()));
 		score.setBoardSize(profile.get(1));
 		score.setDuration(System.currentTimeMillis() - stopTime + startTime);
 		score.setDate(LocalDateTime.now());
-		if(scoresList.size()==0) {
+		if (scoresList.size() == 0) {
 			scoresList.add(score);
 			serializedIndex++;
-		}
-		
-		else if(scoresList.size()==10) {
-			if(score.getGuessRatio()<=scoresList.get(9).getGuessRatio()) {
+			System.out.println("==0 serializedIndex= " + serializedIndex);
+
+		} else if ((scoresList.size() < 10) && (scoresList.size() > 0)) {
+			
+			for (int i = 0; i < scoresList.size(); i++) {
+				if (score.getGuessRatio() > scoresList.get(i).getGuessRatio()) {
+					scoresList.add(i, score);
+					serializedIndex++;
+					System.out.println("added higher than existant " + serializedIndex);
+					break;
+				} else if (score.getGuessRatio() <= scoresList.get(i).getGuessRatio()) {
+					scoresList.add(score);
+					serializedIndex++;
+					System.out.println("added, smaller than existant " + serializedIndex);
+					break;
+				}
+			}
+		} else if (scoresList.size() == 10) {
+			if (score.getGuessRatio() <= scoresList.get(9).getGuessRatio()) {
+				System.out.println("==10 serializedIndex= " + serializedIndex);
 				return;
-			} else if (score.getGuessRatio()>scoresList.get(9).getGuessRatio()) {
-				for(int i=0; i<scoresList.size(); i++) {
-					if(score.getGuessRatio()>scoresList.get(i).getGuessRatio()) {
-						scoresList.add(i,score);
-						scoresList.remove(scoresList.size());
+			} else if (score.getGuessRatio() > scoresList.get(9).getGuessRatio()) {
+				for (int i = 0; i < scoresList.size(); i++) {
+					if (score.getGuessRatio() > scoresList.get(i).getGuessRatio()) {
+						scoresList.remove(9);
+						scoresList.add(i, score);
 						scoresList.trimToSize();
+						System.out.println(">9th index serializedIndex= " + serializedIndex);
+						break;
+
 					}
 				}
+				System.out.println("after writing to scoresList: " + scoresList);
 			}
-		} else if(scoresList.size()<10){
-			for(int i=0; i<scoresList.size(); i++) {
-				if(score.getGuessRatio()>scoresList.get(i).getGuessRatio()) {
-					scoresList.add(i,score);
-					serializedIndex++;
-				}
+		}
+		try (FileOutputStream fosScore = new FileOutputStream(serializeScore);
+				ObjectOutputStream oosScore = new ObjectOutputStream(fosScore)) {
+			counter.setCounter(serializedIndex);
+			oosScore.writeObject(counter);
+			int g=0;
+			for (int i = 0; i < scoresList.size(); i++) {
+				oosScore.writeObject(scoresList.get(i));
+				g++;
 			}
-		} 
-		 
-		try {
-			
-			FileOutputStream fosScore = new FileOutputStream(serializeScore);
-			ObjectOutputStream oosScore = new ObjectOutputStream(fosScore);
-			oosScore.write(serializedIndex);
-			for(int i=0; i<scoresList.size();i++) {
-				oosScore.writeObject(scoresList.get(i));				
-			}
-			
-			fosScore.close();
-			oosScore.close();
+			System.out.println("g is: "+g);
+
 		} catch (Exception ex) {
 			ex.printStackTrace();
-		} System.out.println("exiting serialize()");
+		}
+		System.out.println("exiting serialize()");
 	}
 }
