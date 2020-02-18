@@ -50,12 +50,12 @@ public class MenuController {
 	private int validClicksOnCards = 0;
 	private boolean firstTimeProfileSave = false;
 	int firstNumber, secondNumber;
-	private int factor;
-	private long startTime, stopTime, timeScore;
+	private int factor, serializedIndex;
+	private long startTime, stopTime;
 	Duration duration;
 	Timer timer = new Timer(53, clock);
 	ArrayList<Integer> temp = new ArrayList<>();
-	File serializeFile = new File("data.txt"), serializeScore = new File("scores.dat");
+	File serializeFile = new File("data.txt"), serializeScore = new File("scores.ser");
 	static File profileFile = new File("profile.txt");
 	private ArrayList<ScoreModel> scoresList = new ArrayList<>();
 	private ScoreModel score = new ScoreModel();
@@ -224,9 +224,16 @@ public class MenuController {
 			// display high scores if 'high scores' button is clicked in main menu
 			if (e.getSource() == mainMenuView.getScoresButton()) {
 				try {
-					FileInputStream fis = new FileInputStream("scores.dat");
+					FileInputStream fis = new FileInputStream("scores.ser");
 					ObjectInputStream ois = new ObjectInputStream(fis);
-					score=(ScoreModel) ois.readObject();
+					serializedIndex=ois.read();
+					if(serializedIndex!=0) {
+						for(int i=0; i<serializedIndex; i++) {
+							score=(ScoreModel) ois.readObject();
+							scoresList.add(score);							
+						}
+					}
+				
 					ois.close();
 					fis.close();
 				} catch (Exception ex) {
@@ -234,8 +241,10 @@ public class MenuController {
 				}
 				
 				ScoresView scoresV = new ScoresView();
-				scoresV.setScores(score);
-				scoresV.displayScores();
+				for(int i=0; i<scoresList.size(); i++) {
+					scoresV.setScores(scoresList.get(i));
+					scoresV.displayScores(i);					
+				}
 			}
 
 			// if 'R E S U M E' button is clicked in main menu
@@ -825,9 +834,9 @@ public class MenuController {
 
 	void resetGame() {
 		mainMenuView.getResumeButton().setEnabled(false);
-		mainMenuView.getScoresButton().setEnabled(true);
 		if (profile.get(0).equals("s")) {
 			serializeScore();
+			mainMenuView.getScoresButton().setEnabled(true);
 
 		}
 
@@ -874,8 +883,10 @@ public class MenuController {
 
 	void checkScoreFile() {
 		try {
+			
 			serializeScore.createNewFile(); // if file already exists will do nothing
-			br = new BufferedReader(new FileReader("scores.dat"));
+			
+			br = new BufferedReader(new FileReader("scores.ser"));
 			if (br.readLine() == null) {
 				System.out.println("disable button");
 				mainMenuView.getScoresButton().setEnabled(false);
@@ -889,35 +900,90 @@ public class MenuController {
 	}
 
 	void serializeScore() {
+		
+		scoresList.clear();
+			if(!mainMenuView.getScoresButton().isEnabled()) {
+				serializedIndex=0;
+				try {
+					
+					FileOutputStream fosScore = new FileOutputStream(serializeScore);
+					ObjectOutputStream oosScore = new ObjectOutputStream(fosScore);
+						oosScore.write(serializedIndex);				
+					oosScore.close();
+					fosScore.close();
+				} catch (Exception ex) {
+					ex.printStackTrace();
+				}	
+			} else if(mainMenuView.getScoresButton().isEnabled()) {
+				try {
+//					
+					FileInputStream fis = new FileInputStream("scores.ser");
+					ObjectInputStream ois = new ObjectInputStream(fis);
+					serializedIndex = ois.read();
+					if(serializedIndex==0) {
+						
+					} else if(serializedIndex>0) {
+						for(int i=0; i<serializedIndex; i++) {
+							score=(ScoreModel) ois.readObject();
+							scoresList.add(score);		
+						}
+					}									
+					ois.close();
+					fis.close();	
+				}
+				catch (Exception ex) {
+					ex.printStackTrace();
+				}
+			}
+		score = new ScoreModel();
+		
+		score.setPlayerName(profile.get(2));
+		score.setGuessRatio( (100 * (  (Integer.parseInt(profile.get(1)) * Integer.parseInt(profile.get(1)) ) / 2 ) 
+				/ gameModel.getPlayer1().getTries())
+				);
+		
+		score.setBoardSize(profile.get(1));
+		score.setDuration(System.currentTimeMillis() - stopTime + startTime);
+		score.setDate(LocalDateTime.now());
+		if(scoresList.size()==0) {
+			scoresList.add(score);
+			serializedIndex++;
+		}
+		
+		else if(scoresList.size()==10) {
+			if(score.getGuessRatio()<=scoresList.get(9).getGuessRatio()) {
+				return;
+			} else if (score.getGuessRatio()>scoresList.get(9).getGuessRatio()) {
+				for(int i=0; i<scoresList.size(); i++) {
+					if(score.getGuessRatio()>scoresList.get(i).getGuessRatio()) {
+						scoresList.add(i,score);
+						scoresList.remove(scoresList.size());
+						scoresList.trimToSize();
+					}
+				}
+			}
+		} else if(scoresList.size()<10){
+			for(int i=0; i<scoresList.size(); i++) {
+				if(score.getGuessRatio()>scoresList.get(i).getGuessRatio()) {
+					scoresList.add(i,score);
+					serializedIndex++;
+				}
+			}
+		} 
+		 
 		try {
-			serializeScore.createNewFile(); // if file already exists will do nothing
-			br = new BufferedReader(new FileReader("data.txt"));
+			
 			FileOutputStream fosScore = new FileOutputStream(serializeScore);
 			ObjectOutputStream oosScore = new ObjectOutputStream(fosScore);
-			if (br.readLine() != null) {
-				br.close();
-				oosScore.close();
-			} else {
-				score.setPlayerName(profile.get(2));
-				score.setGuessRatio( (100 * (  (Integer.parseInt(profile.get(1)) * Integer.parseInt(profile.get(1)) ) / 2 ) 
-						/ gameModel.getPlayer1().getTries())
-						 );
-				System.out.println("gameModel.getPlayer1().getTries()= " + gameModel.getPlayer1().getTries());
-				score.setBoardSize(profile.get(1));
-				score.setDuration(System.currentTimeMillis() - stopTime + startTime);
-				score.setDate(LocalDateTime.now());
-				oosScore.writeObject(score);
-//				LocalTime.MIDNIGHT.plus(duration).format(DateTimeFormatter.ofPattern("HH:mm:ss"))
-//				oosScore.writeObject(profile.get(2));// player 1
-//				oosScore.writeObject(profile.get(1));// board size
-//				oosScore.writeObject(gameModel.getPlayer1().getScore());
-//				oosScore.writeObject(gameModel.getPlayer1().getTries());
-//				oosScore.writeObject(System.currentTimeMillis() - stopTime + startTime);
-				br.close();
-				oosScore.close();
+			oosScore.write(serializedIndex);
+			for(int i=0; i<scoresList.size();i++) {
+				oosScore.writeObject(scoresList.get(i));				
 			}
+			
+			fosScore.close();
+			oosScore.close();
 		} catch (Exception ex) {
 			ex.printStackTrace();
-		}
+		} System.out.println("exiting serialize()");
 	}
 }

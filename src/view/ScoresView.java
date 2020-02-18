@@ -5,8 +5,6 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Date;
-import java.util.concurrent.TimeUnit;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -109,12 +107,12 @@ public class ScoresView {
 		});
 	}
 	
-	public void displayScores() {
-		data[1][0] =  this.playerName;
-		data[1][1] =  this.guessRatio;
-		data[1][2] =  this.boardSize;		
-		data[1][3] =  this.duration;
-		data[1][4] =  this.date;
+	public void displayScores(int row) {
+		data[row+1][0] =  this.playerName;
+		data[row+1][1] =  this.guessRatio;
+		data[row+1][2] =  this.boardSize;		
+		data[row+1][3] =  this.duration;
+		data[row+1][4] =  this.date;
 	}
 	
 	public void setPlayerName(String playerName) {
@@ -139,7 +137,7 @@ public class ScoresView {
 
 	public void setScores(ScoreModel score) {
 		
-		long millis = score.getDuration() % 1000;
+
 		long second = (score.getDuration() / 1000) % 60;
 		long minute = (score.getDuration() / (1000 * 60)) % 60;
 		long hour = (score.getDuration() / (1000 * 60 * 60)) % 24;
