@@ -54,7 +54,7 @@ public class MenuController {
 	private int factor, serializedIndex;
 	private long startTime, stopTime;
 	Duration duration;
-	Timer timer = new Timer(53, clock);
+	Timer timer = new Timer(60, clock);
 	ArrayList<Integer> temp = new ArrayList<>();
 	File serializeFile = new File("data.txt"), serializeScore = new File("scores.ser");
 	static File profileFile = new File("profile.txt");
@@ -78,7 +78,7 @@ public class MenuController {
 	}
 
 	void startTimer() {
-		timer = new Timer(53, clock);
+		timer = new Timer(60, clock);
 		startTime = System.currentTimeMillis() - stopTime + startTime;
 		timer.start();
 	}
