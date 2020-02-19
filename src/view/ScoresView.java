@@ -138,7 +138,9 @@ public class ScoresView {
 
 	public void setScores(ScoreModel score) {
 		
-
+		
+		
+		System.out.println("score.getDuration is: " + score.getDuration());
 		long second = (score.getDuration() / 1000) % 60;
 		long minute = (score.getDuration() / (1000 * 60)) % 60;
 		long hour = (score.getDuration() / (1000 * 60 * 60)) % 24;

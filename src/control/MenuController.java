@@ -838,13 +838,13 @@ public class MenuController {
 
 	void resetGame() {
 		mainMenuView.getResumeButton().setEnabled(false);
+		stopTimer();
 		if (profile.get(0).equals("s")) {
 			serializeScore();
 			mainMenuView.getScoresButton().setEnabled(true);
 
 		}
 
-		stopTimer();
 		switch (gameModel.getMessage(profile.get(0))) {
 		case 0:// play
 			gameModel = new MemoryGame();
@@ -946,7 +946,8 @@ public class MenuController {
 		score.setGuessRatio((100 * ((Integer.parseInt(profile.get(1)) * Integer.parseInt(profile.get(1))) / 2)
 				/ gameModel.getPlayer1().getTries()));
 		score.setBoardSize(profile.get(1));
-		score.setDuration(System.currentTimeMillis() - stopTime + startTime);
+		score.setDuration(stopTime - startTime);
+		System.out.println("System.currentTimeMillis() - stopTime + startTime = " + score.getDuration());
 		score.setDate(LocalDateTime.now());
 		if (scoresList.size() == 0) {
 			scoresList.add(score);
