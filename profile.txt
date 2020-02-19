@@ -1,6 +1,6 @@
 mode:s
 boardsize:4
-player1:a
+player1:as
 player2:
 difficulty:null
 iconSet:emotics

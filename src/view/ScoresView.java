@@ -27,7 +27,7 @@ public class ScoresView {
 	private String guessRatio;
 	private String duration;
 	private String date, newDate, newTime;
-	
+	//isCellEditable().
     Object[][] data = new Object[11][5];
     int[] columnsWidth = {135, 58, 42, 70, 135};     
     
@@ -38,14 +38,15 @@ public class ScoresView {
 		
 		table = new JTable(data, columns);
 		table.setPreferredSize(new Dimension(440, 345));
-		
+		table.setEnabled(false);
 		int k = 0;
         for (int width : columnsWidth) {
             TableColumn column = table.getColumnModel().getColumn(k++);
             column.setMinWidth(width);
             column.setMaxWidth(width);
             column.setPreferredWidth(width);
-        }
+            table.setColumnSelectionAllowed(false);
+        }	
         for(int i=0; i<1; i++) {
         	for (int j=0; j<5; j++) {
         		
@@ -58,7 +59,7 @@ public class ScoresView {
 		
 		table.setBackground(Color.LIGHT_GRAY);
         table.setForeground(Color.black);
-        
+       
 		mainPanel = new JPanel();
 //		textAreaPanel = new JPanel();
 		jTablePanel= new JPanel();

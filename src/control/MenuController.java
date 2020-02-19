@@ -954,36 +954,33 @@ public class MenuController {
 			System.out.println("==0 serializedIndex= " + serializedIndex);
 
 		} else if ((scoresList.size() < 10) && (scoresList.size() > 0)) {
+			//if score.getGuessRatio()> the smaller one in list
+			//else add
+			if (score.getGuessRatio() > scoresList.get(scoresList.size()-1).getGuessRatio() ) {
 			
-			for (int i = 0; i < scoresList.size(); i++) {
-				if (score.getGuessRatio() > scoresList.get(i).getGuessRatio()) {
-					scoresList.add(i, score);
-					serializedIndex++;
-					System.out.println("added higher than existant " + serializedIndex);
-					break;
-				} else if (score.getGuessRatio() <= scoresList.get(i).getGuessRatio()) {
-					scoresList.add(score);
-					serializedIndex++;
-					System.out.println("added, smaller than existant " + serializedIndex);
-					break;
-				}
+				for (int i = 0; i < scoresList.size(); i++) {
+					if (score.getGuessRatio() > scoresList.get(i).getGuessRatio()) {
+						scoresList.add(i, score);
+						serializedIndex++;
+						System.out.println(">9th index serializedIndex= " + serializedIndex);
+						break;
+					}
+				}	
+			} else {
+				scoresList.add(score);
+				serializedIndex++;
+				System.out.println("added, smaller than existant " + serializedIndex);				
 			}
-		} else if (scoresList.size() == 10) {
-			if (score.getGuessRatio() <= scoresList.get(9).getGuessRatio()) {
-				System.out.println("==10 serializedIndex= " + serializedIndex);
-				return;
-			} else if (score.getGuessRatio() > scoresList.get(9).getGuessRatio()) {
+		}  else if (scoresList.size() == 10) {
+			if (score.getGuessRatio() > scoresList.get(9).getGuessRatio()) {
 				for (int i = 0; i < scoresList.size(); i++) {
 					if (score.getGuessRatio() > scoresList.get(i).getGuessRatio()) {
 						scoresList.remove(9);
 						scoresList.add(i, score);
-						scoresList.trimToSize();
 						System.out.println(">9th index serializedIndex= " + serializedIndex);
 						break;
-
 					}
 				}
-				System.out.println("after writing to scoresList: " + scoresList);
 			}
 		}
 		try (FileOutputStream fosScore = new FileOutputStream(serializeScore);
