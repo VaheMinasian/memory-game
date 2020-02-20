@@ -18,7 +18,7 @@ import model.ScoreModel;
 
 
 public class ScoresView {
-	JFrame frame;
+	public JFrame frame;
 	JPanel mainPanel, buttonPanel, jTablePanel/* textAreaPanel */;
 	JTable table;
 	String[] columns =  {"Name", "guess%", "board", "time score", "date & time"};
@@ -90,7 +90,7 @@ public class ScoresView {
 		mainPanel.add(jTablePanel);
 		mainPanel.add(buttonPanel);
 
-		frame.setUndecorated(true);
+//		frame.setUndecorated(true);
 		frame.setAlwaysOnTop(true);
 		
 		frame.add(mainPanel);
@@ -99,15 +99,23 @@ public class ScoresView {
 		frame.setResizable(false);
 		frame.setLocationRelativeTo(null);
 
-		okButton.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				frame.dispose();
-			}
-		});
+//		okButton.addActionListener(new ActionListener() {
+//
+//			@Override
+//			public void actionPerformed(ActionEvent arg0) {
+//				frame.dispose();
+//			}
+//		});
 	}
 	
+	public JButton getOkButton() {
+		return okButton;
+	}
+
+	public void setOkButton(JButton okButton) {
+		this.okButton = okButton;
+	}
+
 	public void displayScores(int row) {
 		data[row+1][0] =  this.playerName;
 		data[row+1][1] =  this.guessRatio;

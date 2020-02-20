@@ -39,6 +39,7 @@ public class MenuController {
 
 	private static MainMenuView mainMenuView;
 	private static OptionsView optionsView;
+	private static ScoresView hsView;
 	private static BufferedReader bfReader;
 	private static FileReader file;
 	private static ArrayList<String> profile = new ArrayList<>();
@@ -225,6 +226,7 @@ public class MenuController {
 
 			// display high scores if 'high scores' button is clicked in main menu
 			if (e.getSource() == mainMenuView.getScoresButton()) {
+				mainMenuView.frame.setEnabled(false);
 				scoresList.clear();
 				scoresList.trimToSize();
 				try (FileInputStream fis = new FileInputStream("scores.ser");
@@ -244,10 +246,19 @@ public class MenuController {
 					ex.printStackTrace();
 				}
 
-				ScoresView scoresV = new ScoresView();
+				hsView = new ScoresView();
 				for (int i = 0; i < scoresList.size(); i++) {
-					scoresV.setScores(scoresList.get(i));
-					scoresV.displayScores(i);
+					hsView.setScores(scoresList.get(i));
+					hsView.displayScores(i);
+					hsView.getOkButton().addActionListener(new ActionListener() {
+
+						@Override
+						public void actionPerformed(ActionEvent arg0) {
+							hsView.frame.dispose();
+							mainMenuView.frame.setEnabled(true);
+							mainMenuView.frame.setVisible(true);
+						}
+					});
 				}
 			}
 
