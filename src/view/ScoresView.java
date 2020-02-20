@@ -3,8 +3,6 @@ package view;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -26,6 +24,7 @@ public class ScoresView {
 	private String boardSize;
 	private String guessRatio;
 	private String duration;
+	private String time;
 	private String date, newDate, newTime;
 	//isCellEditable().
     Object[][] data = new Object[11][5];
@@ -152,8 +151,13 @@ public class ScoresView {
 		long second = (score.getDuration() / 1000) % 60;
 		long minute = (score.getDuration() / (1000 * 60)) % 60;
 		long hour = (score.getDuration() / (1000 * 60 * 60)) % 24;
-
-		String time = String.format("%02d:%02d:%02d", hour, minute, second);
+		
+		if(hour<1) {
+			time = String.format("%02d:%02d", minute, second);			
+		} else if (hour>=1) {
+			time = String.format("%02d:%02d:%02d", hour, minute, second);			
+		}
+		
 		
 		
 		newDate = score.getDate().toString().substring(0,10);

@@ -234,7 +234,6 @@ public class MenuController {
 
 					counter = (Counter) ois.readObject();
 					serializedIndex = counter.getCounter();
-					System.out.println(serializedIndex + "is the serializedIndex");
 					
 						for (int i = 0; i < serializedIndex; i++) {
 							score = (ScoreModel) ois.readObject();
@@ -254,6 +253,14 @@ public class MenuController {
 
 						@Override
 						public void actionPerformed(ActionEvent arg0) {
+							hsView.frame.dispose();
+							mainMenuView.frame.setEnabled(true);
+							mainMenuView.frame.setVisible(true);
+						}
+					});
+					hsView.frame.addWindowListener(new WindowAdapter() {
+						@Override
+						public void windowClosing(WindowEvent e) {
 							hsView.frame.dispose();
 							mainMenuView.frame.setEnabled(true);
 							mainMenuView.frame.setVisible(true);
@@ -381,8 +388,7 @@ public class MenuController {
 				ObjectOutputStream oos = new ObjectOutputStream(fos);
 
 				// write something in the file
-				oos.writeObject(profile.get(0));// game mode
-				oos.writeObject(profile.get(1));// board size
+			
 				oos.writeObject(profile.get(2));// player 1
 				oos.writeObject(gameModel.getPlayer1().getScore());
 				oos.writeObject(gameModel.getPlayer1().getTries());
@@ -424,8 +430,6 @@ public class MenuController {
 					FileInputStream fis = new FileInputStream("data.txt");
 					ObjectInputStream ois = new ObjectInputStream(fis);
 
-					System.out.println(ois.readObject()); // game mode
-					System.out.println(ois.readObject()); // board size
 					System.out.println(ois.readObject()); // player 1
 					// set player 1 score
 					gameModel.getPlayer1().setScore(Integer.parseInt(ois.readObject().toString()));
@@ -908,7 +912,6 @@ public class MenuController {
 				serializeScore.createNewFile(); // if file already exists will do nothing
 				mainMenuView.getScoresButton().setEnabled(false);
 				oosScore.writeObject(counter);
-				System.out.println("doesn't exist");
 			} 
 		 catch (FileNotFoundException e) {
 			e.printStackTrace();
@@ -938,12 +941,10 @@ public class MenuController {
 				ObjectInputStream ois = new ObjectInputStream(fis)) {
 			counter = (Counter) ois.readObject();
 			serializedIndex = counter.getCounter();
-			System.out.println("serializedIndex after first reading from file with serializeScore() is: " + serializedIndex);
 			for (int i = 0; i < serializedIndex; i++) {
 				score = (ScoreModel) ois.readObject();
 				scoresList.add(score);
 			}
-			System.out.println("scoresList size before serializing= " + scoresList.size());
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		} catch (IOException ex) {
@@ -958,12 +959,10 @@ public class MenuController {
 				/ gameModel.getPlayer1().getTries()));
 		score.setBoardSize(profile.get(1));
 		score.setDuration(stopTime - startTime);
-		System.out.println("System.currentTimeMillis() - stopTime + startTime = " + score.getDuration());
 		score.setDate(LocalDateTime.now());
 		if (scoresList.size() == 0) {
 			scoresList.add(score);
 			serializedIndex++;
-			System.out.println("==0 serializedIndex= " + serializedIndex);
 
 		} else if ((scoresList.size() < 10) && (scoresList.size() > 0)) {
 			//if score.getGuessRatio()> the smaller one in list
@@ -974,14 +973,12 @@ public class MenuController {
 					if (score.getGuessRatio() > scoresList.get(i).getGuessRatio()) {
 						scoresList.add(i, score);
 						serializedIndex++;
-						System.out.println(">9th index serializedIndex= " + serializedIndex);
 						break;
 					}
 				}	
 			} else {
 				scoresList.add(score);
 				serializedIndex++;
-				System.out.println("added, smaller than existant " + serializedIndex);				
 			}
 		}  else if (scoresList.size() == 10) {
 			if (score.getGuessRatio() > scoresList.get(9).getGuessRatio()) {
@@ -989,7 +986,6 @@ public class MenuController {
 					if (score.getGuessRatio() > scoresList.get(i).getGuessRatio()) {
 						scoresList.remove(9);
 						scoresList.add(i, score);
-						System.out.println(">9th index serializedIndex= " + serializedIndex);
 						break;
 					}
 				}
@@ -1004,11 +1000,9 @@ public class MenuController {
 				oosScore.writeObject(scoresList.get(i));
 				g++;
 			}
-			System.out.println("g is: "+g);
 
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
-		System.out.println("exiting serialize()");
 	}
 }
