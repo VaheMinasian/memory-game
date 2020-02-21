@@ -234,12 +234,11 @@ public class MenuController {
 
 					counter = (Counter) ois.readObject();
 					serializedIndex = counter.getCounter();
-					
-						for (int i = 0; i < serializedIndex; i++) {
-							score = (ScoreModel) ois.readObject();
-							System.out.println("score is: " + score);
-							scoresList.add(score);
-						}
+
+					for (int i = 0; i < serializedIndex; i++) {
+						score = (ScoreModel) ois.readObject();
+						scoresList.add(score);
+					}
 
 				} catch (Exception ex) {
 					ex.printStackTrace();
@@ -388,7 +387,7 @@ public class MenuController {
 				ObjectOutputStream oos = new ObjectOutputStream(fos);
 
 				// write something in the file
-			
+
 				oos.writeObject(profile.get(2));// player 1
 				oos.writeObject(gameModel.getPlayer1().getScore());
 				oos.writeObject(gameModel.getPlayer1().getTries());
@@ -397,7 +396,7 @@ public class MenuController {
 					oos.writeObject(gameModel.getPlayer2().getScore());
 					oos.writeObject(gameModel.getPlayer2().getTries());
 				}
-				oos.writeObject(profile.get(4));// difficulty
+				
 				oos.writeObject(gameView.getButtonState());
 //				oos.writeObject(gameModel.getMissedButtons());
 				oos.writeObject(gameModel.getActivePlayer().getName());
@@ -447,8 +446,7 @@ public class MenuController {
 						// set player 2 tries
 						gameModel.getPlayer2().setTries(Integer.parseInt(ois.readObject().toString()));
 					}
-					System.out.println(ois.readObject()); // difficulty
-
+					
 					// showRemovedIcons button state
 					if ((boolean) ois.readObject()) {
 						gameView.getMatchesButton().doClick();
@@ -902,41 +900,29 @@ public class MenuController {
 
 	void checkScoreFile() {
 		serializedIndex = 0;
-		
 
-			if (!serializeScore.exists()) {
-				try (FileOutputStream fosScore = new FileOutputStream(serializeScore);
-						ObjectOutputStream oosScore = new ObjectOutputStream(fosScore)) {
+		if (!serializeScore.exists()) {
+			try (FileOutputStream fosScore = new FileOutputStream(serializeScore);
+					ObjectOutputStream oosScore = new ObjectOutputStream(fosScore)) {
 				counter = new Counter();
 				counter.setCounter(0);
 				serializeScore.createNewFile(); // if file already exists will do nothing
 				mainMenuView.getScoresButton().setEnabled(false);
 				oosScore.writeObject(counter);
-			} 
-		 catch (FileNotFoundException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		} catch (Exception exp) {
-			exp.printStackTrace();
-		}}
+			} catch (FileNotFoundException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
+			} catch (Exception exp) {
+				exp.printStackTrace();
+			}
+		}
 	}
 
 	void serializeScore() {
 		scoresList.clear();
 		scoresList.trimToSize();
-//			if(!mainMenuView.getScoresButton().isEnabled()) {
-//				serializedIndex=0;
-//				try {
-//					FileOutputStream fosScore = new FileOutputStream(serializeScore);
-//					ObjectOutputStream oosScore = new ObjectOutputStream(fosScore);
-//						oosScore.write(serializedIndex);				
-//					oosScore.close();
-//					fosScore.close();
-//				} catch (Exception ex) {
-//					ex.printStackTrace();
-//				}	
-//			} else if(mainMenuView.getScoresButton().isEnabled()) {
+
 		try (FileInputStream fis = new FileInputStream("scores.ser");
 				ObjectInputStream ois = new ObjectInputStream(fis)) {
 			counter = (Counter) ois.readObject();
@@ -965,22 +951,22 @@ public class MenuController {
 			serializedIndex++;
 
 		} else if ((scoresList.size() < 10) && (scoresList.size() > 0)) {
-			//if score.getGuessRatio()> the smaller one in list
-			//else add
-			if (score.getGuessRatio() > scoresList.get(scoresList.size()-1).getGuessRatio() ) {
-			
+			// if score.getGuessRatio()> the smaller one in list
+			// else add
+			if (score.getGuessRatio() > scoresList.get(scoresList.size() - 1).getGuessRatio()) {
+
 				for (int i = 0; i < scoresList.size(); i++) {
 					if (score.getGuessRatio() > scoresList.get(i).getGuessRatio()) {
 						scoresList.add(i, score);
 						serializedIndex++;
 						break;
 					}
-				}	
+				}
 			} else {
 				scoresList.add(score);
 				serializedIndex++;
 			}
-		}  else if (scoresList.size() == 10) {
+		} else if (scoresList.size() == 10) {
 			if (score.getGuessRatio() > scoresList.get(9).getGuessRatio()) {
 				for (int i = 0; i < scoresList.size(); i++) {
 					if (score.getGuessRatio() > scoresList.get(i).getGuessRatio()) {
@@ -995,12 +981,9 @@ public class MenuController {
 				ObjectOutputStream oosScore = new ObjectOutputStream(fosScore)) {
 			counter.setCounter(serializedIndex);
 			oosScore.writeObject(counter);
-			int g=0;
 			for (int i = 0; i < scoresList.size(); i++) {
 				oosScore.writeObject(scoresList.get(i));
-				g++;
 			}
-
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}

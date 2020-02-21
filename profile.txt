@@ -1,7 +1,0 @@
-mode:s
-boardsize:4
-player1:as
-player2:
-difficulty:null
-iconSet:emotics
-playable:true

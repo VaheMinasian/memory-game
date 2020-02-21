@@ -14,8 +14,7 @@ public class ScoreModel implements Serializable {
 	private int guessRatio;
 	private Long duration;
 	private LocalDateTime date;
-	
-	
+
 	public String getPlayerName() {
 		return playerName;
 	}
