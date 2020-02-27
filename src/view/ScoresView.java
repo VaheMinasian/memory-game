@@ -3,6 +3,7 @@ package view;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.event.ActionListener;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -30,10 +31,10 @@ public class ScoresView {
 	int[] columnsWidth = { 135, 58, 42, 70, 135 };
 
 	JButton okButton;
-
-	public ScoresView() {
+	
+	public void setScoresView() {
 		frame = new JFrame();
-
+		
 		table = new JTable(data, columns);
 		table.setPreferredSize(new Dimension(440, 345));
 		table.setEnabled(false);
@@ -47,44 +48,51 @@ public class ScoresView {
 		}
 		for (int i = 0; i < 1; i++) {
 			for (int j = 0; j < 5; j++) {
-
+				
 				data[i][j] = columns[j];
 			}
 		}
 		table.setIntercellSpacing(new Dimension(8, 5));
 		table.setRowHeight(31);
 		table.setRowHeight(0, 36);
-
+		
 		table.setBackground(Color.LIGHT_GRAY);
 		table.setForeground(Color.black);
-
+		
 		mainPanel = new JPanel();
 		jTablePanel = new JPanel();
 		buttonPanel = new JPanel();
-
+		
 		mainPanel.setPreferredSize(new Dimension(470, 440));
 		jTablePanel.setPreferredSize(new Dimension(460, 380));
 		jTablePanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), " HIGH SCORES ",
 				TitledBorder.CENTER, TitledBorder.TOP));
 		table.setFillsViewportHeight(true);
-
+		
 		jTablePanel.add(table);
-
+		
 		okButton = new JButton("close");
 		okButton.setFont((new Font("dialog", Font.BOLD, 13)));
 		buttonPanel.add(okButton);
-
+		
 		mainPanel.add(jTablePanel);
 		mainPanel.add(buttonPanel);
-
+		
 		frame.setAlwaysOnTop(true);
-
+		
 		frame.add(mainPanel);
 		frame.pack();
 		frame.setVisible(true);
 		frame.setResizable(false);
 		frame.setLocationRelativeTo(null);
-
+		
+	}
+	public void addScoresViewListener(ActionListener selected) {
+		okButton.addActionListener(selected);
+	}
+	
+	public ScoresView() {
+		
 	}
 
 	public JButton getOkButton() {

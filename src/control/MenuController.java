@@ -67,11 +67,12 @@ public class MenuController {
 	public MenuController() {
 	}
 
-	public MenuController(MainMenuView mView, OptionsView oView, MemoryGame mGame, GameView gView) {
+	public MenuController(MainMenuView mView, OptionsView oView, MemoryGame mGame, GameView gView, ScoresView sView) {
 		mainMenuView = mView;
 		optionsView = oView;
 		gameModel = mGame;
 		gameView = gView;
+		hsView = sView;
 		isPlayable();
 		mainMenuView.addMainMenuViewListener(new MainMenuViewListener());
 		checkDataFile();
@@ -224,6 +225,35 @@ public class MenuController {
 				System.exit(0);
 			}
 
+//			if (e.getSource() == mainMenuView.getOptionsButton()) {
+//
+//				// hide main menu when switching to options menu.
+//				mainMenuView.frame.setVisible(false);
+//
+//				// setup and display options menu
+//				optionsView.setOptionsMenu();
+//				if ((profile.size() != 0) || (firstTimeProfileSave == true)) {
+//					loadProfile();
+//					// used when options button is clicked more than once within the one game
+//					// session
+//					loadProfileUI();
+//				}
+//				// Add listeners to options menu
+//				optionsView.addOptionsViewListener(new OptionsViewListener());
+//
+//				// marker to ensure loading the "profile" file version of profile is loaded into
+//				// options menu UI
+//
+//				// override system.exit(0) on options menu to return to main menu
+//				optionsView.frame.addWindowListener(new WindowAdapter() {
+//					@Override
+//					public void windowClosing(WindowEvent e) {
+//						optionsView.frame.setVisible(false);
+//						mainMenuView.frame.setVisible(true);
+//					}
+//				});
+//			}
+			
 			// display high scores if 'high scores' button is clicked in main menu
 			if (e.getSource() == mainMenuView.getScoresButton()) {
 				mainMenuView.frame.setEnabled(false);
@@ -243,29 +273,23 @@ public class MenuController {
 				} catch (Exception ex) {
 					ex.printStackTrace();
 				}
-
-				hsView = new ScoresView();
+				hsView.setScoresView();
+				hsView.addScoresViewListener(new ScoresViewListener());
 				for (int i = 0; i < scoresList.size(); i++) {
 					hsView.setScores(scoresList.get(i));
 					hsView.displayScores(i);
-					hsView.getOkButton().addActionListener(new ActionListener() {
-
-						@Override
-						public void actionPerformed(ActionEvent arg0) {
-							hsView.frame.dispose();
-							mainMenuView.frame.setEnabled(true);
-							mainMenuView.frame.setVisible(true);
-						}
-					});
-					hsView.frame.addWindowListener(new WindowAdapter() {
-						@Override
-						public void windowClosing(WindowEvent e) {
-							hsView.frame.dispose();
-							mainMenuView.frame.setEnabled(true);
-							mainMenuView.frame.setVisible(true);
-						}
-					});
+					
 				}
+				hsView.frame.addWindowListener(new WindowAdapter() {
+					@Override
+					public void windowClosing(WindowEvent e) {
+						System.out.println("PERFORMED");
+						hsView.frame.setVisible(false);
+						mainMenuView.frame.setVisible(true);
+						mainMenuView.frame.setEnabled(true);
+//							mainMenuView.frame.setVisible(true);
+					}
+				});
 			}
 
 			// if 'R E S U M E' button is clicked in main menu
@@ -499,6 +523,20 @@ public class MenuController {
 		}
 	}
 
+	class ScoresViewListener implements ActionListener {
+
+		// Actions to perform when 'save' is clicked in options menu
+		public void actionPerformed(ActionEvent e) {
+
+			if (e.getSource() == hsView.getOkButton()) {
+					hsView.frame.setVisible(false);
+					mainMenuView.frame.setVisible(true);
+					mainMenuView.frame.setEnabled(true);
+			}
+		}
+	}
+	
+	
 	class OptionsViewListener implements ActionListener {
 
 		String player1 = "", player2 = "", player3 = "";
